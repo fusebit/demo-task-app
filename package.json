@@ -2,12 +2,14 @@
   "name": "untitled1",
   "version": "0.0.0",
   "private": true,
-  "main": "build/app.js",
-  "module": "build/app.js",
+  "main": "build/server/app.js",
+  "module": "build/server/app.js",
   "scripts": {
-    "build": "tsc & webpack",
+    "build": "tsc && webpack",
     "start": "node .",
-    "dev": "tsc && (tsc -w & webpack --mode development --watch --progress & nodemon .)",
+    "dev": "nodemon .",
+    "listen": "tsc -w & webpack --mode development --watch --progress",
+    "dev-hot": "npm run build && (npm run listen & npm run dev)",
     "reset": "rm -rf build & rm -rf dist"
   },
   "dependencies": {

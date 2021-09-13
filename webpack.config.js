@@ -4,11 +4,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: 'development',
   entry: {
-    index: './build/react/index.js',
+    index: './build/client/index.js',
   },
   devtool: 'inline-source-map',
   devServer: {
-    static: './build',
+    static: './build/client',
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -18,9 +18,9 @@ module.exports = {
   ],
   output: {
     filename: '[name].bundle.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '..', 'dist'),
     clean: true,
-    publicPath: '/react'
+    publicPath: '/client'
   },
   devtool: 'source-map',
   module: {
