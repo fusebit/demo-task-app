@@ -24,7 +24,7 @@ app.get('/', function(req: Request, res: Response, next: NextFunction) {
 });
 app.use('/react', (req: Request, res: Response, next: NextFunction) => {
     res.setHeader('Content-Type', 'application/json')
-    res.sendFile(path.join(__dirname, '..', 'dist', 'index.bundle.js'))
+    res.sendFile(path.join(__dirname, '..', 'dist'))
 });
 
 app.use(
