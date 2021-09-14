@@ -1,12 +1,19 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+require('dotenv').config();
+// import path from 'path';
+// import HtmlWebpackPlugin from 'html-webpack-plugin';
+// import webpack from 'webpack';
+// import dotenv from 'dotenv';
+// dotenv.config()
+// const __dirname = path.resolve();
 
 module.exports = {
   mode: 'development',
   entry: {
-    index: './build/client/index.js',
+    index: ["regenerator-runtime/runtime.js",'./build/client/index.js']
   },
-  devtool: 'inline-source-map',
   devServer: {
     static: './build/client',
   },
@@ -15,6 +22,14 @@ module.exports = {
       title: 'Development',
       template: 'public/index.html'
     }),
+    new webpack.DefinePlugin({
+      env: {
+        SLACK_INTEGRATION: JSON.stringify(process.env.SLACK_INTEGRATION),
+        HUBSPOT_INTEGRATION: JSON.stringify(process.env.HUBSPOT_INTEGRATION),
+        FUSEBIT_URL: JSON.stringify(process.env.FUSEBIT_URL)
+      },
+      LAST_BUILD_TIME: JSON.stringify((new Date()).toISOString())
+    })
   ],
   output: {
     filename: '[name].bundle.js',

@@ -1,9 +1,20 @@
-import react from 'react';
+import React from 'react';
+import AppRouter from "./Router";
+import {createTheme, ThemeProvider} from "@material-ui/core";
 
-class Index extends react.Component {
-    render() {
-        return <div>React Scaffold Hotload</div>
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#1F2937'
+        }
     }
+});
+const Index =  () => {
+    return (
+        <ThemeProvider theme={theme}>
+            <AppRouter/>
+        </ThemeProvider>
+    )
 }
 
 export default Index;
