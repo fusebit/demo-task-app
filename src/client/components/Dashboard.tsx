@@ -1,14 +1,31 @@
-import {User} from "./Types";
+import {Task} from "./Types";
 import StatusPaper from "./StatusPaper";
-import {Grid, Typography} from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import TaskInput from "./TaskInput";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import TaskTable from "./TaskTable";
 import PageItem from './PageItem';
 import Page from './Page';
+import {Tasks} from "../api";
 
+export default () => {
+    const [tasks, setTasks] = useState<{name: string, description: string}[]>([]);
+    const [doRefresh, setRefresh] = useState<boolean>(false);
+    useEffect(() => {
+        if (!doRefresh) {
+            return;
+        }
+        Tasks.getTasks()
+                .then(tasks => {
+                    setTasks(tasks);
+                    setRefresh(false);
+                });
+    }, [doRefresh]);
 
-export default (props: {currentUser: User}) => {
+    const handleTaskCreated = async (task: Task) => {
+        await Tasks.saveTask(task);
+        setRefresh(true);
+    }
     return (
         <Page>
             <PageItem>
@@ -19,10 +36,10 @@ export default (props: {currentUser: User}) => {
                 </StatusPaper>
             </PageItem>
             <PageItem>
-                <TaskInput/>
+                <TaskInput onTaskCreated={handleTaskCreated}/>
             </PageItem>
             <PageItem>
-                <TaskTable tasks={[]}/>
+                <TaskTable tasks={tasks}/>
             </PageItem>
         </Page>
     )

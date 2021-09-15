@@ -9,7 +9,29 @@ import apiRouter from './api';
 import config from '../../webpack.config.js';
 const compiler = webpack(config);
 
+import session from 'express-session';
+declare module 'express-session' {
+    interface SessionData {
+        tenantId: string;
+        name: string;
+    }
+}
+
 const app = express();
+const logger = (req:Request, res:Response, next:NextFunction) => {
+    console.log(req.method, req.url);
+    next();
+}
+app.use(
+    logger,
+    express.json(),
+    session({
+        secret: 'Fusebit Example',
+        resave: false,
+        saveUninitialized: true,
+        cookie: { secure: false }
+    })
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

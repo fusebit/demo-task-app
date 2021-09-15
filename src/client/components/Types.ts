@@ -33,15 +33,15 @@ export interface FusebitStore {
 export interface FusebitReducerState {}
 
 export interface LoginState extends FusebitReducerState {
-    currentUser?: User
+    currentUser?: Tenant
 }
 
 // ##########
 // USER
 // ##########
 
-export interface User {
-    id: number;
+export interface Tenant {
+    id: string;
     name: string;
 }
 
@@ -51,3 +51,7 @@ export enum IntegrationType {
     hubspot = 'hubspot'
 }
 
+export interface Task {
+    name: string,
+    description: string;
+}

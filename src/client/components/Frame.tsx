@@ -6,15 +6,13 @@ import {
     Grid,
     List,
     ListItem,
-    ListItemProps,
     ListItemIcon,
     ListItemText, Paper,
 } from "@material-ui/core";
 import InboxIcon from '@material-ui/icons/Inbox';
 import StarIcon from '@material-ui/icons/Star';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import {User} from "./Types";
-import {useHistory} from "react-router-dom";
+import {Tenant} from "./Types";
 
 function ListItemLink(props: React.PropsWithChildren<{
     to: string;
@@ -37,11 +35,9 @@ function ListItemLink(props: React.PropsWithChildren<{
 }
 
 
-const Frame = (props: React.PropsWithChildren<{currentUser?: User}>) => {
+const Frame = (props: React.PropsWithChildren<{currentUser?: Tenant, onLogout: () => void}>) => {
     if (!props.currentUser) {
-        const history = useHistory();
-        history.push('/');
-        return <React.Fragment/>;
+        return <React.Fragment/>
     }
     return (
         <div>
@@ -53,14 +49,14 @@ const Frame = (props: React.PropsWithChildren<{currentUser?: User}>) => {
                     >
                         <List>
                             <ListItem className="center-text">
-                                <Avatar>{props.currentUser.id}</Avatar>
-                                <ListItemText>{props.currentUser.name}</ListItemText>
+                                <Avatar>{props.currentUser?.id}</Avatar>
+                                <ListItemText>{props.currentUser?.name}</ListItemText>
                             </ListItem>
                             <ListItem className="center-text">
                                 <ListItemText>Sample App</ListItemText>
                             </ListItem>
                             <Divider variant="middle" style={{backgroundColor: 'white'}} />
-                            <ListItemLink to='/dashboard'>
+                            <ListItemLink to='/'>
                                 <ListItemIcon><InboxIcon style={{color:"white"}}/></ListItemIcon>
                                 <ListItemText>Your Tasks</ListItemText>
                             </ListItemLink>
@@ -68,10 +64,10 @@ const Frame = (props: React.PropsWithChildren<{currentUser?: User}>) => {
                                 <ListItemIcon><StarIcon style={{color:"white"}}/></ListItemIcon>
                                 <ListItemText>Integration Marketplace</ListItemText>
                             </ListItemLink>
-                            <ListItemLink to='/logout'>
+                            <ListItem button onClick={props.onLogout}>
                                 <ListItemIcon><ExitToAppIcon style={{color:"white"}}/></ListItemIcon>
                                 <ListItemText>Logout</ListItemText>
-                            </ListItemLink>
+                            </ListItem>
                         </List>
                     </Paper>
                 </Grid>
