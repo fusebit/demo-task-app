@@ -1,6 +1,6 @@
 {
   "name": "@fusebit-int/sample-app",
-  "version": "0.0.0-1",
+  "version": "0.0.0-4",
   "main": "build/server/IntegrationMount.js",
   "files": [
     "build/**/*.js",
@@ -9,7 +9,7 @@
     "build/**/*.html"
   ],
   "scripts": {
-    "build": "tsc && webpack;",
+    "build": "tsc && webpack; cp -R public build",
     "start": "node .;",
     "dev": "nodemon .;",
     "listen": "tsc -w  & webpack --mode development --watch --progress;",
