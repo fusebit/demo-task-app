@@ -8,7 +8,7 @@ exec('fuse token -o raw', (error, stdout, stderr) => {
     {
       INTEGRATION_NAME: 'slack-integration',
       INTEGRATION_URL:
-        'https://localhost:3001/v2/account/acc-21a4974efd574f87/subscription/sub-eeae7b111e9c4285/integration/slack-integration',
+        'https://localhost:3001/v2/account/acc-21a4974efd574f87/subscription/sub-eeae7b111e9c4285/integration',
       APP_URL: 'http://localhost:3000',
       FUSEBIT_JWT: stdout,
     },

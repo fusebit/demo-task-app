@@ -1,6 +1,5 @@
 interface Config {
   INTEGRATION_URL: string;
-  INTEGRATION_NAME: string;
   FUSEBIT_JWT: string;
   APP_URL: string;
 }

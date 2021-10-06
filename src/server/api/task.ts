@@ -22,7 +22,7 @@ router.post('/', async (req, res, next) => {
   const currentUser = users[currentUserId];
   const configuration = dao.getData(DataKeyMap.configuration);
   try {
-    fetch(`${configuration.INTEGRATION_URL}/api/${currentUser.userId}/postSlackMessage`, {
+    fetch(`${configuration.INTEGRATION_URL}/slack-integration/api/${currentUser.userId}/postSlackMessage`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',

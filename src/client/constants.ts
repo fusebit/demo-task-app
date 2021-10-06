@@ -1,4 +1,4 @@
 export enum IntegrationType {
-  slack = 'slack',
-  hubspot = 'hubspot',
+  slack = 'slack-integration',
+  hubspot = 'hubspot-integration',
 }

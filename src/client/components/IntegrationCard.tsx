@@ -9,7 +9,7 @@ const IntegrationCard = (props: { integration: IntegrationType; isInstalled: boo
     [IntegrationType.hubspot]: 'Sync your hubspot task list here.',
   };
 
-  const installApp = () => (window.location.href = `/api/integration/install`);
+  const installApp = () => (window.location.href = `/api/integration/${props.integration}/install`);
   const uninstallApp = () => props.onUninstall();
 
   return (
@@ -35,6 +35,7 @@ const IntegrationCard = (props: { integration: IntegrationType; isInstalled: boo
           variant="contained"
           color={props.isInstalled ? 'primary' : 'secondary'}
           onClick={props.isInstalled ? uninstallApp : installApp}
+          disabled={props.integration !== IntegrationType.slack}
         >
           {props.isInstalled ? 'Uninstall' : 'Install'}
         </Button>
