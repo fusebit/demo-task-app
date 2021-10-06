@@ -29,7 +29,7 @@ router.get('/me', async (req, res, next) => {
     // Check if integration is installed
     const configuration = dao.getData(DataKeyMap.configuration);
     const response = await fetch(
-      `${configuration.INTEGRATION_URL}/slack-integration/instance?tag=fusebit.tenantId=${currentUserId}`,
+      `${configuration.BASE_INTEGRATION_URL}/slack-integration/instance?tag=fusebit.tenantId=${currentUserId}`,
       {
         headers: {
           Accept: 'application/json, text/plain, */*',

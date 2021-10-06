@@ -26,7 +26,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
     };
-    const createSessionResponse = await fetch(`${configuration.INTEGRATION_URL}/${integrationId}/session`, {
+    const createSessionResponse = await fetch(`${configuration.BASE_INTEGRATION_URL}/${integrationId}/session`, {
       body,
       headers,
       method: 'POST',
@@ -38,7 +38,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
       return;
     }
     const sessionId = session.id;
-    res.redirect(`${configuration.INTEGRATION_URL}/${integrationId}/session/${sessionId}/start`);
+    res.redirect(`${configuration.BASE_INTEGRATION_URL}/${integrationId}/session/${sessionId}/start`);
   } catch (e) {
     console.log('Error starting Fusebit session', e);
     res.sendStatus(500);
@@ -53,10 +53,10 @@ router.get('/:integrationName/callback', async (req, res, next) => {
   const integrationId = INTEGRATION_ID_MAP[req.params.integrationName];
 
   const sessionId = req.query.session;
-  const INTEGRATION_URL = configuration.INTEGRATION_URL;
+  const BASE_INTEGRATION_URL = configuration.BASE_INTEGRATION_URL;
 
   try {
-    const sessionPersistResponse = await fetch(`${INTEGRATION_URL}/${integrationId}/session/${sessionId}/commit`, {
+    const sessionPersistResponse = await fetch(`${BASE_INTEGRATION_URL}/${integrationId}/session/${sessionId}/commit`, {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
@@ -86,7 +86,7 @@ router.delete('/:integrationName/install', async (req, res) => {
   try {
     // Get installation
     const lookupResponse = await fetch(
-      `${configuration.INTEGRATION_URL}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
+      `${configuration.BASE_INTEGRATION_URL}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
       {
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -98,7 +98,7 @@ router.delete('/:integrationName/install', async (req, res) => {
     const status = await lookupResponse.json();
     const installation = status.items?.[0];
     // Delete installation
-    await fetch(`${configuration.INTEGRATION_URL}/${integrationId}/instance/${installation.id}`, {
+    await fetch(`${configuration.BASE_INTEGRATION_URL}/${integrationId}/instance/${installation.id}`, {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',

@@ -13,11 +13,11 @@ router.use(
     const dao = new Dao(req, res);
 
     // Check for Environment Variables, Load if available.
-    if (process.env.FUSEBIT_JWT && process.env.INTEGRATION_URL && process.env.APP_URL) {
+    if (process.env.FUSEBIT_JWT && process.env.BASE_INTEGRATION_URL && process.env.APP_URL) {
       dao.saveData(DataKeyMap.configuration, {
         INTEGRATION_ID_MAP: JSON.parse(process.env.INTEGRATION_ID_MAP),
         FUSEBIT_JWT: process.env.FUSEBIT_JWT,
-        INTEGRATION_URL: process.env.INTEGRATION_URL,
+        BASE_INTEGRATION_URL: process.env.BASE_INTEGRATION_URL,
         APP_URL: process.env.APP_URL,
       });
       return next();
