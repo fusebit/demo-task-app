@@ -24,7 +24,6 @@ const Routes = () => {
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('on mount effect');
     let mounted = true;
     // Check if browser is logged in and fetch user data
     getMe()

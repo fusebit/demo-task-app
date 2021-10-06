@@ -16,7 +16,7 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
           <p>
             Fusebit handles all the overhead of authenticating users and wiring up their configurations to a specific
             install for you. Once you've installed the app,{' '}
-            <strong>head on over the the fusebit management portal</strong> to see it.
+            <strong>head on over the the Fusebit management portal</strong> to see it.
           </p>
           <p>Note: This sample app is currently limited to one integratino for demonstration purposes.</p>
         </StatusPaper>
