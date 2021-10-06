@@ -3,7 +3,7 @@ import apiRouter from './api';
 import files from './files';
 import Dao from './data/dao';
 import jwt from 'jsonwebtoken';
-import { DataKeyMap } from './constants';
+import { DataKeyMap } from '../constants';
 
 const router = express.Router();
 
@@ -15,6 +15,7 @@ router.use(
     // Check for Environment Variables, Load if available.
     if (process.env.FUSEBIT_JWT && process.env.INTEGRATION_URL && process.env.APP_URL) {
       dao.saveData(DataKeyMap.configuration, {
+        INTEGRATION_ID_MAP: JSON.parse(process.env.INTEGRATION_ID_MAP),
         FUSEBIT_JWT: process.env.FUSEBIT_JWT,
         INTEGRATION_URL: process.env.INTEGRATION_URL,
         APP_URL: process.env.APP_URL,

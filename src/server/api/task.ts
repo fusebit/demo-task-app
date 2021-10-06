@@ -1,7 +1,7 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import Dao from '../data/dao';
-import { DataKeyMap } from '../constants';
+import { DataKeyMap } from '../../constants';
 const router = express.Router();
 
 router.post('/', async (req, res, next) => {

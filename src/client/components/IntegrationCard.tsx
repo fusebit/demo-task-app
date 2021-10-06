@@ -2,7 +2,12 @@ import React from 'react';
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import { IntegrationTypeEnum } from '../../constants';
 
-const IntegrationCard = (props: { integration: IntegrationTypeEnum; isInstalled: boolean; onUninstall: Function, enabledTypes: IntegrationType[] }) => {
+const IntegrationCard = (props: {
+  integration: IntegrationTypeEnum;
+  isInstalled: boolean;
+  onUninstall: Function;
+  enabledTypes: IntegrationType[];
+}) => {
   const capitalize = (string: string) => string[0].toUpperCase() + string.slice(1).toLowerCase();
   const bodyTextMap: Record<IntegrationTypeEnum, string> = {
     [IntegrationTypeEnum.slack]: 'Get slack notifications when a new task is created.',

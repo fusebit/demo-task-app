@@ -4,7 +4,7 @@ import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
 import { Grid, Typography } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
-import {IntegrationTypeEnum} from "../../constants";
+import { IntegrationTypeEnum } from '../../constants';
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
   const isInstalled = !!props.userData.integration;
@@ -37,10 +37,10 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
           <Grid item xs={2} />
           <Grid item xs={4}>
             <IntegrationCard
-                onUninstall={() => ({})}
-                integration={IntegrationTypeEnum.hubspot}
-                isInstalled={false}
-                enabledTypes={props.userData.integrationTypes}
+              onUninstall={() => ({})}
+              integration={IntegrationTypeEnum.hubspot}
+              isInstalled={false}
+              enabledTypes={props.userData.integrationTypes}
             />
           </Grid>
         </Grid>

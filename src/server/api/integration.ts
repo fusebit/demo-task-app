@@ -1,14 +1,14 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import Dao from '../data/dao';
-import { IntegrationTypeIdMap, DataKeyMap, AssertsIsKeyOf } from '../../constants';
+import { DataKeyMap, AssertsIsKeyOf } from '../../constants';
 
 const router = express.Router();
 
 router.get('/:integrationName/install', async (req, res, next) => {
   const dao = new Dao(req, res);
   const configuration = dao.getData(DataKeyMap.configuration);
-  const INTEGRATION_ID_MAP =configuration.INTEGRATION_ID_MAP;
+  const INTEGRATION_ID_MAP = configuration.INTEGRATION_ID_MAP;
   AssertsIsKeyOf(req.params.integrationName, INTEGRATION_ID_MAP);
   const integrationId = INTEGRATION_ID_MAP[req.params.integrationName];
 
@@ -48,7 +48,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
 router.get('/:integrationName/callback', async (req, res, next) => {
   const dao = new Dao(req, res);
   const configuration = dao.getData(DataKeyMap.configuration);
-  const INTEGRATION_ID_MAP =configuration.INTEGRATION_ID_MAP;
+  const INTEGRATION_ID_MAP = configuration.INTEGRATION_ID_MAP;
   AssertsIsKeyOf(req.params.integrationName, INTEGRATION_ID_MAP);
   const integrationId = INTEGRATION_ID_MAP[req.params.integrationName];
 
@@ -78,7 +78,7 @@ router.get('/:integrationName/callback', async (req, res, next) => {
 router.delete('/:integrationName/install', async (req, res) => {
   const dao = new Dao(req, res);
   const configuration = dao.getData(DataKeyMap.configuration);
-  const INTEGRATION_ID_MAP =configuration.INTEGRATION_ID_MAP;
+  const INTEGRATION_ID_MAP = configuration.INTEGRATION_ID_MAP;
   AssertsIsKeyOf(req.params.integrationName, INTEGRATION_ID_MAP);
   const integrationId = INTEGRATION_ID_MAP[req.params.integrationName];
 
