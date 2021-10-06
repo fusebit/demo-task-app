@@ -14,24 +14,24 @@ export default (props: { onLogin: Function; userData: UserData }) => {
     'user-id-1': {
       userId: 'user-id-1',
       name: 'User 1',
-      index: 0
+      index: 0,
     },
     'user-id-2': {
       userId: 'user-id-2',
       name: 'User 2',
-      index: 1
+      index: 1,
     },
     'user-id-3': {
       userId: 'user-id-3',
       name: 'User 3',
-      index: 2
+      index: 2,
     },
     'user-id-4': {
       userId: 'user-id-4',
       name: 'User 4',
-      index: 3
+      index: 3,
     },
-  }
+  };
 
   return (
     <Grid container justifyContent="center" spacing={1}>

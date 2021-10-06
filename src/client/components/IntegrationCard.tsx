@@ -1,20 +1,8 @@
 import React from 'react';
-import {
-  Button,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-} from '@mui/material';
+import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import { IntegrationType } from '../constants';
 
-const IntegrationCard = (props: {
-  integration: IntegrationType;
-  isInstalled: boolean;
-  onUninstall: Function;
-}) => {
+const IntegrationCard = (props: { integration: IntegrationType; isInstalled: boolean; onUninstall: Function }) => {
   const capitalize = (string: string) => string[0].toUpperCase() + string.slice(1).toLowerCase();
   const bodyTextMap: Record<IntegrationType, string> = {
     [IntegrationType.slack]: 'Get slack notifications when a new task is created.',
@@ -43,9 +31,10 @@ const IntegrationCard = (props: {
       </CardActionArea>
       <CardActions>
         <span className="spacer" />
-        <Button variant="contained"
-                color={props.isInstalled ? 'primary' : 'secondary'}
-                onClick={props.isInstalled ? uninstallApp : installApp}
+        <Button
+          variant="contained"
+          color={props.isInstalled ? 'primary' : 'secondary'}
+          onClick={props.isInstalled ? uninstallApp : installApp}
         >
           {props.isInstalled ? 'Uninstall' : 'Install'}
         </Button>

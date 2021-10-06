@@ -5,25 +5,20 @@ import Dao from './data/dao';
 import jwt from 'jsonwebtoken';
 import { DataKeyMap } from './constants';
 
-
 const router = express.Router();
 
-router.use('/api',
+router.use(
+  '/api',
   (req, res, next) => {
     const dao = new Dao(req, res);
 
     // Check for Environment Variables, Load if available.
-    if (
-      process.env.FUSEBIT_JWT &&
-      process.env.INTEGRATION_URL &&
-      process.env.INTEGRATION_NAME &&
-      process.env.APP_URL
-    ) {
+    if (process.env.FUSEBIT_JWT && process.env.INTEGRATION_URL && process.env.INTEGRATION_NAME && process.env.APP_URL) {
       dao.saveData(DataKeyMap.configuration, {
         FUSEBIT_JWT: process.env.FUSEBIT_JWT,
         INTEGRATION_URL: process.env.INTEGRATION_URL,
         INTEGRATION_NAME: process.env.INTEGRATION_NAME,
-        APP_URL: process.env.APP_URL
+        APP_URL: process.env.APP_URL,
       });
       return next();
     }
@@ -48,7 +43,6 @@ router.use('/api',
     }
 
     res.sendStatus(403);
-
   },
   apiRouter
 );

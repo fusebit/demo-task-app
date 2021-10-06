@@ -1,8 +1,8 @@
 interface Config {
-  INTEGRATION_URL: string,
-  INTEGRATION_NAME: string,
-  FUSEBIT_JWT: string,
-  APP_URL: string,
+  INTEGRATION_URL: string;
+  INTEGRATION_NAME: string;
+  FUSEBIT_JWT: string;
+  APP_URL: string;
 }
 
 interface User {
@@ -23,27 +23,22 @@ interface UserData {
   integration: any;
 }
 
-interface Task {
-  name: string;
-  description: string;
-}
-
 interface Users {
-  [key: string]: User
+  [key: string]: User;
 }
 interface Tasks {
-  [key: string]: Task[]
+  [key: string]: Task[];
 }
 
 interface Data {
-  'users': Users,
-  'tasks': Tasks
-  'currentUserId': string,
-  'configuration': Config
+  users: Users;
+  tasks: Tasks;
+  currentUserId: string;
+  configuration: Config;
 }
 
 type DataKey = keyof Data;
 
 type DataKeyMap = {
-  [key in keyof Data]: key
-}
+  [key in keyof Data]: key;
+};

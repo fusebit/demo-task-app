@@ -40,7 +40,6 @@ router.get('/install', async (req, res, next) => {
   }
 });
 
-
 router.get('/callback', async (req, res, next) => {
   const dao = new Dao(req, res);
   const configuration = dao.getData(DataKeyMap.configuration);
@@ -74,13 +73,16 @@ router.delete('/install', async (req, res) => {
   const currentUserId = dao.getData(DataKeyMap.currentUserId);
   try {
     // Get installation
-    const lookupResponse = await fetch(`${configuration.INTEGRATION_URL}/instance?tag=fusebit.tenantId=${currentUserId}`, {
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+    const lookupResponse = await fetch(
+      `${configuration.INTEGRATION_URL}/instance?tag=fusebit.tenantId=${currentUserId}`,
+      {
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+        },
       }
-    });
+    );
     const status = await lookupResponse.json();
     const installation = status.items?.[0];
     // Delete installation
@@ -90,14 +92,13 @@ router.delete('/install', async (req, res) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
       },
-      method: 'DELETE'
+      method: 'DELETE',
     });
     res.sendStatus(200);
   } catch (e) {
     console.log('Error deleting Fusebit installation', e);
     res.sendStatus(500);
   }
-
-})
+});
 
 export default router;

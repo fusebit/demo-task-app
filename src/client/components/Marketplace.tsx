@@ -35,11 +35,7 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
           </Grid>
           <Grid item xs={2} />
           <Grid item xs={4}>
-            <IntegrationCard
-              onUninstall={() => ({})}
-              integration={IntegrationType.hubspot}
-              isInstalled={false}
-            />
+            <IntegrationCard onUninstall={() => ({})} integration={IntegrationType.hubspot} isInstalled={false} />
           </Grid>
         </Grid>
       </PageItem>

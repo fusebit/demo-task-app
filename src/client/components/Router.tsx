@@ -24,7 +24,7 @@ const Routes = () => {
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log('on mount effect')
+    console.log('on mount effect');
     let mounted = true;
     // Check if browser is logged in and fetch user data
     getMe()
@@ -33,7 +33,7 @@ const Routes = () => {
           setUserData(userData);
         }
       })
-      .catch(e => {
+      .catch((e) => {
         if (mounted) {
           setUserData(undefined);
         }
@@ -49,12 +49,11 @@ const Routes = () => {
     };
   }, []);
 
-  const getMe = async () => fetch('/api/user/me',
-    {
+  const getMe = async () =>
+    fetch('/api/user/me', {
       headers: { Authorization: `Bearer ${localStorage.getItem('configuration')}` },
-      credentials: "include"
-    })
-    .then((response) => response.json());
+      credentials: 'include',
+    }).then((response) => response.json());
 
   const { hash } = useLocation();
   useEffect(() => {
@@ -88,16 +87,16 @@ const Routes = () => {
         Authorization: `Bearer ${localStorage.getItem('configuration')}`,
         'Content-Type': 'application/json; charset=utf-8',
       },
-      credentials: "include"
+      credentials: 'include',
     });
-    await getMe().then(userData => setUserData(userData));
+    await getMe().then((userData) => setUserData(userData));
   };
 
   const handleLogout = async () => {
     await fetch('/api/user/logout', {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${localStorage.getItem('configuration')}` },
-      credentials: "include"
+      credentials: 'include',
     });
     await getMe().finally(() => setUserData(undefined));
   };
@@ -115,10 +114,12 @@ const Routes = () => {
         Authorization: `Bearer ${localStorage.getItem('configuration')}`,
         'Content-Type': 'application/json; charset=utf-8',
       },
-      credentials: "include"
+      credentials: 'include',
     });
-    await getMe().then(userData => setUserData(userData)).catch(() => ({}));
-  }
+    await getMe()
+      .then((userData) => setUserData(userData))
+      .catch(() => ({}));
+  };
 
   return (
     <Switch>

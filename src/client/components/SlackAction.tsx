@@ -3,7 +3,7 @@ import { Fab, Popover, Typography } from '@mui/material';
 import AddAlertIcon from '@mui/icons-material/AddAlert';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 
-const SlackAction = (props: { isInstalled: boolean; }) => {
+const SlackAction = (props: { isInstalled: boolean }) => {
   const [anchorEl, setAnchorEl] = React.useState<any>(null);
   const divRef = React.useRef();
 

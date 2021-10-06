@@ -2,7 +2,7 @@ import { Button, Grid, TextField } from '@mui/material';
 import React, { useState } from 'react';
 import SlackAction from './SlackAction';
 
-const TaskInput = (props: { onTaskCreated: (task: Task) => void; isInstalled: boolean; }) => {
+const TaskInput = (props: { onTaskCreated: (task: Task) => void; isInstalled: boolean }) => {
   const [task, setTask] = useState<Task>({ name: '', description: '' });
   const handleAddTask = async () => {
     props.onTaskCreated(task);

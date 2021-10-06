@@ -7,7 +7,7 @@ import PageItem from './PageItem';
 import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
 
-export default (props: { isInstalled: boolean; }) => {
+export default (props: { isInstalled: boolean }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);
   const [alertProps, setAlertProps] = useState<{ text: string; severity: 'error' | 'warning' | 'info' | 'success' }>();
@@ -22,7 +22,7 @@ export default (props: { isInstalled: boolean; }) => {
         Authorization: `Bearer ${localStorage.getItem('configuration')}`,
         'Content-Type': 'application/json; charset=utf-8',
       },
-      credentials: "include"
+      credentials: 'include',
     })
       .then((response) => response.json())
       .then((tasks) => {
@@ -31,7 +31,7 @@ export default (props: { isInstalled: boolean; }) => {
           setRefreshFlag(false);
           setHasLoaded(true);
         }
-      })
+      });
     return () => {
       mounted = false;
     };
@@ -45,7 +45,7 @@ export default (props: { isInstalled: boolean; }) => {
       },
       method: 'POST',
       body: JSON.stringify(task),
-      credentials: "include"
+      credentials: 'include',
     });
     setTasks(await response.json());
     alert();
@@ -83,8 +83,8 @@ export default (props: { isInstalled: boolean; }) => {
         <StatusPaper elevation={24}>
           <Typography>Fusebit Integrations in Action!</Typography>
           <p>
-            Fusebit automatically checks if the specific user (or user) has installed the integration in their
-            account. You can use this information to enable / disable different actions in the system.
+            Fusebit automatically checks if the specific user (or user) has installed the integration in their account.
+            You can use this information to enable / disable different actions in the system.
           </p>
           <p>
             In this example, the "Add New Task" Button, if installed, will use your integration code to immediately
