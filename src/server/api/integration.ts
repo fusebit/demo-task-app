@@ -16,7 +16,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
     const currentUserId = dao.getData(DataKeyMap.currentUserId);
 
     const body = JSON.stringify({
-      redirectUrl: `${configuration.APP_URL}/api/${integrationId}integration/callback`,
+      redirectUrl: `${configuration.APP_URL}/api/${integrationId}/integration/callback`,
       tags: {
         'fusebit.tenantId': currentUserId.toString(),
       },
