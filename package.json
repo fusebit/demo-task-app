@@ -13,10 +13,9 @@
   "scripts": {
     "build": "tsc && copyfiles public/**/* libc && webpack;",
     "listen": "copyfiles public/**/* libc; tsc -w  & webpack --mode development --watch --progress;",
-    "dev-hot": "npm run build && (npm run listen & npm run dev);",
-    "clean": "rm -rf libc & rm -rf dist",
     "start": "node .;",
     "dev": "nodemon .;",
+    "clean": "rm -rf libc & rm -rf dist",
     "config": "node ./config-jwt"
   },
   "dependencies": {
