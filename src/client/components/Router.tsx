@@ -106,8 +106,8 @@ const Routes = () => {
 
   const FrameWithProps = (props: RouteProps) => <Frame {...props} onLogout={handleLogout} userData={userData} />;
 
-  const handleUninstall = async () => {
-    await fetch('/api/integration/install', {
+  const handleUninstall = async (integrationName: string) => {
+    await fetch(`/api/integration/${integrationName}/install`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('configuration')}`,

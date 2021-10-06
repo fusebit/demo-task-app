@@ -8,15 +8,15 @@ exec('fuse token -o raw', (error, stdout, stderr) => {
     {
       INTEGRATION_ID_MAP: {
         slack: 'slack-integration',
-        hubspot: 'hubspot-integration',
       },
-      INTEGRATION_URL:
-        'https://localhost:3001/v2/account/acc-21a4974efd574f87/subscription/sub-eeae7b111e9c4285/integration',
+      BASE_INTEGRATION_URL:
+        'https://kind-moose-5.tunnel.dev.fusebit.io/v2/account/acc-21a4974efd574f87/subscription/sub-eeae7b111e9c4285/integration',
       APP_URL: 'http://localhost:3000',
-      FUSEBIT_JWT: stdout,
+      FUSEBIT_JWT: stdout.trim(),
     },
     process.env.JWT_SECRET,
     { expiresIn: 60 * 60 * 24 }
   );
-  console.log('\n\nConfig Token\n\n', configToken);
+  console.log('\n\nConfig Token\n\n', configToken, '\n\n');
+  console.log('signed with: ', process.env.JWT_SECRET);
 });

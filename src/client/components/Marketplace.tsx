@@ -7,7 +7,8 @@ import IntegrationCard from './IntegrationCard';
 import { IntegrationTypeEnum } from '../../constants';
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
-  const isInstalled = !!props.userData.integration;
+  const isInstalledList = Object.keys(props.userData.integrations);
+  console.log('the following integrations are installed', isInstalledList);
   return (
     <Page>
       <PageItem>
@@ -30,7 +31,7 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
             <IntegrationCard
               onUninstall={props.onUninstall}
               integration={IntegrationTypeEnum.slack}
-              isInstalled={isInstalled}
+              isInstalled={isInstalledList.includes(IntegrationTypeEnum.slack)}
               enabledTypes={props.userData.integrationTypes}
             />
           </Grid>
@@ -39,7 +40,7 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
             <IntegrationCard
               onUninstall={() => ({})}
               integration={IntegrationTypeEnum.hubspot}
-              isInstalled={false}
+              isInstalled={isInstalledList.includes(IntegrationTypeEnum.hubspot)}
               enabledTypes={props.userData.integrationTypes}
             />
           </Grid>
