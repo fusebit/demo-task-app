@@ -7,7 +7,10 @@ import PageItem from './PageItem';
 import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
 
-export default (props: { isInstalled: boolean }) => {
+export default (props: { integrations: Partial<Record<IntegrationType, any>> }) => {
+  // TODO: For now, this sample app only supports the Slack integration.  This will be updated in the future to support other integrations.
+  const isSlackInstalled = !!props.integrations.slack;
+
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);
   const [alertProps, setAlertProps] = useState<{ text: string; severity: 'error' | 'warning' | 'info' | 'success' }>();
@@ -52,9 +55,9 @@ export default (props: { isInstalled: boolean }) => {
   };
 
   const alert = () => {
-    const severity = props.isInstalled ? 'success' : 'warning';
+    const severity = isSlackInstalled ? 'success' : 'warning';
 
-    const message = props.isInstalled
+    const message = isSlackInstalled
       ? 'A message is being sent to your slack account.'
       : 'Head to the Integration Marketplace to install the Slack Integration';
 
@@ -93,7 +96,7 @@ export default (props: { isInstalled: boolean }) => {
         </StatusPaper>
       </PageItem>
       <PageItem>
-        <TaskInput onTaskCreated={saveTask} isInstalled={props.isInstalled} />
+        <TaskInput onTaskCreated={saveTask} isInstalled={isSlackInstalled} />
       </PageItem>
       <PageItem>
         <Body />

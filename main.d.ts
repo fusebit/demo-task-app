@@ -2,7 +2,7 @@ interface Config {
   BASE_INTEGRATION_URL: string;
   FUSEBIT_JWT: string;
   APP_URL: string;
-  INTEGRATION_ID_MAP: Record<string, string>;
+  INTEGRATION_ID_MAP: Record<IntegrationType, string>;
 }
 
 interface User {
@@ -22,7 +22,7 @@ type IntegrationType = 'slack' | 'hubspot';
 interface UserData {
   currentUserId: string;
   users: Users;
-  integration: any;
+  integrations: Partial<Record<IntegrationType, any>>;
   integrationTypes: IntegrationType[];
 }
 

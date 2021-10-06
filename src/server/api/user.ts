@@ -2,6 +2,7 @@ import express from 'express';
 import Dao from '../data/dao';
 import { DataKeyMap } from '../../constants';
 import fetch from 'node-fetch';
+import integration from './integration';
 const router = express.Router();
 
 router.post('/login', async (req, res, next) => {
@@ -28,22 +29,32 @@ router.get('/me', async (req, res, next) => {
   try {
     // Check if integration is installed
     const configuration = dao.getData(DataKeyMap.configuration);
-    const response = await fetch(
-      `${configuration.BASE_INTEGRATION_URL}/slack-integration/instance?tag=fusebit.tenantId=${currentUserId}`,
-      {
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
-        },
-      }
-    );
-    const status = await response.json();
-    const integration = status.items?.[0];
+    const integrationTypes = Object.keys(configuration.INTEGRATION_ID_MAP) as IntegrationType[];
+    const integrations = (
+      await Promise.all(
+        integrationTypes.map(async (integrationType) => {
+          const integrationId = configuration.INTEGRATION_ID_MAP[integrationType];
+          const response = await fetch(
+            `${configuration.BASE_INTEGRATION_URL}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
+            {
+              headers: {
+                Accept: 'application/json, text/plain, */*',
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+              },
+            }
+          );
+          const status = await response.json();
+          const integration = status.items?.[0];
+          return { integrationType, integration };
+        })
+      )
+    ).reduce<Partial<Record<IntegrationType, any>>>((acc, { integrationType, integration }) => {
+      acc[integrationType] = integration;
+      return acc;
+    }, {});
 
-    const integrationTypes = Object.keys(configuration.INTEGRATION_ID_MAP);
-
-    res.send({ currentUserId, users, integration, integrationTypes });
+    res.send({ currentUserId, users, integrations, integrationTypes });
   } catch (e) {
     console.log('Error fetching integration installation status', e);
     res.sendStatus(500);
