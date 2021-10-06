@@ -6,13 +6,17 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "build",
+    "outDir": "libc",
     "baseUrl": ".",
-    "jsx": "react-jsx",
+    "jsx": "react",
     "paths": {
       "*": ["node_modules/*"]
     }
   },
   "presets": ["@babel/preset-react"],
-  "include": ["src/**/*", "bin/**/*"]
+  "include": [
+    "src/**/*",
+    "public/**/*",
+    "main.d.ts"
+  ]
 }

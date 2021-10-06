@@ -1,37 +1,47 @@
-import express from "express";
+import express from 'express';
 import fetch from 'node-fetch';
-import MemoryManager from '../MemoryStorage';
+import Dao from '../data/dao';
+import { DataKeyMap } from '../constants';
 const router = express.Router();
 
-const getHeaders = () => ({
-    'Accept': 'application/json, text/plain, */*',
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${process.env.FUSEBIT_JWT}`
-})
-
 router.post('/', async (req, res, next) => {
-    const task = req.body;
-    const tenantId = req.session.tenantId;
-    const isSlackEnabled = MemoryManager.isSlackEnabled(tenantId);
+  const dao = new Dao(req, res);
 
-    // send slack message in public channel, using integration
-    if (isSlackEnabled) {
-        // Can be done in background
-        try {
-            fetch(`${process.env.FUSEBIT_URL}/integration/slack-integration/api/${tenantId}/postSlackMessage`,
-                {method: 'POST', headers: getHeaders(), body: JSON.stringify(task)});
-        } catch (e) {
-            console.log("Error posting message through integration")
-        }
-    }
+  // Save task
+  const task = req.body;
+  const currentUserId = dao.getData(DataKeyMap.currentUserId);
+  const tasks = dao.getData(DataKeyMap.tasks) || {};
+  const userTasks = tasks[currentUserId] || [];
+  userTasks.push(task);
+  tasks[currentUserId] = userTasks;
+  dao.saveData(DataKeyMap.tasks, tasks);
+  res.send(userTasks);
 
-    // Internal management
-    MemoryManager.addTask(req.body);
-    res.send(req.body);
+  // Post to Integration
+  const users = dao.getData(DataKeyMap.users);
+  const currentUser = users[currentUserId];
+  const configuration = dao.getData(DataKeyMap.configuration);
+  try {
+    fetch(`${configuration.INTEGRATION_URL}/api/${currentUser.userId}/postSlackMessage`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+      },
+      body: JSON.stringify(task),
+    });
+  } catch (e) {
+    console.log('Error posting message through integration', e);
+  }
 });
 
-router.get('/', async (req, res, next) => {
-    res.send(MemoryManager.getTasks());
-})
+router.get('/', (req, res, next) => {
+  const dao = new Dao(req, res);
+  const currentUserId = dao.getData(DataKeyMap.currentUserId);
+  const tasks = dao.getData(DataKeyMap.tasks) || {};
+  const userTasks = tasks[currentUserId] || [];
+  res.send(userTasks);
+});
 
 export default router;

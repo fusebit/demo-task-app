@@ -1,12 +1,13 @@
 import express from 'express';
-import root from './root';
-import users from './users';
+import user from './user';
 import integration from './integration';
-import task from "./task";
+import task from './task';
 
 const apiRouter = express();
-apiRouter.use('/users', users);
-apiRouter.use('/root', root);
+apiRouter.get('/health', (req, res, next) => {
+  res.send({ status: 'ok' });
+});
+apiRouter.use('/user', user);
 apiRouter.use('/integration', integration);
 apiRouter.use('/task', task);
 
