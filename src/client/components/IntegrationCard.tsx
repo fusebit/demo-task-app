@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
-import { IntegrationType } from '../constants';
+import { IntegrationTypeEnum } from '../../constants';
 
-const IntegrationCard = (props: { integration: IntegrationType; isInstalled: boolean; onUninstall: Function }) => {
+const IntegrationCard = (props: { integration: IntegrationTypeEnum; isInstalled: boolean; onUninstall: Function, enabledTypes: IntegrationType[] }) => {
   const capitalize = (string: string) => string[0].toUpperCase() + string.slice(1).toLowerCase();
-  const bodyTextMap: Record<IntegrationType, string> = {
-    [IntegrationType.slack]: 'Get slack notifications when a new task is created.',
-    [IntegrationType.hubspot]: 'Sync your hubspot task list here.',
+  const bodyTextMap: Record<IntegrationTypeEnum, string> = {
+    [IntegrationTypeEnum.slack]: 'Get slack notifications when a new task is created.',
+    [IntegrationTypeEnum.hubspot]: 'Sync your hubspot task list here.',
   };
 
   const installApp = () => (window.location.href = `/api/integration/${props.integration}/install`);
@@ -35,7 +35,7 @@ const IntegrationCard = (props: { integration: IntegrationType; isInstalled: boo
           variant="contained"
           color={props.isInstalled ? 'primary' : 'secondary'}
           onClick={props.isInstalled ? uninstallApp : installApp}
-          disabled={props.integration !== IntegrationType.slack}
+          disabled={!props.enabledTypes.includes(props.integration)}
         >
           {props.isInstalled ? 'Uninstall' : 'Install'}
         </Button>

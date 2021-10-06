@@ -6,7 +6,10 @@ dotenv.config('.env');
 exec('fuse token -o raw', (error, stdout, stderr) => {
   const configToken = jwt.sign(
     {
-      INTEGRATION_NAME: 'slack-integration',
+      INTEGRATION_ID_MAP: {
+          slack: 'slack-integration',
+          hubspot: 'hubspot-integration'
+      },
       INTEGRATION_URL:
         'https://localhost:3001/v2/account/acc-21a4974efd574f87/subscription/sub-eeae7b111e9c4285/integration',
       APP_URL: 'http://localhost:3000',

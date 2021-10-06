@@ -1,6 +1,6 @@
 import express from 'express';
 import Dao from '../data/dao';
-import { DataKeyMap } from '../constants';
+import { DataKeyMap } from '../../constants';
 import fetch from 'node-fetch';
 const router = express.Router();
 
@@ -41,7 +41,9 @@ router.get('/me', async (req, res, next) => {
     const status = await response.json();
     const integration = status.items?.[0];
 
-    res.send({ currentUserId, users, integration });
+    const integrationTypes = Object.keys(configuration.INTEGRATION_ID_MAP);
+
+    res.send({ currentUserId, users, integration, integrationTypes });
   } catch (e) {
     console.log('Error fetching integration installation status', e);
     res.sendStatus(500);

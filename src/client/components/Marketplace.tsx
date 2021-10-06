@@ -4,7 +4,7 @@ import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
 import { Grid, Typography } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
-import { IntegrationType } from '../constants';
+import {IntegrationTypeEnum} from "../../constants";
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
   const isInstalled = !!props.userData.integration;
@@ -29,13 +29,19 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
           <Grid item xs={4}>
             <IntegrationCard
               onUninstall={props.onUninstall}
-              integration={IntegrationType.slack}
+              integration={IntegrationTypeEnum.slack}
               isInstalled={isInstalled}
+              enabledTypes={props.userData.integrationTypes}
             />
           </Grid>
           <Grid item xs={2} />
           <Grid item xs={4}>
-            <IntegrationCard onUninstall={() => ({})} integration={IntegrationType.hubspot} isInstalled={false} />
+            <IntegrationCard
+                onUninstall={() => ({})}
+                integration={IntegrationTypeEnum.hubspot}
+                isInstalled={false}
+                enabledTypes={props.userData.integrationTypes}
+            />
           </Grid>
         </Grid>
       </PageItem>

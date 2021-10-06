@@ -1,4 +1,4 @@
-export enum IntegrationType {
+export enum IntegrationTypeEnum {
   slack = 'slack',
   hubspot = 'hubspot',
 }
@@ -12,10 +12,10 @@ export const DataKeyMap: DataKeyMap = {
 
 // Replace each value with a valid integration id
 export const IntegrationTypeIdMap = {
-  [IntegrationType.slack]: 'slack-integration',
-  [IntegrationType.hubspot]: 'hubspot-integration',
+  [IntegrationTypeEnum.slack]: 'slack-integration',
+  [IntegrationTypeEnum.hubspot]: 'hubspot-integration',
 };
-export const AssertsIsIntegrationType: (input: string) => asserts input is keyof typeof IntegrationTypeIdMap = (
+export const AssertsIsKeyOf: <T extends string>(key: string, map: Record<T, any>) => asserts key is T = (
   input
 ) => {
   if (!Object.keys(IntegrationTypeIdMap).includes(input)) {

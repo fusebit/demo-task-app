@@ -1,17 +1,19 @@
 import express from 'express';
 import fetch from 'node-fetch';
 import Dao from '../data/dao';
-import { IntegrationTypeIdMap, DataKeyMap, AssertsIsIntegrationType } from '../../constants';
+import { IntegrationTypeIdMap, DataKeyMap, AssertsIsKeyOf } from '../../constants';
 
 const router = express.Router();
 
 router.get('/:integrationName/install', async (req, res, next) => {
-  AssertsIsIntegrationType(req.params.integrationName);
-  const integrationId = IntegrationTypeIdMap[req.params.integrationName];
   const dao = new Dao(req, res);
+  const configuration = dao.getData(DataKeyMap.configuration);
+  const INTEGRATION_ID_MAP =configuration.INTEGRATION_ID_MAP;
+  AssertsIsKeyOf(req.params.integrationName, INTEGRATION_ID_MAP);
+  const integrationId = INTEGRATION_ID_MAP[req.params.integrationName];
+
   try {
     const currentUserId = dao.getData(DataKeyMap.currentUserId);
-    const configuration = dao.getData(DataKeyMap.configuration);
 
     const body = JSON.stringify({
       redirectUrl: `${configuration.APP_URL}/api/${integrationId}integration/callback`,
@@ -44,10 +46,11 @@ router.get('/:integrationName/install', async (req, res, next) => {
 });
 
 router.get('/:integrationName/callback', async (req, res, next) => {
-  AssertsIsIntegrationType(req.params.integrationName);
-  const integrationId = IntegrationTypeIdMap[req.params.integrationName];
   const dao = new Dao(req, res);
   const configuration = dao.getData(DataKeyMap.configuration);
+  const INTEGRATION_ID_MAP =configuration.INTEGRATION_ID_MAP;
+  AssertsIsKeyOf(req.params.integrationName, INTEGRATION_ID_MAP);
+  const integrationId = INTEGRATION_ID_MAP[req.params.integrationName];
 
   const sessionId = req.query.session;
   const INTEGRATION_URL = configuration.INTEGRATION_URL;
@@ -73,11 +76,12 @@ router.get('/:integrationName/callback', async (req, res, next) => {
 });
 
 router.delete('/:integrationName/install', async (req, res) => {
-  AssertsIsIntegrationType(req.params.integrationName);
-  const integrationId = IntegrationTypeIdMap[req.params.integrationName];
-
   const dao = new Dao(req, res);
   const configuration = dao.getData(DataKeyMap.configuration);
+  const INTEGRATION_ID_MAP =configuration.INTEGRATION_ID_MAP;
+  AssertsIsKeyOf(req.params.integrationName, INTEGRATION_ID_MAP);
+  const integrationId = INTEGRATION_ID_MAP[req.params.integrationName];
+
   const currentUserId = dao.getData(DataKeyMap.currentUserId);
   try {
     // Get installation
