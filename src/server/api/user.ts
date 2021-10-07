@@ -1,46 +1,45 @@
 import express from 'express';
-import Dao from '../data/dao';
-import { DataKeyMap } from '../../constants';
 import fetch from 'node-fetch';
-import integration from './integration';
 const router = express.Router();
 
 router.post('/login', async (req, res, next) => {
-  const dao = new Dao(req, res);
-  dao.saveData(DataKeyMap.users, req.body.users);
-  dao.saveData(DataKeyMap.currentUserId, req.body.currentUserId);
+  res.locals.data.setUsers(req.body.users);
+  res.locals.data.setCurrentUserId(req.body.currentUserId);
   res.sendStatus(200);
 });
 
 router.delete('/logout', (req, res, next) => {
-  const dao = new Dao(req, res);
-  dao.clearData();
+  res.locals.data.clearData();
   res.sendStatus(200);
 });
 
 router.get('/me', async (req, res, next) => {
-  const dao = new Dao(req, res);
-  const currentUserId = dao.getData(DataKeyMap.currentUserId);
+  // Update this with your preferred data storage=
+  const currentUserId: string = res.locals.data.getCurrentUserId();
+  const users: Users = res.locals.data.getUsers();
+  const configuration: Config = res.locals.data.getConfiguration();
+  const integrationTypes: IntegrationType[] = res.locals.data.getEnabledIntegrationTypes();
+  const fusebitJwt: string = configuration.FUSEBIT_JWT;
+  const baseIntegrationUrl: string = configuration.BASE_INTEGRATION_URL;
+
   if (!currentUserId) {
     return res.sendStatus(403);
   }
-  const users = dao.getData(DataKeyMap.users);
 
   try {
-    // Check if integration is installed
-    const configuration = dao.getData(DataKeyMap.configuration);
-    const integrationTypes = Object.keys(configuration.INTEGRATION_ID_MAP) as IntegrationType[];
+    // Check which integrations are installed
     const integrations = (
       await Promise.all(
         integrationTypes.map(async (integrationType) => {
-          const integrationId = configuration.INTEGRATION_ID_MAP[integrationType];
+          // Check if this integrationType is installed
+          const integrationId = res.locals.data.getIntegrationId(integrationType);
           const response = await fetch(
-            `${configuration.BASE_INTEGRATION_URL}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
+            `${baseIntegrationUrl}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
             {
               headers: {
                 Accept: 'application/json, text/plain, */*',
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+                Authorization: `Bearer ${fusebitJwt}`,
               },
             }
           );

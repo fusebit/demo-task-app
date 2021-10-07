@@ -1,22 +1,24 @@
 import express from 'express';
 import fetch from 'node-fetch';
-import Dao from '../data/dao';
-import { DataKeyMap, AssertsIsKeyOf } from '../../constants';
+import { AssertIntegrationName } from '../../constants';
 
 const router = express.Router();
 
 router.get('/:integrationName/install', async (req, res, next) => {
-  const dao = new Dao(req, res);
-  const configuration = dao.getData(DataKeyMap.configuration);
-  const INTEGRATION_ID_MAP = configuration.INTEGRATION_ID_MAP;
-  AssertsIsKeyOf(req.params.integrationName, INTEGRATION_ID_MAP);
-  const integrationId = INTEGRATION_ID_MAP[req.params.integrationName];
+  // Type check on integrationName
+  AssertIntegrationName(req.params.integrationName);
+
+  // Update this with your preferred data storage
+  const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
+  const currentUserId: string = res.locals.data.getCurrentUserId();
+  const configuration: Config = res.locals.data.getConfiguration();
+  const fusebitJwt: string = configuration.FUSEBIT_JWT;
+  const appUrl: string = configuration.APP_URL;
+  const baseIntegrationUrl: string = configuration.BASE_INTEGRATION_URL;
 
   try {
-    const currentUserId = dao.getData(DataKeyMap.currentUserId);
-
     const body = JSON.stringify({
-      redirectUrl: `${configuration.APP_URL}/api/integration/${req.params.integrationName}/callback`,
+      redirectUrl: `${appUrl}/api/integration/${req.params.integrationName}/callback`,
       tags: {
         'fusebit.tenantId': currentUserId.toString(),
       },
@@ -24,9 +26,9 @@ router.get('/:integrationName/install', async (req, res, next) => {
     const headers = {
       Accept: 'application/json, text/plain, */*',
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+      Authorization: `Bearer ${fusebitJwt}`,
     };
-    const createSessionResponse = await fetch(`${configuration.BASE_INTEGRATION_URL}/${integrationId}/session`, {
+    const createSessionResponse = await fetch(`${baseIntegrationUrl}/${integrationId}/session`, {
       body,
       headers,
       method: 'POST',
@@ -38,7 +40,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
       return;
     }
     const sessionId = session.id;
-    res.redirect(`${configuration.BASE_INTEGRATION_URL}/${integrationId}/session/${sessionId}/start`);
+    res.redirect(`${baseIntegrationUrl}/${integrationId}/session/${sessionId}/start`);
   } catch (e) {
     console.log('Error starting Fusebit session', e);
     res.sendStatus(500);
@@ -46,21 +48,23 @@ router.get('/:integrationName/install', async (req, res, next) => {
 });
 
 router.get('/:integrationName/callback', async (req, res, next) => {
-  const dao = new Dao(req, res);
-  const configuration = dao.getData(DataKeyMap.configuration);
-  const INTEGRATION_ID_MAP = configuration.INTEGRATION_ID_MAP;
-  AssertsIsKeyOf(req.params.integrationName, INTEGRATION_ID_MAP);
-  const integrationId = INTEGRATION_ID_MAP[req.params.integrationName];
+  // Type check on integrationName
+  AssertIntegrationName(req.params.integrationName);
+
+  // Update this with your preferred data storage
+  const configuration: Config = res.locals.data.getConfiguration();
+  const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
+  const baseIntegrationUrl: string = configuration.BASE_INTEGRATION_URL;
+  const fusebitJwt: string = configuration.FUSEBIT_JWT;
 
   const sessionId = req.query.session;
-  const BASE_INTEGRATION_URL = configuration.BASE_INTEGRATION_URL;
 
   try {
-    const sessionPersistResponse = await fetch(`${BASE_INTEGRATION_URL}/${integrationId}/session/${sessionId}/commit`, {
+    const sessionPersistResponse = await fetch(`${baseIntegrationUrl}/${integrationId}/session/${sessionId}/commit`, {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+        Authorization: `Bearer ${fusebitJwt}`,
       },
       method: 'POST',
     });
@@ -76,33 +80,36 @@ router.get('/:integrationName/callback', async (req, res, next) => {
 });
 
 router.delete('/:integrationName/install', async (req, res) => {
-  const dao = new Dao(req, res);
-  const configuration = dao.getData(DataKeyMap.configuration);
-  const INTEGRATION_ID_MAP = configuration.INTEGRATION_ID_MAP;
-  AssertsIsKeyOf(req.params.integrationName, INTEGRATION_ID_MAP);
-  const integrationId = INTEGRATION_ID_MAP[req.params.integrationName];
+  // Type check on integrationName
+  AssertIntegrationName(req.params.integrationName);
 
-  const currentUserId = dao.getData(DataKeyMap.currentUserId);
+  // Update this with your preferred data storage
+  const configuration: Config = res.locals.data.getConfiguration();
+  const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
+  const currentUserId: string = res.locals.data.getCurrentUserId();
+  const baseIntegrationUrl: string = res.locals.data.getBaseIntegrationUrl();
+  const fusebitJwt: string = configuration.FUSEBIT_JWT;
+
   try {
     // Get installation
     const lookupResponse = await fetch(
-      `${configuration.BASE_INTEGRATION_URL}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
+      `${baseIntegrationUrl}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
       {
         headers: {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+          Authorization: `Bearer ${fusebitJwt}`,
         },
       }
     );
     const status = await lookupResponse.json();
     const installation = status.items?.[0];
     // Delete installation
-    await fetch(`${configuration.BASE_INTEGRATION_URL}/${integrationId}/instance/${installation.id}`, {
+    await fetch(`${baseIntegrationUrl}/${integrationId}/instance/${installation.id}`, {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+        Authorization: `Bearer ${fusebitJwt}`,
       },
       method: 'DELETE',
     });

@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { DataKeyMap, IntegrationTypeEnum } from '../../constants';
 
 class DAO {
   constructor(req: Request, res: Response) {
@@ -42,6 +43,56 @@ class DAO {
     };
     const encodedCookieString = Buffer.from(JSON.stringify(this.data)).toString('base64');
     this.res.cookie('sample-app', encodedCookieString, { path: '/' });
+  };
+
+  getUsers = () => {
+    return this.getData(DataKeyMap.users);
+  };
+
+  setUsers = (users: Users) => {
+    this.saveData(DataKeyMap.users, users);
+  };
+
+  getCurrentUserId = () => {
+    return this.getData(DataKeyMap.currentUserId);
+  };
+
+  setCurrentUserId = (currentUserId: string) => {
+    this.saveData(DataKeyMap.currentUserId, currentUserId);
+  };
+
+  getConfiguration = () => {
+    return this.getData(DataKeyMap.configuration);
+  };
+
+  setConfiguration = (config: Config) => {
+    this.saveData(DataKeyMap.configuration, config);
+  };
+
+  getTasks = () => {
+    return this.getData(DataKeyMap.tasks);
+  };
+
+  setTasks = (tasks: TaskMap) => {
+    this.saveData(DataKeyMap.tasks, tasks);
+  };
+
+  getEnabledIntegrationIds = () => {
+    return this.getEnabledIntegrationTypes().map((integrationType: IntegrationType) =>
+      this.getIntegrationId(integrationType)
+    );
+  };
+
+  getEnabledIntegrationTypes = () => {
+    const configuration = this.getConfiguration();
+    return Object.keys(IntegrationTypeEnum).filter(
+      (integrationType: IntegrationType) => !configuration[`${integrationType}_INTEGRATION_ID`]
+    );
+  };
+
+  getIntegrationId = (integrationType: IntegrationType) => {
+    const configuration = this.getConfiguration();
+    return configuration[`${integrationType}_INTEGRATION_ID`];
   };
 }
 

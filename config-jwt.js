@@ -6,9 +6,7 @@ dotenv.config('.env');
 exec('fuse token -o raw', (error, stdout, stderr) => {
   const configToken = jwt.sign(
     {
-      INTEGRATION_ID_MAP: {
-        slack: 'slack-integration',
-      },
+      SLACK_INTEGRATION_ID: 'slack-integration',
       BASE_INTEGRATION_URL:
         'https://kind-moose-5.tunnel.dev.fusebit.io/v2/account/acc-21a4974efd574f87/subscription/sub-eeae7b111e9c4285/integration',
       APP_URL: 'http://localhost:3000',

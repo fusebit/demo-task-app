@@ -2,7 +2,8 @@ interface Config {
   BASE_INTEGRATION_URL: string;
   FUSEBIT_JWT: string;
   APP_URL: string;
-  INTEGRATION_ID_MAP: Record<IntegrationType, string>;
+  SLACK_INTEGRATION_ID?: string;
+  HUBSPOT_INTEGRATION_ID?: string;
 }
 
 interface User {
@@ -17,12 +18,20 @@ interface Task {
   index?: number;
 }
 
-type IntegrationType = 'slack' | 'hubspot';
+interface TaskMap {
+  [key: string]: Task[];
+}
+
+type IntegrationType = 'SLACK' | 'HUBSPOT';
+
+interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> {}
+
+interface IntegrationIdMap extends IntegrationMap<string> {}
 
 interface UserData {
   currentUserId: string;
   users: Users;
-  integrations: Partial<Record<IntegrationType, any>>;
+  integrations: IntegrationMap<any>;
   integrationTypes: IntegrationType[];
 }
 
@@ -44,4 +53,12 @@ type DataKey = keyof Data;
 
 type DataKeyMap = {
   [key in keyof Data]: key;
+};
+
+type IntegrationTypeKeyMap = {
+  [key in IntegrationType]: key;
+};
+
+type IntegrationIdKeyMap = {
+  [key in IntegrationType]: string;
 };

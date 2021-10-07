@@ -11,11 +11,13 @@ router.use(
   '/api',
   (req, res, next) => {
     const dao = new Dao(req, res);
+    res.locals.data = dao;
 
     // Check for Environment Variables, Load if available.
     if (process.env.FUSEBIT_JWT && process.env.BASE_INTEGRATION_URL && process.env.APP_URL) {
       dao.saveData(DataKeyMap.configuration, {
-        INTEGRATION_ID_MAP: JSON.parse(process.env.INTEGRATION_ID_MAP),
+        SLACK_INTEGRATION_ID: process.env.SLACK_INTEGRATION_ID,
+        HUBSPOT_INTEGRATION_ID: process.env.HUBSPOT_INTEGRATION_ID,
         FUSEBIT_JWT: process.env.FUSEBIT_JWT,
         BASE_INTEGRATION_URL: process.env.BASE_INTEGRATION_URL,
         APP_URL: process.env.APP_URL,
