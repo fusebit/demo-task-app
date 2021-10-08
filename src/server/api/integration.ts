@@ -87,7 +87,7 @@ router.delete('/:integrationName/install', async (req, res) => {
   const configuration: Config = res.locals.data.getConfiguration();
   const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
   const currentUserId: string = res.locals.data.getCurrentUserId();
-  const baseIntegrationUrl: string = res.locals.data.getBaseIntegrationUrl();
+  const baseIntegrationUrl: string = configuration.BASE_INTEGRATION_URL;
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
 
   try {

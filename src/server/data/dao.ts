@@ -46,7 +46,7 @@ class DAO {
   };
 
   getUsers = () => {
-    return this.getData(DataKeyMap.users);
+    return this.getData(DataKeyMap.users) || {};
   };
 
   setUsers = (users: Users) => {
@@ -70,7 +70,7 @@ class DAO {
   };
 
   getTasks = () => {
-    return this.getData(DataKeyMap.tasks);
+    return this.getData(DataKeyMap.tasks) || {};
   };
 
   setTasks = (tasks: TaskMap) => {
@@ -86,7 +86,7 @@ class DAO {
   getEnabledIntegrationTypes = () => {
     const configuration = this.getConfiguration();
     return Object.keys(IntegrationTypeEnum).filter(
-      (integrationType: IntegrationType) => !configuration[`${integrationType}_INTEGRATION_ID`]
+      (integrationType: IntegrationType) => !!configuration[`${integrationType}_INTEGRATION_ID`]
     );
   };
 

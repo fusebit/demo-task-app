@@ -2,7 +2,7 @@
   "name": "@fusebit-int/sample-app",
   "version": "1.0.0",
   "main": "libc/server/server.js",
-  "typings": "main.d.ts",
+  "typings": "src/main.d.ts",
   "files": [
     "libc/**/*.js",
     "libc/**/*.d.ts",

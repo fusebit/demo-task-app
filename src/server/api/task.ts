@@ -10,14 +10,15 @@ router.post('/', async (req, res, next) => {
   const configuration: Config = res.locals.data.getConfiguration();
   const currentUserId: string = res.locals.data.getCurrentUserId();
   const tasks: TaskMap = res.locals.data.getTasks();
-  const userTasks: Task[] = tasks[currentUserId];
+  const userTasks: Task[] = tasks[currentUserId] || [];
   const users: Users = res.locals.data.getData(DataKeyMap.users);
   const currentUser: User = users[currentUserId];
   const integrationIds: string[] = res.locals.data.getEnabledIntegrationIds();
 
   // Save Task
-  tasks[currentUserId] = [...userTasks, task];
-  res.locals.saveData(DataKeyMap.tasks, tasks);
+  userTasks.push(task);
+  tasks[currentUserId] = userTasks;
+  res.locals.data.setTasks(tasks);
   res.send(userTasks);
 
   // Post to Integration
@@ -41,7 +42,7 @@ router.post('/', async (req, res, next) => {
 router.get('/', (req, res, next) => {
   // Update this with your preferred data storage
   const currentUserId: string = res.locals.data.getCurrentUserId();
-  const userTasks: Task[] = res.locals.data.getTasks()[currentUserId];
+  const userTasks: Task[] = res.locals.data.getTasks()[currentUserId] || [];
 
   res.send(userTasks);
 });

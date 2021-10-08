@@ -9,7 +9,7 @@ import IntegrationFeedback from './IntegrationFeedback';
 
 export default (props: { integrations: Partial<Record<IntegrationType, any>> }) => {
   // TODO: For now, this sample app only supports the Slack integration.  This will be updated in the future to support other integrations.
-  const isSlackInstalled = !!props.integrations.slack;
+  const isSlackInstalled = !!props.integrations.SLACK;
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);

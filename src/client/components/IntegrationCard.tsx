@@ -3,15 +3,15 @@ import { Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typo
 import { IntegrationTypeEnum } from '../../constants';
 
 const IntegrationCard = (props: {
-  integration: IntegrationTypeEnum;
+  integration: IntegrationType;
   isInstalled: boolean;
   onUninstall: Function;
   enabledTypes: IntegrationType[];
 }) => {
   const capitalize = (string: string) => string[0].toUpperCase() + string.slice(1).toLowerCase();
-  const bodyTextMap: Record<IntegrationTypeEnum, string> = {
-    [IntegrationTypeEnum.slack]: 'Get slack notifications when a new task is created.',
-    [IntegrationTypeEnum.hubspot]: 'Sync your hubspot task list here.',
+  const bodyTextMap: Record<IntegrationType, string> = {
+    [IntegrationTypeEnum.SLACK]: 'Get slack notifications when a new task is created.',
+    [IntegrationTypeEnum.HUBSPOT]: 'Sync your hubspot task list here.',
   };
 
   const installApp = () => (window.location.href = `/api/integration/${props.integration}/install`);

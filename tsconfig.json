@@ -14,5 +14,5 @@
     }
   },
   "presets": ["@babel/preset-react"],
-  "include": ["src/**/*", "public/**/*", "main.d.ts"]
+  "include": ["src/**/*", "public/**/*"]
 }
