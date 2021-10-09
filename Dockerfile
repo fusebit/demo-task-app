@@ -1,7 +1,5 @@
 FROM node:14
 
-ENV JWT_SECRET=FUSEBIT_SECRET:TODO
-
 WORKDIR /usr/src/app
 
 COPY package.json ./
@@ -13,6 +11,7 @@ COPY public ./public
 COPY src ./src
 RUN npm run build
 
-EXPOSE 3000
+ENV JWT_SECRET=FUSEBIT_SECRET:TODO
+EXPOSE 80
 CMD ["npm", "start"]
 

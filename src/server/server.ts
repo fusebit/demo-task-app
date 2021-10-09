@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(router);
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!\n');
+const port = process.env.SAMPLE_APP_PORT || 3000;
+app.listen(port, function () {
+  console.log(`Sample App listening on port ${port}!\n`);
 });
