@@ -1,7 +1,6 @@
 interface Config {
-  BASE_INTEGRATION_URL: string;
+  FUSEBIT_INTEGRATION_URL: string;
   FUSEBIT_JWT: string;
-  APP_URL: string;
   SLACK_INTEGRATION_ID?: string;
   HUBSPOT_INTEGRATION_ID?: string;
 }

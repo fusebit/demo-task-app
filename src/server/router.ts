@@ -14,13 +14,12 @@ router.use(
     res.locals.data = dao;
 
     // Check for Environment Variables, Load if available.
-    if (process.env.FUSEBIT_JWT && process.env.BASE_INTEGRATION_URL && process.env.APP_URL) {
+    if (process.env.FUSEBIT_JWT) {
       dao.saveData(DataKeyMap.configuration, {
         SLACK_INTEGRATION_ID: process.env.SLACK_INTEGRATION_ID,
         HUBSPOT_INTEGRATION_ID: process.env.HUBSPOT_INTEGRATION_ID,
         FUSEBIT_JWT: process.env.FUSEBIT_JWT,
-        BASE_INTEGRATION_URL: process.env.BASE_INTEGRATION_URL,
-        APP_URL: process.env.APP_URL,
+        FUSEBIT_INTEGRATION_URL: process.env.FUSEBIT_INTEGRATION_URL,
       });
       return next();
     }

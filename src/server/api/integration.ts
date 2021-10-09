@@ -13,8 +13,8 @@ router.get('/:integrationName/install', async (req, res, next) => {
   const currentUserId: string = res.locals.data.getCurrentUserId();
   const configuration: Config = res.locals.data.getConfiguration();
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
-  const appUrl: string = configuration.APP_URL;
-  const baseIntegrationUrl: string = configuration.BASE_INTEGRATION_URL;
+  const appUrl: string = `${req.protocol}://${req.hostname}`;
+  const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
 
   try {
     const body = JSON.stringify({
@@ -28,7 +28,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${fusebitJwt}`,
     };
-    const createSessionResponse = await fetch(`${baseIntegrationUrl}/${integrationId}/session`, {
+    const createSessionResponse = await fetch(`${fusebitIntegrationUrl}/${integrationId}/session`, {
       body,
       headers,
       method: 'POST',
@@ -40,7 +40,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
       return;
     }
     const sessionId = session.id;
-    res.redirect(`${baseIntegrationUrl}/${integrationId}/session/${sessionId}/start`);
+    res.redirect(`${fusebitIntegrationUrl}/${integrationId}/session/${sessionId}/start`);
   } catch (e) {
     console.log('Error starting Fusebit session', e);
     res.sendStatus(500);
@@ -54,20 +54,23 @@ router.get('/:integrationName/callback', async (req, res, next) => {
   // Update this with your preferred data storage
   const configuration: Config = res.locals.data.getConfiguration();
   const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
-  const baseIntegrationUrl: string = configuration.BASE_INTEGRATION_URL;
+  const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
 
   const sessionId = req.query.session;
 
   try {
-    const sessionPersistResponse = await fetch(`${baseIntegrationUrl}/${integrationId}/session/${sessionId}/commit`, {
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${fusebitJwt}`,
-      },
-      method: 'POST',
-    });
+    const sessionPersistResponse = await fetch(
+      `${fusebitIntegrationUrl}/${integrationId}/session/${sessionId}/commit`,
+      {
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${fusebitJwt}`,
+        },
+        method: 'POST',
+      }
+    );
 
     if (sessionPersistResponse.status > 299) {
       throw 'ERROR: Fusebit session did not persist';
@@ -87,13 +90,13 @@ router.delete('/:integrationName/install', async (req, res) => {
   const configuration: Config = res.locals.data.getConfiguration();
   const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
   const currentUserId: string = res.locals.data.getCurrentUserId();
-  const baseIntegrationUrl: string = configuration.BASE_INTEGRATION_URL;
+  const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
 
   try {
     // Get installation
     const lookupResponse = await fetch(
-      `${baseIntegrationUrl}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
+      `${fusebitIntegrationUrl}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
       {
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -105,7 +108,7 @@ router.delete('/:integrationName/install', async (req, res) => {
     const status = await lookupResponse.json();
     const installation = status.items?.[0];
     // Delete installation
-    await fetch(`${baseIntegrationUrl}/${integrationId}/instance/${installation.id}`, {
+    await fetch(`${fusebitIntegrationUrl}/${integrationId}/instance/${installation.id}`, {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
