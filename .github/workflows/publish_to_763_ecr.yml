@@ -38,3 +38,4 @@ jobs:
         run: |
           docker build -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} --build-arg VERSION_HASH=${GITHUB_SHA} .
           docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+          aws ecs update-service --cluster sample-app-task --service sample-app-task --force-new-deployment
