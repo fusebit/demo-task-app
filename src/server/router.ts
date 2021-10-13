@@ -51,7 +51,7 @@ router.use(
   },
   apiRouter
 );
-apiRouter.get('/version', (req, res) => {
+router.get('/version', (req, res) => {
   res.send(process.env.VERSION_HASH || 'unknown');
 });
 router.use(files);
