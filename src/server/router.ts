@@ -25,15 +25,17 @@ router.use(
     }
 
     // Check if config hash exists.  Load if available.
+    let jwtError;
     if (req.header('authorization')) {
       try {
         const token = req.header('authorization').split(' ')[1];
-        const config: Config = jwt.verify(token, process.env.JWT_SECRET) as Config;
+        const config: Config = jwt.verify(token, process.env.SAMPLE_APP_TASK_JWT_SECRET) as Config;
         dao.saveData(DataKeyMap.configuration, config);
         return next();
       } catch (e) {
         console.log('Unable to verify JWT');
         console.log(e);
+        jwtError = e;
         // Continue to test stored configuration
       }
     }
@@ -43,7 +45,8 @@ router.use(
       return next();
     }
 
-    res.sendStatus(403);
+    res.status(403);
+    res.send(jwtError);
   },
   apiRouter
 );
