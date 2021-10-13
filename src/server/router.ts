@@ -51,5 +51,8 @@ router.use(
   apiRouter
 );
 router.use(files);
+apiRouter.get('/version', (req, res) => {
+  res.send(process.env.VERSION_HASH || 'unknown');
+});
 
 export default router;
