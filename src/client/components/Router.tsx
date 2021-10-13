@@ -22,6 +22,7 @@ const AuthedRoute = (props: { onLogin: Function; userData: UserData } & RoutePro
 const Routes = () => {
   const [userData, setUserData] = useState<UserData>();
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
+  const { hash } = useLocation();
 
   useEffect(() => {
     let mounted = true;
@@ -46,22 +47,18 @@ const Routes = () => {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [hash]);
 
-  const getMe = async () =>
-    fetch('/api/user/me', {
+  const getMe = async () => {
+    if (hash && hash.includes('configuration=')) {
+      const configuration = hash.split('configuration=')[1];
+      localStorage.setItem('configuration', configuration);
+    }
+    return fetch('/api/user/me', {
       headers: { Authorization: `Bearer ${localStorage.getItem('configuration')}` },
       credentials: 'include',
     }).then((response) => response.json());
-
-  const { hash } = useLocation();
-  useEffect(() => {
-    if (!hash || !hash.includes('configuration=')) {
-      return;
-    }
-    const configuration = hash.split('configuration=')[1];
-    localStorage.setItem('configuration', configuration);
-  }, [hash]);
+  };
 
   if (!hasLoaded) {
     return (
