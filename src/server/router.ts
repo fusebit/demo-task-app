@@ -25,6 +25,7 @@ router.use(
     }
 
     // Check if config hash exists.  Load if available.
+    let jwtError;
     if (req.header('authorization')) {
       try {
         const token = req.header('authorization').split(' ')[1];
@@ -34,6 +35,7 @@ router.use(
       } catch (e) {
         console.log('Unable to verify JWT');
         console.log(e);
+        jwtError = e;
         // Continue to test stored configuration
       }
     }
@@ -43,7 +45,8 @@ router.use(
       return next();
     }
 
-    res.sendStatus(403);
+    res.status(403);
+    res.send(jwtError);
   },
   apiRouter
 );
