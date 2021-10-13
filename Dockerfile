@@ -11,7 +11,7 @@ COPY public ./public
 COPY src ./src
 RUN npm run build
 
-ENV JWT_SECRET=FUSEBIT_SECRET:TODO
+ENV SAMPLE_APP_TASK_JWT_SECRET=FUSEBIT_SECRET
 EXPOSE 80
 CMD ["npm", "start"]
 

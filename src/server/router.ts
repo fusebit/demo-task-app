@@ -28,7 +28,7 @@ router.use(
     if (req.header('authorization')) {
       try {
         const token = req.header('authorization').split(' ')[1];
-        const config: Config = jwt.verify(token, process.env.JWT_SECRET) as Config;
+        const config: Config = jwt.verify(token, process.env.SAMPLE_APP_TASK_JWT_SECRET) as Config;
         dao.saveData(DataKeyMap.configuration, config);
         return next();
       } catch (e) {
