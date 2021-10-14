@@ -29,7 +29,8 @@ router.use(
     if (req.header('authorization')) {
       try {
         const token = req.header('authorization').split(' ')[1];
-        const config: Config = jwt.verify(token, process.env.SAMPLE_APP_TASK_JWT_SECRET) as Config;
+        const secret = process.env.SAMPLE_APP_TASK_JWT_SECRET || process.env.SAMPLE_APP_FALLBACK_SECRET;
+        const config: Config = jwt.verify(token, secret) as Config;
         dao.saveData(DataKeyMap.configuration, config);
         return next();
       } catch (e) {
@@ -50,6 +51,11 @@ router.use(
   },
   apiRouter
 );
+
+router.get('/version', (req, res) => {
+  res.send(process.env.VERSION_HASH || 'unknown');
+});
+
 router.use(files);
 
 export default router;
