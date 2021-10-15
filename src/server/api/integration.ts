@@ -13,7 +13,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
   const currentUserId: string = res.locals.data.getCurrentUserId();
   const configuration: Config = res.locals.data.getConfiguration();
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
-  const appUrl: string = `${req.protocol}://${req.hostname}`;
+  const appUrl: string = `${process.env.SSL_ENABLED ? 'https' : 'http'}://${req.hostname}`;
   const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
 
   try {
@@ -48,18 +48,24 @@ router.get('/:integrationName/install', async (req, res, next) => {
 });
 
 router.get('/:integrationName/callback', async (req, res, next) => {
-  // Type check on integrationName
-  AssertIntegrationName(req.params.integrationName);
-
-  // Update this with your preferred data storage
-  const configuration: Config = res.locals.data.getConfiguration();
-  const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
-  const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
-  const fusebitJwt: string = configuration.FUSEBIT_JWT;
-
-  const sessionId = req.query.session;
+  const integrationName = req.params.integrationName.toUpperCase();
+  try {
+    // Type check on integrationName
+    AssertIntegrationName(integrationName);
+  } catch (e) {
+    res.status(500);
+    res.send(e);
+    return;
+  }
 
   try {
+    // Update this with your preferred data storage
+    const configuration: Config = res.locals.data.getConfiguration();
+    const integrationId: string = res.locals.data.getIntegrationId(integrationName);
+    const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
+    const fusebitJwt: string = configuration.FUSEBIT_JWT;
+
+    const sessionId = req.query.session;
     const sessionPersistResponse = await fetch(
       `${fusebitIntegrationUrl}/${integrationId}/session/${sessionId}/commit`,
       {
@@ -96,7 +102,7 @@ router.delete('/:integrationName/install', async (req, res) => {
   try {
     // Get installation
     const lookupResponse = await fetch(
-      `${fusebitIntegrationUrl}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
+      `${fusebitIntegrationUrl}/${integrationId}/install?tag=fusebit.tenantId=${currentUserId}`,
       {
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -108,7 +114,7 @@ router.delete('/:integrationName/install', async (req, res) => {
     const status = await lookupResponse.json();
     const installation = status.items?.[0];
     // Delete installation
-    await fetch(`${fusebitIntegrationUrl}/${integrationId}/instance/${installation.id}`, {
+    await fetch(`${fusebitIntegrationUrl}/${integrationId}/install/${installation.id}`, {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
