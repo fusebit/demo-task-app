@@ -102,7 +102,7 @@ router.delete('/:integrationName/install', async (req, res) => {
   try {
     // Get installation
     const lookupResponse = await fetch(
-      `${fusebitIntegrationUrl}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
+      `${fusebitIntegrationUrl}/${integrationId}/install?tag=fusebit.tenantId=${currentUserId}`,
       {
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -114,7 +114,7 @@ router.delete('/:integrationName/install', async (req, res) => {
     const status = await lookupResponse.json();
     const installation = status.items?.[0];
     // Delete installation
-    await fetch(`${fusebitIntegrationUrl}/${integrationId}/instance/${installation.id}`, {
+    await fetch(`${fusebitIntegrationUrl}/${integrationId}/install/${installation.id}`, {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',

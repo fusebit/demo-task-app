@@ -34,7 +34,7 @@ router.get('/me', async (req, res, next) => {
           // Check if this integrationType is installed
           const integrationId = res.locals.data.getIntegrationId(integrationType);
           const response = await fetch(
-            `${fusebitIntegrationUrl}/${integrationId}/instance?tag=fusebit.tenantId=${currentUserId}`,
+            `${fusebitIntegrationUrl}/${integrationId}/install?tag=fusebit.tenantId=${currentUserId}`,
             {
               headers: {
                 Accept: 'application/json, text/plain, */*',
