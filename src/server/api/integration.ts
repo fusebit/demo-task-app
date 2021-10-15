@@ -48,12 +48,19 @@ router.get('/:integrationName/install', async (req, res, next) => {
 });
 
 router.get('/:integrationName/callback', async (req, res, next) => {
-  // Type check on integrationName
-  AssertIntegrationName(req.params.integrationName);
+  const integrationName = req.params.integrationName.toUpperCase();
+  try {
+    // Type check on integrationName
+    AssertIntegrationName(integrationName);
+  } catch (e) {
+    res.status(500);
+    res.send(e);
+    return;
+  }
 
   // Update this with your preferred data storage
   const configuration: Config = res.locals.data.getConfiguration();
-  const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
+  const integrationId: string = res.locals.data.getIntegrationId(integrationName);
   const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
 

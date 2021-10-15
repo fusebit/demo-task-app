@@ -8,12 +8,15 @@ const app = express();
 app.use(
   cookieSession({
     keys: ['Fusebit Example'],
-  })
+  }),
+  (req, res, next) => {
+    console.log(req.path);
+    next();
+  }
 );
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 app.use(router);
 const port = process.env.SAMPLE_APP_PORT || 3000;
 app.listen(port, function () {
