@@ -24,7 +24,7 @@ router.post('/', async (req, res, next) => {
   // Post to Integration
   try {
     integrationIds.forEach((integrationId) => {
-      fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/${currentUser.userId}/postSlackMessage`, {
+      fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/tenant/${currentUser.userId}/test`, {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
