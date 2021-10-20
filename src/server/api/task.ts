@@ -24,14 +24,16 @@ router.post('/', async (req, res, next) => {
   // Post to Integration
   try {
     integrationIds.forEach((integrationId) => {
-      fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/tenant/${currentUser.userId}/test`, {
+      fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/postMessage/${currentUser.userId}`, {
         method: 'POST',
         headers: {
           Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
           Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
         },
-        body: JSON.stringify(task),
+        body: JSON.stringify({
+          message: `A task has been created within the Sample App. \n\n Task Name: ${task.name} \n Task Description: ${task.description}`,
+        }),
       });
     });
   } catch (e) {
