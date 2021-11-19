@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import StatusPaper from './StatusPaper';
 import { Avatar, Grid, List, ListItem, ListItemIcon, ListItemText, Paper, Box, Typography } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 
 export default (props: { onLogin: Function; userData: UserData }) => {
-  const [isStatusCardOpen, setStatusCardOpen] = useState(true);
-
   const handleLogin = (user: User) => async () => {
     props.onLogin({
       users,
@@ -32,19 +30,13 @@ export default (props: { onLogin: Function; userData: UserData }) => {
     <Grid display="flex" flexDirection="column" container alignItems="center" justifyContent="center">
       <Box position="absolute" left="0" top="0" width="100vw" height="204px" style={{ backgroundColor: '#333333' }} />
       <Grid item xs={6} position="relative" mt="113px">
-        {isStatusCardOpen && (
-          <StatusPaper
-            title="Welcome to the Fusebit Sample App!"
-            elevation={24}
-            onClose={() => setStatusCardOpen(false)}
-          >
-            <Typography fontSize="16px" lineHeight="24px">
-              Fusebit provides multi-tenancy out of box, we’ve mocked out two users for you in this sample app so you
-              can see it in action. Log in to get started and don’t forget to follow along in the code in your favorite
-              editor!
-            </Typography>
-          </StatusPaper>
-        )}
+        <StatusPaper title="Welcome to the Fusebit Sample App!" elevation={24}>
+          <Typography fontSize="16px" lineHeight="24px">
+            Fusebit provides multi-tenancy out of box, we’ve mocked out two users for you in this sample app so you can
+            see it in action. Log in to get started and don’t forget to follow along in the code in your favorite
+            editor!
+          </Typography>
+        </StatusPaper>
       </Grid>
       <Grid minWidth="268px" position="relative" mt="104px">
         <Paper elevation={24}>
