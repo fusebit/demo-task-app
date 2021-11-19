@@ -1,6 +1,17 @@
 import React from 'react';
 import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
-import { Avatar, Divider, Grid, List, ListItem, ListItemIcon, ListItemText, Paper } from '@mui/material';
+import {
+  Avatar,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Box,
+  Typography,
+} from '@mui/material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import StarIcon from '@mui/icons-material/Star';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -35,9 +46,25 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
   return (
     <div>
       <Grid container className="navigation-drawer-grid null-pointer">
-        <Grid item xs={2}>
+        <Grid item minWidth="310px">
           <Paper square className="navigation-drawer full-pointer">
-            <List>
+            <List disablePadding style={{ padding: '64px 0' }}>
+              <ListItem>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                  width="100%"
+                  border="1px dotted #FFFFFF"
+                  borderRadius="8px"
+                  padding="38px 0"
+                  mb="40px"
+                >
+                  <Typography fontSize="18px" lineHeight="21px" style={{ width: 'fit-content' }}>
+                    Your Logo Here
+                  </Typography>
+                </Box>
+              </ListItem>
               <ListItem className="center-text">
                 <Avatar>{currentUser?.index + 1}</Avatar>
                 <ListItemText>{currentUser?.name}</ListItemText>
@@ -56,7 +83,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
                 <ListItemIcon>
                   <StarIcon style={{ color: 'white' }} />
                 </ListItemIcon>
-                <ListItemText>Integration Marketplace</ListItemText>
+                <ListItemText>Integrations Marketplace</ListItemText>
               </ListItemLink>
               <ListItem button onClick={props.onLogout}>
                 <ListItemIcon>

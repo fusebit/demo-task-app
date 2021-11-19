@@ -7,9 +7,10 @@ body {
 }
 
 .navigation-drawer {
-  background-color: #1f2937;
+  background-color: #333333;
   color: white;
   height: 100vh;
+  padding-top: 64px;
 }
 
 .navigation-drawer-grid {
