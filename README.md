@@ -5,7 +5,9 @@
 
 ### How do I integrate Fusebit into my SaaS app?
 </br>
+
 We built this sample app to **help you answer** this question.
+
 
 Please explore this codebase to understand how the different pieces work under the hood. Additionally, you can also use this as a companion app while you build out your integration in Fusebit before you migrate it fully into your own product.
 
