@@ -24,15 +24,15 @@ const drawerWidth = 310;
 const iconStyle = { color: 'white', marginLeft: '10px' };
 
 const sampleAppLinks = [
-  { icon: <InboxIcon style={iconStyle} />, text: 'Your Tasks', to: '/' },
-  { icon: <StarIcon style={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
-  { icon: <ExitToAppIcon style={iconStyle} />, text: 'Logout', logout: true },
+  { id: 'tasks', icon: <InboxIcon style={iconStyle} />, text: 'Your Tasks', to: '/' },
+  { id: 'marketplace', icon: <StarIcon style={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
+  { id: 'logout', icon: <ExitToAppIcon style={iconStyle} />, text: 'Logout', logout: true },
 ];
 
 const learnMoreLinks = [
-  { icon: <InsertDriveFileIcon style={iconStyle} />, text: 'Docs', to: '/docs' },
-  { icon: <SubjectIcon style={iconStyle} />, text: 'Blog', to: '/blog' },
-  { icon: <GitHubIcon style={iconStyle} />, text: 'Github', to: '/github' },
+  { id: 'docs', icon: <InsertDriveFileIcon style={iconStyle} />, text: 'Docs', to: '/docs' },
+  { id: 'blog', icon: <SubjectIcon style={iconStyle} />, text: 'Blog', to: '/blog' },
+  { id: 'github', icon: <GitHubIcon style={iconStyle} />, text: 'Github', to: '/github' },
 ];
 
 const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void }>) => {
@@ -85,7 +85,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
             </ListItem>
             {sampleAppLinks.map((link) => {
               return (
-                <CustomButton to={link.to} onClick={link.logout && props.onLogout}>
+                <CustomButton key={link.id} to={link.to} onClick={link.logout && props.onLogout}>
                   <ListItemIcon>{link.icon}</ListItemIcon>
                   <ListItemText>{link.text}</ListItemText>
                 </CustomButton>
@@ -97,7 +97,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
             </ListItem>
             {learnMoreLinks.map((link) => {
               return (
-                <CustomButton to={link.to}>
+                <CustomButton key={link.id} to={link.to}>
                   <ListItemIcon>{link.icon}</ListItemIcon>
                   <ListItemText>{link.text}</ListItemText>
                 </CustomButton>

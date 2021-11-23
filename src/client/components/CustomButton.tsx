@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import { ListItemButton, Box } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
-const StyledListItemLink = styled(ListItemButton)(() => ({
+const StyledListItemLink = styled(ListItemButton)((props) => ({
   position: 'relative',
   transition: 'all .15s linear',
   ':hover': {
@@ -19,11 +19,19 @@ interface Props {
 
 const CustomButton = ({ to, onClick, children }: Props) => {
   const [hovering, setHovering] = useState(false);
+  const isActive = (() => {
+    const linkPath = to;
+    if (linkPath) {
+      return window.location.pathname === linkPath;
+    }
+    return false;
+  })();
 
   return (
-    <RouterLink to={to && to} style={{ textDecoration: 'none', color: 'white' }}>
+    <RouterLink to={to || ''} style={{ textDecoration: 'none', color: 'white' }}>
       <StyledListItemLink
-        onClick={() => onClick()}
+        sx={{ backgroundColor: isActive && 'rgba(255,255,255,0.2)' }}
+        onClick={() => onClick?.()}
         onMouseOver={() => setHovering(true)}
         onMouseLeave={() => setHovering(false)}
       >
@@ -33,7 +41,7 @@ const CustomButton = ({ to, onClick, children }: Props) => {
           bottom="0"
           height="100%"
           width="12px"
-          style={{ backgroundColor: '#7986CB', opacity: hovering ? 1 : 0, transition: 'all .15s linear' }}
+          style={{ backgroundColor: '#7986CB', opacity: hovering || isActive ? 1 : 0, transition: 'all .15s linear' }}
         />
         {children}
       </StyledListItemLink>
