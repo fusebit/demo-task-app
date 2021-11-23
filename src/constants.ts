@@ -1,6 +1,14 @@
 export const IntegrationTypeEnum: IntegrationTypeKeyMap = {
-  SLACK: 'SLACK',
-  HUBSPOT: 'HUBSPOT',
+  SLACK: {
+    value: 'SLACK',
+    action: 'Get slack notifications when a new task is created.',
+    taskDoneText: 'A message is being sent to your slack account.',
+    taskDescription: 'In this example, the "Add New Task" Button, if installed, will use your integration code to immediately update your user via Slack! Look at the code to see how it works, and learn more in the docs here.'
+  },
+  HUBSPOT: {
+    value: 'HUBSPOT',
+    action: 'Sync your hubspot task list here.',
+  },
 };
 
 export const DataKeyMap: DataKeyMap = {

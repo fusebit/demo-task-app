@@ -6,10 +6,13 @@ import TaskTable from './TaskTable';
 import PageItem from './PageItem';
 import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
+import { IntegrationTypeEnum } from '../../constants';
 
 export default (props: { integrations: Partial<Record<IntegrationType, any>> }) => {
-  // TODO: For now, this sample app only supports the Slack integration.  This will be updated in the future to support other integrations.
-  const isSlackInstalled = !!props.integrations.SLACK;
+  // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
+  const [currentIntegration] = Object.keys(props.integrations || {}) as IntegrationType[];
+  const integrationId = props.integrations[currentIntegration]?.tags['fusebit.parentEntityId'] || '';
+  const installedApp = IntegrationTypeEnum[currentIntegration];
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);
@@ -47,7 +50,7 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
         'Content-Type': 'application/json; charset=utf-8',
       },
       method: 'POST',
-      body: JSON.stringify(task),
+      body: JSON.stringify({ ...task, integrationId }),
       credentials: 'include',
     });
     setTasks(await response.json());
@@ -55,11 +58,11 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
   };
 
   const alert = () => {
-    const severity = isSlackInstalled ? 'success' : 'warning';
+    const severity = installedApp ? 'success' : 'warning';
 
-    const message = isSlackInstalled
-      ? 'A message is being sent to your slack account.'
-      : 'Head to the Integration Marketplace to install the Slack Integration';
+    const message = installedApp
+      ? installedApp.taskDoneText
+      : 'Head to the Integration Marketplace to pick one integration';
 
     setAlertProps({ severity, text: message });
   };
@@ -89,14 +92,11 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
             Fusebit automatically checks if the specific user (or user) has installed the integration in their account.
             You can use this information to enable / disable different actions in the system.
           </p>
-          <p>
-            In this example, the "Add New Task" Button, if installed, will use your integration code to immediately
-            update your user via Slack! Look at the code to see how it works, and learn more in the docs here.
-          </p>
+          {installedApp?.taskDescription && installedApp.taskDescription}
         </StatusPaper>
       </PageItem>
       <PageItem>
-        <TaskInput onTaskCreated={saveTask} isInstalled={isSlackInstalled} />
+        <TaskInput installedApp={installedApp} onTaskCreated={saveTask} />
       </PageItem>
       <PageItem>
         <Body />
