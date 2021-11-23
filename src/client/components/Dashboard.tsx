@@ -83,16 +83,17 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
   return (
     <Page>
       <PageItem>
-        <StatusPaper elevation={24}>
-          <Typography>Fusebit Integrations in Action!</Typography>
-          <p>
-            Fusebit automatically checks if the specific user (or user) has installed the integration in their account.
-            You can use this information to enable / disable different actions in the system.
-          </p>
-          <p>
-            In this example, the "Add New Task" Button, if installed, will use your integration code to immediately
-            update your user via Slack! Look at the code to see how it works, and learn more in the docs here.
-          </p>
+        <StatusPaper title="Fusebit Integrations in Action!" elevation={24}>
+          <>
+            <p>
+              Fusebit automatically checks if the specific user (or user) has installed the integration in their
+              account. You can use this information to enable / disable different actions in the system.
+            </p>
+            <p>
+              In this example, the "Add New Task" Button, if installed, will use your integration code to immediately
+              update your user via Slack! Look at the code to see how it works, and learn more in the docs here.
+            </p>
+          </>
         </StatusPaper>
       </PageItem>
       <PageItem>
