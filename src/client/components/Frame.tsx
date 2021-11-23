@@ -72,7 +72,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
                 </Typography>
               </Box>
             </ListItem>
-            <ListItem style={{ marginBottom: '32px' }}>
+            <ListItem style={{ marginBottom: '32px', marginLeft: '10px' }}>
               <ListItemIcon>
                 <Avatar sx={{ bgcolor: '#BBDEFB' }}>
                   <PersonIcon sx={{ color: '#1F2937' }} />
@@ -80,7 +80,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
               </ListItemIcon>
               <ListItemText>{currentUser?.name}</ListItemText>
             </ListItem>
-            <ListItem style={{ marginBottom: '12px' }}>
+            <ListItem style={{ marginBottom: '12px', marginLeft: '10px' }}>
               <Typography fontWeight="700">Sample App</Typography>
             </ListItem>
             {sampleAppLinks.map((link) => {
@@ -92,7 +92,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
               );
             })}
             <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '35px 0' }} />
-            <ListItem style={{ marginBottom: '12px' }}>
+            <ListItem style={{ marginBottom: '12px', marginLeft: '10px' }}>
               <Typography fontWeight="700">Learn More</Typography>
             </ListItem>
             {learnMoreLinks.map((link) => {
