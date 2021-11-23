@@ -1,9 +1,7 @@
 import React from 'react';
-import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
 import {
   Avatar,
   Divider,
-  Grid,
   List,
   ListItem,
   ListItemIcon,
@@ -11,32 +9,31 @@ import {
   Paper,
   Box,
   Typography,
+  Drawer,
 } from '@mui/material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import StarIcon from '@mui/icons-material/Star';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import PersonIcon from '@mui/icons-material/Person';
+import SubjectIcon from '@mui/icons-material/Subject';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import CustomButton from './CustomButton';
 
-function ListItemLink(
-  props: React.PropsWithChildren<{
-    to: string;
-  }>
-) {
-  const { to } = props;
+const drawerWidth = 310;
+const iconStyle = { color: 'white', marginLeft: '10px' };
 
-  const renderLink = React.useMemo(
-    () =>
-      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
-        <RouterLink to={to} ref={ref} {...itemProps} />
-      )),
-    [to]
-  );
+const sampleAppLinks = [
+  { icon: <InboxIcon style={iconStyle} />, text: 'Your Tasks', to: '/' },
+  { icon: <StarIcon style={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
+  { icon: <ExitToAppIcon style={iconStyle} />, text: 'Logout', logout: true },
+];
 
-  return (
-    <ListItem button component={renderLink}>
-      {props.children}
-    </ListItem>
-  );
-}
+const learnMoreLinks = [
+  { icon: <InsertDriveFileIcon style={iconStyle} />, text: 'Docs', to: '/docs' },
+  { icon: <SubjectIcon style={iconStyle} />, text: 'Blog', to: '/blog' },
+  { icon: <GitHubIcon style={iconStyle} />, text: 'Github', to: '/github' },
+];
 
 const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void }>) => {
   if (!props.userData.currentUserId) {
@@ -44,64 +41,75 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
   }
   const currentUser = props.userData.users[props.userData.currentUserId];
   return (
-    <div>
-      <Grid container className="navigation-drawer-grid null-pointer">
-        <Grid item minWidth="310px">
-          <Paper square className="navigation-drawer full-pointer">
-            <List disablePadding style={{ padding: '64px 0' }}>
-              <ListItem>
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  width="100%"
-                  border="1px dotted #FFFFFF"
-                  borderRadius="8px"
-                  padding="38px 0"
-                  mb="40px"
-                >
-                  <Typography fontSize="18px" lineHeight="21px" style={{ width: 'fit-content' }}>
-                    Your Logo Here
-                  </Typography>
-                </Box>
-              </ListItem>
-              <ListItem className="center-text">
-                <Avatar>{currentUser?.index + 1}</Avatar>
-                <ListItemText>{currentUser?.name}</ListItemText>
-              </ListItem>
-              <ListItem className="center-text">
-                <ListItemText>Sample App</ListItemText>
-              </ListItem>
-              <Divider variant="middle" style={{ backgroundColor: 'white' }} />
-              <ListItemLink to="/">
-                <ListItemIcon>
-                  <InboxIcon style={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText>Your Tasks</ListItemText>
-              </ListItemLink>
-              <ListItemLink to="/marketplace">
-                <ListItemIcon>
-                  <StarIcon style={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText>Integrations Marketplace</ListItemText>
-              </ListItemLink>
-              <ListItem button onClick={props.onLogout}>
-                <ListItemIcon>
-                  <ExitToAppIcon style={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText>Logout</ListItemText>
-              </ListItem>
-            </List>
-          </Paper>
-        </Grid>
-      </Grid>
-      <Grid container spacing={5}>
-        <Grid item xs={2} />
-        <Grid item xs={10}>
-          {props.children}
-        </Grid>
-      </Grid>
-    </div>
+    <Box display="flex">
+      <Drawer
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        <Paper square className="navigation-drawer full-pointer">
+          <List disablePadding style={{ padding: '0' }}>
+            <ListItem>
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                width="100%"
+                border="1px dotted #FFFFFF"
+                borderRadius="8px"
+                padding="38px 0"
+                mb="40px"
+              >
+                <Typography fontSize="18px" lineHeight="21px" style={{ width: 'fit-content' }}>
+                  Your Logo Here
+                </Typography>
+              </Box>
+            </ListItem>
+            <ListItem style={{ marginBottom: '32px' }}>
+              <ListItemIcon>
+                <Avatar sx={{ bgcolor: '#BBDEFB' }}>
+                  <PersonIcon sx={{ color: '#1F2937' }} />
+                </Avatar>
+              </ListItemIcon>
+              <ListItemText>{currentUser?.name}</ListItemText>
+            </ListItem>
+            <ListItem style={{ marginBottom: '12px' }}>
+              <Typography fontWeight="700">Sample App</Typography>
+            </ListItem>
+            {sampleAppLinks.map((link) => {
+              return (
+                <CustomButton to={link.to} onClick={link.logout && props.onLogout}>
+                  <ListItemIcon>{link.icon}</ListItemIcon>
+                  <ListItemText>{link.text}</ListItemText>
+                </CustomButton>
+              );
+            })}
+            <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '35px 0' }} />
+            <ListItem style={{ marginBottom: '12px' }}>
+              <Typography fontWeight="700">Learn More</Typography>
+            </ListItem>
+            {learnMoreLinks.map((link) => {
+              return (
+                <CustomButton to={link.to}>
+                  <ListItemIcon>{link.icon}</ListItemIcon>
+                  <ListItemText>{link.text}</ListItemText>
+                </CustomButton>
+              );
+            })}
+          </List>
+        </Paper>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        {props.children}
+      </Box>
+    </Box>
   );
 };
 
