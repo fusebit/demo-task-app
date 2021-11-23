@@ -55,7 +55,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
         anchor="left"
       >
         <Paper square className="navigation-drawer full-pointer">
-          <List disablePadding style={{ padding: '0' }}>
+          <List disablePadding>
             <ListItem>
               <Box
                 display="flex"
