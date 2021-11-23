@@ -7,6 +7,9 @@ const theme = createTheme({
     primary: {
       main: '#1F2937',
     },
+    secondary: {
+      main: '#3F51B5',
+    },
   },
 });
 const Index = () => {

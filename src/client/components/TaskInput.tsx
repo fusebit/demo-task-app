@@ -41,15 +41,16 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; isInstalled: bo
       </Grid>
       <Grid item xs={2} ml="15px">
         <CustomWidthTooltip
-          open={!props.isInstalled && tooltipOpen}
-          onClose={() => setTooltipOpen(false)}
-          onOpen={() => setTooltipOpen(true)}
           sx={{ m: 1 }}
           arrow
-          title="Please install the Slack Integration from the Integrations Marketplace first"
+          title={
+            props.isInstalled
+              ? 'Your integration will be triggered when you click this button'
+              : 'Please install the Slack Integration from the Integrations Marketplace first'
+          }
         >
           <span style={{ display: 'block' }}>
-            <Button disabled={!props.isInstalled} variant="contained" color="primary" onClick={handleAddTask}>
+            <Button disabled={!props.isInstalled} variant="contained" color="secondary" onClick={handleAddTask}>
               Add New Task
             </Button>
           </span>

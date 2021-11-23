@@ -66,7 +66,7 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
 
   const Body = () =>
     hasLoaded ? (
-      <TaskTable tasks={tasks} />
+      <TaskTable tasks={tasks} isInstalled={isSlackInstalled} />
     ) : (
       <Fade
         in
