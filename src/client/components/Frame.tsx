@@ -25,15 +25,15 @@ const drawerWidth = 310;
 const iconStyle = { color: 'white', marginLeft: '10px' };
 
 const sampleAppLinks = [
-  { id: 'tasks', icon: <InboxIcon style={iconStyle} />, text: 'Your Tasks', to: '/' },
-  { id: 'marketplace', icon: <StarIcon style={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
-  { id: 'logout', icon: <ExitToAppIcon style={iconStyle} />, text: 'Logout', logout: true },
+  { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: 'Your Tasks', to: '/' },
+  { id: 'marketplace', icon: <StarIcon sx={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
+  { id: 'logout', icon: <ExitToAppIcon sx={iconStyle} />, text: 'Logout', logout: true },
 ];
 
 const learnMoreLinks = [
-  { id: 'docs', icon: <InsertDriveFileIcon style={iconStyle} />, text: 'Docs', to: '/docs' },
-  { id: 'blog', icon: <SubjectIcon style={iconStyle} />, text: 'Blog', to: '/blog' },
-  { id: 'github', icon: <GitHubIcon style={iconStyle} />, text: 'Github', to: '/github' },
+  { id: 'docs', icon: <InsertDriveFileIcon sx={iconStyle} />, text: 'Docs', to: '/docs' },
+  { id: 'blog', icon: <SubjectIcon sx={iconStyle} />, text: 'Blog', to: '/blog' },
+  { id: 'github', icon: <GitHubIcon sx={iconStyle} />, text: 'Github', to: '/github' },
 ];
 
 const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void }>) => {
@@ -68,12 +68,12 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
                 padding="38px 0"
                 mb="40px"
               >
-                <Typography fontSize="18px" lineHeight="21px" style={{ width: 'fit-content' }}>
+                <Typography fontSize="18px" lineHeight="21px" sx={{ width: 'fit-content' }}>
                   Your Logo Here
                 </Typography>
               </Box>
             </ListItem>
-            <ListItem style={{ marginBottom: '32px', marginLeft: '10px' }}>
+            <ListItem sx={{ marginBottom: '32px', marginLeft: '10px' }}>
               <ListItemIcon>
                 <Avatar sx={{ bgcolor: '#BBDEFB' }}>
                   <PersonIcon sx={{ color: '#1F2937' }} />
@@ -81,7 +81,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
               </ListItemIcon>
               <ListItemText>{currentUser?.name}</ListItemText>
             </ListItem>
-            <ListItem style={{ marginBottom: '12px', marginLeft: '10px' }}>
+            <ListItem sx={{ marginBottom: '12px', marginLeft: '10px' }}>
               <Typography fontWeight="700">Sample App</Typography>
             </ListItem>
             {sampleAppLinks.map((link) => {
@@ -98,7 +98,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
               );
             })}
             <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '35px 0' }} />
-            <ListItem style={{ marginBottom: '12px', marginLeft: '10px' }}>
+            <ListItem sx={{ marginBottom: '12px', marginLeft: '10px' }}>
               <Typography fontWeight="700">Learn More</Typography>
             </ListItem>
             {learnMoreLinks.map((link) => {

@@ -49,7 +49,7 @@ export default (props: { onLogin: Function; userData: UserData }) => {
       </Grid>
       <Grid item xs={12} />
       <Grid item xs={4}>
-        <Paper style={{ borderRadius: 25 }}>
+        <Paper sx={{ borderRadius: 25 }}>
           <List>
             {Object.values(users).map((user, index) => (
               <ListItem button onClick={handleLogin(user)} key={index}>
