@@ -31,9 +31,15 @@ const sampleAppLinks = [
 ];
 
 const learnMoreLinks = [
-  { id: 'docs', icon: <InsertDriveFileIcon sx={iconStyle} />, text: 'Docs', to: '/docs' },
-  { id: 'blog', icon: <SubjectIcon sx={iconStyle} />, text: 'Blog', to: '/blog' },
-  { id: 'github', icon: <GitHubIcon sx={iconStyle} />, text: 'Github', to: '/github' },
+  {
+    id: 'docs',
+    icon: <InsertDriveFileIcon sx={iconStyle} />,
+    text: 'Docs',
+    to: 'https://developer.fusebit.io/docs/getting-started',
+    target: '_blank',
+  },
+  { id: 'blog', icon: <SubjectIcon sx={iconStyle} />, text: 'Blog', to: 'https://fusebit.io/blog/', target: '_blank' },
+  { id: 'github', icon: <GitHubIcon sx={iconStyle} />, text: 'Github', to: '/github', taget: '_self' },
 ];
 
 const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void }>) => {
@@ -103,12 +109,18 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
             </ListItem>
             {learnMoreLinks.map((link) => {
               return (
-                <RouterLink key={link.id} to={link.to} style={{ textDecoration: 'none', color: 'white' }}>
+                <a
+                  rel="noreferrer"
+                  target={link.target}
+                  key={link.id}
+                  href={link.to}
+                  style={{ textDecoration: 'none', color: 'white' }}
+                >
                   <ListItemButton>
                     <ListItemIcon>{link.icon}</ListItemIcon>
                     <ListItemText>{link.text}</ListItemText>
                   </ListItemButton>
-                </RouterLink>
+                </a>
               );
             })}
           </List>
