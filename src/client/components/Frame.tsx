@@ -4,6 +4,7 @@ import {
   Divider,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Paper,
@@ -18,7 +19,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import SubjectIcon from '@mui/icons-material/Subject';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import CustomButton from './CustomButton';
+import { Link as RouterLink } from 'react-router-dom';
 
 const drawerWidth = 310;
 const iconStyle = { color: 'white', marginLeft: '10px' };
@@ -85,10 +86,15 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
             </ListItem>
             {sampleAppLinks.map((link) => {
               return (
-                <CustomButton key={link.id} to={link.to} onClick={link.logout && props.onLogout}>
-                  <ListItemIcon>{link.icon}</ListItemIcon>
-                  <ListItemText>{link.text}</ListItemText>
-                </CustomButton>
+                <RouterLink key={link.id} to={link.to || ''} style={{ textDecoration: 'none', color: 'white' }}>
+                  <ListItemButton
+                    sx={{ backgroundColor: link.to && link.to === window.location.pathname && 'rgba(255,255,255,0.2)' }}
+                    onClick={link.logout && props.onLogout}
+                  >
+                    <ListItemIcon>{link.icon}</ListItemIcon>
+                    <ListItemText>{link.text}</ListItemText>
+                  </ListItemButton>
+                </RouterLink>
               );
             })}
             <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '35px 0' }} />
@@ -97,10 +103,12 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
             </ListItem>
             {learnMoreLinks.map((link) => {
               return (
-                <CustomButton key={link.id} to={link.to}>
-                  <ListItemIcon>{link.icon}</ListItemIcon>
-                  <ListItemText>{link.text}</ListItemText>
-                </CustomButton>
+                <RouterLink key={link.id} to={link.to} style={{ textDecoration: 'none', color: 'white' }}>
+                  <ListItemButton>
+                    <ListItemIcon>{link.icon}</ListItemIcon>
+                    <ListItemText>{link.text}</ListItemText>
+                  </ListItemButton>
+                </RouterLink>
               );
             })}
           </List>

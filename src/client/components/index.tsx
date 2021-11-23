@@ -8,6 +8,17 @@ const theme = createTheme({
       main: '#333333',
     },
   },
+  components: {
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          ':hover': {
+            backgroundColor: 'rgba(255,255,255,0.2)',
+          },
+        },
+      },
+    },
+  },
 });
 const Index = () => {
   return (
