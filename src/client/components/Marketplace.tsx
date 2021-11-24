@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Page from './Page';
 import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
 import { Grid, Typography } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
 import { IntegrationTypeEnum } from '../../constants';
+import { integrationsFeed } from '../../utils';
+import { Feed } from '../../interfaces';
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
+  const [integrations, setIntegrations] = useState<undefined | Feed[]>();
   const isInstalledList = Object.keys(props.userData.integrations);
+
+  useEffect(() => {
+    integrationsFeed().then((_feed) => {
+      setIntegrations(_feed);
+    });
+  }, []);
+
   console.log('the following integrations are installed', isInstalledList);
   return (
     <Page>
