@@ -1,5 +1,5 @@
 import StatusPaper from './StatusPaper';
-import { CircularProgress, Fade, Typography } from '@mui/material';
+import { CircularProgress, Fade, Typography, Box } from '@mui/material';
 import TaskInput from './TaskInput';
 import React, { useEffect, useState } from 'react';
 import TaskTable from './TaskTable';
@@ -66,7 +66,7 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
 
   const Body = () =>
     hasLoaded ? (
-      <TaskTable tasks={tasks} />
+      <TaskTable tasks={tasks} isInstalled={isSlackInstalled} />
     ) : (
       <Fade
         in
@@ -83,17 +83,20 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
   return (
     <Page>
       <PageItem>
-        <StatusPaper elevation={24}>
-          <Typography>Fusebit Integrations in Action!</Typography>
-          <p>
-            Fusebit automatically checks if the specific user (or user) has installed the integration in their account.
-            You can use this information to enable / disable different actions in the system.
-          </p>
-          <p>
-            In this example, the "Add New Task" Button, if installed, will use your integration code to immediately
-            update your user via Slack! Look at the code to see how it works, and learn more in the docs here.
-          </p>
-        </StatusPaper>
+        <Box mb="80px" mt="36px">
+          <StatusPaper title="Fusebit Integrations in Action!" elevation={24}>
+            <>
+              <Typography>
+                Fusebit automatically checks if the specific user (or user) has installed the integration in their
+                account. You can use this information to enable / disable different actions in the system.
+              </Typography>
+              <Typography>
+                In this example, the "Add New Task" Button, if installed, will use your integration code to immediately
+                update your user via Slack! Look at the code to see how it works, and learn more in the docs here.
+              </Typography>
+            </>
+          </StatusPaper>
+        </Box>
       </PageItem>
       <PageItem>
         <TaskInput onTaskCreated={saveTask} isInstalled={isSlackInstalled} />
