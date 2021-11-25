@@ -7,6 +7,7 @@ interface Config {
 
 interface User {
   userId: string;
+  color?: string;
   name: string;
   index: number;
 }
