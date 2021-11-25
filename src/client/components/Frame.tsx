@@ -1,31 +1,45 @@
 import React from 'react';
-import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
-import { Avatar, Divider, Grid, List, ListItem, ListItemIcon, ListItemText, Paper } from '@mui/material';
+import {
+  Avatar,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Box,
+  Typography,
+  Drawer,
+} from '@mui/material';
 import InboxIcon from '@mui/icons-material/Inbox';
 import StarIcon from '@mui/icons-material/Star';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import PersonIcon from '@mui/icons-material/Person';
+import SubjectIcon from '@mui/icons-material/Subject';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import { Link as RouterLink } from 'react-router-dom';
 
-function ListItemLink(
-  props: React.PropsWithChildren<{
-    to: string;
-  }>
-) {
-  const { to } = props;
+const iconStyle = { color: 'white' };
 
-  const renderLink = React.useMemo(
-    () =>
-      React.forwardRef<any, Omit<RouterLinkProps, 'to'>>((itemProps, ref) => (
-        <RouterLink to={to} ref={ref} {...itemProps} />
-      )),
-    [to]
-  );
+const sampleAppLinks = [
+  { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: 'Your Tasks', to: '/' },
+  { id: 'marketplace', icon: <StarIcon sx={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
+  { id: 'logout', icon: <ExitToAppIcon sx={iconStyle} />, text: 'Logout', logout: true },
+];
 
-  return (
-    <ListItem button component={renderLink}>
-      {props.children}
-    </ListItem>
-  );
-}
+const learnMoreLinks = [
+  {
+    id: 'docs',
+    icon: <InsertDriveFileIcon sx={iconStyle} />,
+    text: 'Docs',
+    to: 'https://developer.fusebit.io/docs/getting-started',
+    target: '_blank',
+  },
+  { id: 'blog', icon: <SubjectIcon sx={iconStyle} />, text: 'Blog', to: 'https://fusebit.io/blog/', target: '_blank' },
+  { id: 'github', icon: <GitHubIcon sx={iconStyle} />, text: 'Github', to: '/github', taget: '_self' },
+];
 
 const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void }>) => {
   if (!props.userData.currentUserId) {
@@ -33,48 +47,79 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
   }
   const currentUser = props.userData.users[props.userData.currentUserId];
   return (
-    <div>
-      <Grid container className="navigation-drawer-grid null-pointer">
-        <Grid item xs={2}>
-          <Paper square className="navigation-drawer full-pointer">
-            <List>
-              <ListItem className="center-text">
-                <Avatar>{currentUser?.index + 1}</Avatar>
-                <ListItemText>{currentUser?.name}</ListItemText>
-              </ListItem>
-              <ListItem className="center-text">
-                <ListItemText>Sample App</ListItemText>
-              </ListItem>
-              <Divider variant="middle" style={{ backgroundColor: 'white' }} />
-              <ListItemLink to="/">
-                <ListItemIcon>
-                  <InboxIcon style={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText>Your Tasks</ListItemText>
-              </ListItemLink>
-              <ListItemLink to="/marketplace">
-                <ListItemIcon>
-                  <StarIcon style={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText>Integration Marketplace</ListItemText>
-              </ListItemLink>
-              <ListItem button onClick={props.onLogout}>
-                <ListItemIcon>
-                  <ExitToAppIcon style={{ color: 'white' }} />
-                </ListItemIcon>
-                <ListItemText>Logout</ListItemText>
-              </ListItem>
-            </List>
-          </Paper>
-        </Grid>
-      </Grid>
-      <Grid container spacing={5}>
-        <Grid item xs={2} />
-        <Grid item xs={10}>
-          {props.children}
-        </Grid>
-      </Grid>
-    </div>
+    <Box display="flex">
+      <Drawer
+        sx={{
+          width: 310,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: 310,
+            boxSizing: 'border-box',
+          },
+        }}
+        variant="permanent"
+        anchor="left"
+      >
+        <Box style={{ backgroundColor: '#333333', height: '100%', padding: '32px 0', color: 'white' }}>
+          <List disablePadding>
+            <ListItem>
+              <Box className="drawer-logo-container">
+                <Typography fontSize="18px" lineHeight="21px" sx={{ width: 'fit-content' }}>
+                  Your Logo Here
+                </Typography>
+              </Box>
+            </ListItem>
+            <ListItem sx={{ marginBottom: '32px' }}>
+              <ListItemIcon>
+                <Avatar sx={{ bgcolor: '#BBDEFB' }}>
+                  <PersonIcon sx={{ color: '#1F2937' }} />
+                </Avatar>
+              </ListItemIcon>
+              <ListItemText sx={{ color: 'white' }}>{currentUser?.name}</ListItemText>
+            </ListItem>
+            <ListItem sx={{ marginBottom: '12px' }}>
+              <Typography fontWeight="700">Sample App</Typography>
+            </ListItem>
+            {sampleAppLinks.map((link) => {
+              return (
+                <RouterLink key={link.id} to={link.to || ''} style={{ textDecoration: 'none', color: 'white' }}>
+                  <ListItemButton
+                    sx={{ backgroundColor: link.to && link.to === window.location.pathname && 'rgba(255,255,255,0.2)' }}
+                    onClick={link.logout && props.onLogout}
+                  >
+                    <ListItemIcon>{link.icon}</ListItemIcon>
+                    <ListItemText>{link.text}</ListItemText>
+                  </ListItemButton>
+                </RouterLink>
+              );
+            })}
+            <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '35px 0' }} />
+            <ListItem sx={{ marginBottom: '12px' }}>
+              <Typography fontWeight="700">Learn More</Typography>
+            </ListItem>
+            {learnMoreLinks.map((link) => {
+              return (
+                <a
+                  rel="noreferrer"
+                  target={link.target}
+                  key={link.id}
+                  href={link.to}
+                  style={{ textDecoration: 'none', color: 'white' }}
+                >
+                  <ListItemButton>
+                    <ListItemIcon>{link.icon}</ListItemIcon>
+                    <ListItemText>{link.text}</ListItemText>
+                  </ListItemButton>
+                </a>
+              );
+            })}
+          </List>
+        </Box>
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        {props.children}
+      </Box>
+    </Box>
   );
 };
 

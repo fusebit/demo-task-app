@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { urlOrSvgToImage } from '../../constants';
 
 const IntegrationCard = (props: {
   name?: string;

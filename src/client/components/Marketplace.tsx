@@ -64,7 +64,7 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
         <IntegrationCard
           name="my-integration-842"
           onUninstall={props.onUninstall}
-          isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
+          isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK.value)}
           enabled
         />
         <Box display="flex" flexWrap="wrap">
