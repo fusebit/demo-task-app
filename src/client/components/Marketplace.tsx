@@ -2,19 +2,25 @@ import React, { useEffect, useState } from 'react';
 import Page from './Page';
 import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
-import { Grid, Typography, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
-import { IntegrationTypeEnum } from '../../constants';
-import { integrationsFeed } from '../../utils';
-import { Feed } from '../../interfaces';
+import { IntegrationTypeEnum, urlOrSvgToImage } from '../../constants';
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
-  const [integrations, setIntegrations] = useState<undefined | Feed[]>();
+  const [integrations, setIntegrations] = useState<Feed[] | undefined>();
   const isInstalledList = Object.keys(props.userData.integrations);
 
   useEffect(() => {
-    integrationsFeed().then((_feed) => {
-      setIntegrations(_feed);
+    fetch('https://stage-manage.fusebit.io/feed/integrationsFeed.json').then((res) => {
+      res
+        .json()
+        .then((feed: Feed[]) => {
+          setIntegrations(feed);
+          console.log(feed);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     });
   }, []);
 
@@ -56,37 +62,15 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
       </PageItem>
       <PageItem>
         <IntegrationCard
+          name="my-integration-842"
           onUninstall={props.onUninstall}
-          integration={IntegrationTypeEnum.SLACK}
           isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
           enabled
         />
         <Box display="flex" flexWrap="wrap">
-          <IntegrationCard
-            onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
-          />
-          <IntegrationCard
-            onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
-          />
-          <IntegrationCard
-            onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
-          />
-          <IntegrationCard
-            onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
-          />
-          <IntegrationCard
-            onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
-          />
+          {integrations?.map((integration) => (
+            <IntegrationCard key={integration.id} image={urlOrSvgToImage(integration.largeIcon)} />
+          ))}
         </Box>
       </PageItem>
     </Page>

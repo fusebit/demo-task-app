@@ -24,3 +24,6 @@ export const AssertIntegrationName: (integrationName: string) => asserts integra
 ) => {
   AssertsIsKeyOf(integrationName, IntegrationTypeEnum);
 };
+
+export const urlOrSvgToImage = (img = '') =>
+  img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;

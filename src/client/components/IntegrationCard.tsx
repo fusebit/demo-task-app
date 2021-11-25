@@ -1,38 +1,45 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { IntegrationTypeEnum } from '../../constants';
+import { urlOrSvgToImage } from '../../constants';
 
 const IntegrationCard = (props: {
-  integration: IntegrationType;
-  isInstalled: boolean;
-  onUninstall: Function;
+  name?: string;
+  image?: string;
+  isInstalled?: boolean;
+  onUninstall?: Function;
   enabled?: boolean;
 }) => {
-  const installApp = () => (window.location.href = `/api/integration/${props.integration}/install`);
-  const uninstallApp = () => props.onUninstall(props.integration);
+  const installApp = () => (window.location.href = `/api/integration/${props.name}/install`);
+  const uninstallApp = () => props.onUninstall?.(props.name);
 
   return (
     <Box
+      display="flex"
+      flexDirection="column"
       mr="10px"
       mb="40px"
       width="260px"
+      minHeight="80px"
       padding="25px"
       borderRadius="4px"
       boxShadow={props.enabled && '0px 20px 48px rgba(52, 72, 123, 0.1)'}
       sx={{ backgroundColor: !props.enabled && '#F2F2F2', cursor: 'default' }}
     >
-      {props.enabled && (
+      {props.enabled && props.name && (
         <Typography fontSize="12px" fontWeight={500} sx={{ color: '#333333' }}>
-          My-integration-302
+          {props.name}
         </Typography>
       )}
-      <img
-        src="static/SLACK.png"
-        height="52"
-        width="129"
-        style={{ objectFit: 'cover', margin: '8px 0 15px', filter: !props.enabled && 'grayscale(100%)' }}
-      />
-      <Box display="flex" alignItems="center">
+      {props.image && (
+        <img
+          src={props.image}
+          height="52"
+          width="52"
+          style={{ objectFit: 'contain', margin: '8px 0 15px', filter: !props.enabled && 'grayscale(100%)' }}
+        />
+      )}
+
+      <Box display="flex" alignItems="center" marginTop="auto">
         <Typography
           fontSize="14px"
           sx={{
