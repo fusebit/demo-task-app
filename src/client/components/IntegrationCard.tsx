@@ -9,11 +9,6 @@ const IntegrationCard = (props: {
   enabledTypes: IntegrationType[];
 }) => {
   const capitalize = (string: string) => string[0].toUpperCase() + string.slice(1).toLowerCase();
-  const bodyTextMap: Record<IntegrationType, string> = {
-    [IntegrationTypeEnum.SLACK]: 'Get slack notifications when a new task is created.',
-    [IntegrationTypeEnum.HUBSPOT]: 'Sync your hubspot task list here.',
-  };
-
   const installApp = () => (window.location.href = `/api/integration/${props.integration}/install`);
   const uninstallApp = () => props.onUninstall(props.integration);
 
@@ -30,7 +25,7 @@ const IntegrationCard = (props: {
             {capitalize(props.integration)}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
-            {bodyTextMap[props.integration]}
+            {IntegrationTypeEnum[props.integration].action}
           </Typography>
         </CardContent>
       </CardActionArea>
