@@ -1,8 +1,7 @@
 import { Button, Grid, TextField } from '@mui/material';
 import React, { useState } from 'react';
-import SlackAction from './SlackAction';
 
-const TaskInput = (props: { onTaskCreated: (task: Task) => void; isInstalled: boolean }) => {
+const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: IntegrationInfo }) => {
   const [task, setTask] = useState<Task>({ name: '', description: '' });
   const handleAddTask = async () => {
     props.onTaskCreated(task);
@@ -31,9 +30,6 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; isInstalled: bo
         <Button variant="contained" color="primary" onClick={handleAddTask}>
           Add New Task
         </Button>
-      </Grid>
-      <Grid item xs={2}>
-        <SlackAction isInstalled={props.isInstalled} />
       </Grid>
     </Grid>
   );

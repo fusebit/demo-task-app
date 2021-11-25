@@ -31,17 +31,17 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
           <Grid item xs={4}>
             <IntegrationCard
               onUninstall={props.onUninstall}
-              integration={IntegrationTypeEnum.SLACK}
-              isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
+              integration={IntegrationTypeEnum.SLACK.value}
+              isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK.value)}
               enabledTypes={props.userData.integrationTypes}
             />
           </Grid>
           <Grid item xs={2} />
           <Grid item xs={4}>
             <IntegrationCard
-              onUninstall={() => ({})}
-              integration={IntegrationTypeEnum.HUBSPOT}
-              isInstalled={isInstalledList.includes(IntegrationTypeEnum.HUBSPOT)}
+              onUninstall={props.onUninstall}
+              integration={IntegrationTypeEnum.HUBSPOT.value}
+              isInstalled={isInstalledList.includes(IntegrationTypeEnum.HUBSPOT.value)}
               enabledTypes={props.userData.integrationTypes}
             />
           </Grid>
