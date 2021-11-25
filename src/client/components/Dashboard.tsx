@@ -21,7 +21,7 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
   useEffect(() => {
     if (!refreshFlag) {
       return;
-    } 
+    }
     let mounted = true;
     fetch('/api/task', {
       headers: {
