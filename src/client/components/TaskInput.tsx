@@ -17,11 +17,7 @@ const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 const integrationName = 'Slack';
 
-const TaskInput = (props: {
-  onTaskCreated: (task: Task) => void;
-  installedApp: IntegrationInfo;
-  isInstalled: boolean;
-}) => {
+const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: IntegrationInfo }) => {
   const [task, setTask] = useState<Task>({ name: '', description: '' });
   const handleAddTask = async () => {
     props.onTaskCreated(task);

@@ -21,7 +21,7 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
   useEffect(() => {
     if (!refreshFlag) {
       return;
-    } 
+    }
     let mounted = true;
     fetch('/api/task', {
       headers: {
@@ -93,13 +93,16 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
                 Fusebit automatically checks if the specific user (or user) has installed the integration in their
                 account. You can use this information to enable / disable different actions in the system.
               </Typography>
-              {installedApp?.taskDescription && <Typography>{installedApp.taskDescription}</Typography>}
+              <Typography>
+                In this example, the "Add New Task" Button, if installed, will use your integration code to immediately
+                update your user via Slack! Look at the code to see how it works, and learn more in the docs here.
+              </Typography>
             </>
           </StatusPaper>
         </Box>
       </PageItem>
       <PageItem>
-        <TaskInput isInstalled={!!installedApp} installedApp={installedApp} onTaskCreated={saveTask} />
+        <TaskInput installedApp={installedApp} onTaskCreated={saveTask} />
       </PageItem>
       <PageItem>
         <Body />
