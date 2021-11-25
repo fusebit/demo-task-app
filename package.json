@@ -16,13 +16,15 @@
     "start": "node .;",
     "dev": "nodemon .;",
     "clean": "rm -rf libc & rm -rf dist",
-    "config": "node ./config-jwt"
+    "config": "node ./config-jwt",
+    "dev:all": "npm run build && concurrently \"npm run listen\" \"npm run dev\""
   },
   "dependencies": {
     "@emotion/react": "11.4.1",
     "@emotion/styled": "11.3.0",
     "@mui/icons-material": "^5.0.1",
     "@mui/material": "^5.0.1",
+    "concurrently": "^6.4.0",
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
