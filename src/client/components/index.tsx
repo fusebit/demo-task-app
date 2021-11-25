@@ -5,7 +5,18 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1F2937',
+      main: '#333333',
+    },
+  },
+  components: {
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          ':hover': {
+            backgroundColor: 'rgba(255,255,255,0.2)',
+          },
+        },
+      },
     },
   },
 });
