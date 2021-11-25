@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Tooltip } from '@mui/material';
+import { Button, Grid, TextField, Tooltip, Box } from '@mui/material';
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
@@ -13,7 +13,7 @@ const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 });
 
-const TaskInput = (props: { onTaskCreated: (task: Task) => void; isInstalled: boolean }) => {
+const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: IntegrationInfo }) => {
   const [task, setTask] = useState<Task>({ name: '', description: '' });
   const [tooltipOpen, setTooltipOpen] = useState(false);
   const handleAddTask = async () => {
@@ -39,22 +39,22 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; isInstalled: bo
           value={task.description}
         />
       </Grid>
-      <Grid item xs={2} ml="15px">
-        <CustomWidthTooltip
+      <Grid item xs={2}>
+        <Tooltip
           sx={{ m: 1 }}
           arrow
           title={
-            props.isInstalled
+            !!props.installedApp
               ? 'Your integration will be triggered when you click this button'
               : 'Please install the Slack Integration from the Integrations Marketplace first'
           }
         >
-          <span style={{ display: 'block' }}>
-            <Button disabled={!props.isInstalled} variant="contained" color="secondary" onClick={handleAddTask}>
+          <Box>
+            <Button disabled={!props.installedApp} variant="contained" color="secondary" onClick={handleAddTask}>
               Add New Task
             </Button>
-          </span>
-        </CustomWidthTooltip>
+          </Box>
+        </Tooltip>
       </Grid>
     </Grid>
   );

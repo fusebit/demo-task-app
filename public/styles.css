@@ -6,12 +6,6 @@ body {
   margin: 0px;
 }
 
-.navigation-drawer {
-  background-color: #1f2937;
-  color: white;
-  height: 100vh;
-}
-
 .navigation-drawer-grid {
   position: fixed;
   top: 0;
@@ -44,10 +38,6 @@ body {
   pointer-events: none;
 }
 
-.full-pointer {
-  pointer-events: auto;
-}
-
 .center-icons {
   display: flex;
   justify-content: center;
@@ -61,4 +51,15 @@ body {
 
 .full-height {
   height: 100%;
+}
+
+.drawer-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border: 1px dotted #ffffff;
+  border-radius: 8px;
+  padding: 38px 0;
+  margin-bottom: 40px;
 }
