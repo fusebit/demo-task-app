@@ -21,8 +21,7 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { Link as RouterLink } from 'react-router-dom';
 
-const drawerWidth = 310;
-const iconStyle = { color: 'white', marginLeft: '10px' };
+const iconStyle = { color: 'white' };
 
 const sampleAppLinks = [
   { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: 'Your Tasks', to: '/' },
@@ -51,17 +50,17 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
     <Box display="flex">
       <Drawer
         sx={{
-          width: drawerWidth,
+          width: 310,
           flexShrink: 0,
           '& .MuiDrawer-paper': {
-            width: drawerWidth,
+            width: 310,
             boxSizing: 'border-box',
           },
         }}
         variant="permanent"
         anchor="left"
       >
-        <Paper square className="navigation-drawer full-pointer">
+        <Box style={{ backgroundColor: '#333333', height: '100%', padding: '32px 0', color: 'white' }}>
           <List disablePadding>
             <ListItem>
               <Box
@@ -79,16 +78,18 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
                 </Typography>
               </Box>
             </ListItem>
-            <ListItem sx={{ marginBottom: '32px', marginLeft: '10px' }}>
+            <ListItem sx={{ marginBottom: '32px' }}>
               <ListItemIcon>
                 <Avatar sx={{ bgcolor: '#BBDEFB' }}>
                   <PersonIcon sx={{ color: '#1F2937' }} />
                 </Avatar>
               </ListItemIcon>
-              <ListItemText>{currentUser?.name}</ListItemText>
+              <ListItemText sx={{ color: 'white' }}>{currentUser?.name}</ListItemText>
             </ListItem>
-            <ListItem sx={{ marginBottom: '12px', marginLeft: '10px' }}>
-              <Typography fontWeight="700">Sample App</Typography>
+            <ListItem sx={{ marginBottom: '12px' }}>
+              <Typography fontWeight="700">
+                Sample App
+              </Typography>
             </ListItem>
             {sampleAppLinks.map((link) => {
               return (
@@ -104,8 +105,10 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
               );
             })}
             <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '35px 0' }} />
-            <ListItem sx={{ marginBottom: '12px', marginLeft: '10px' }}>
-              <Typography fontWeight="700">Learn More</Typography>
+            <ListItem sx={{ marginBottom: '12px' }}>
+              <Typography fontWeight="700">
+                Learn More
+              </Typography>
             </ListItem>
             {learnMoreLinks.map((link) => {
               return (
@@ -124,7 +127,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
               );
             })}
           </List>
-        </Paper>
+        </Box>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1 }}>
         {props.children}
