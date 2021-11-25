@@ -12,14 +12,15 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
   return (
     <Page>
       <PageItem>
-        <StatusPaper elevation={24}>
-          <Typography>Fusebit handles Authentification for you!</Typography>
-          <p>
-            Fusebit handles all the overhead of authenticating users and wiring up their configurations to a specific
-            install for you. Once you've installed the app,{' '}
-            <strong>head on over the the Fusebit management portal</strong> to see it.
-          </p>
-          <p>Note: This sample app is currently limited to one integratino for demonstration purposes.</p>
+        <StatusPaper title="Fusebit handles Authentification for you!" elevation={24}>
+          <>
+            <p>
+              Fusebit handles all the overhead of authenticating users and wiring up their configurations to a specific
+              install for you. Once you've installed the app,{' '}
+              <strong>head on over the the Fusebit management portal</strong> to see it.
+            </p>
+            <p>Note: This sample app is currently limited to one integratino for demonstration purposes.</p>
+          </>
         </StatusPaper>
       </PageItem>
       <PageItem>
@@ -30,17 +31,17 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
           <Grid item xs={4}>
             <IntegrationCard
               onUninstall={props.onUninstall}
-              integration={IntegrationTypeEnum.SLACK}
-              isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
+              integration={IntegrationTypeEnum.SLACK.value}
+              isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK.value)}
               enabledTypes={props.userData.integrationTypes}
             />
           </Grid>
           <Grid item xs={2} />
           <Grid item xs={4}>
             <IntegrationCard
-              onUninstall={() => ({})}
-              integration={IntegrationTypeEnum.HUBSPOT}
-              isInstalled={isInstalledList.includes(IntegrationTypeEnum.HUBSPOT)}
+              onUninstall={props.onUninstall}
+              integration={IntegrationTypeEnum.HUBSPOT.value}
+              isInstalled={isInstalledList.includes(IntegrationTypeEnum.HUBSPOT.value)}
               enabledTypes={props.userData.integrationTypes}
             />
           </Grid>

@@ -7,6 +7,7 @@ interface Config {
 
 interface User {
   userId: string;
+  color?: string;
   name: string;
   index: number;
 }
@@ -54,8 +55,15 @@ type DataKeyMap = {
   [key in keyof Data]: key;
 };
 
+type IntegrationInfo<T = string> = {
+  value: T;
+  action: string;
+  taskDoneText?: string;
+  taskDescription?: string;
+}
+
 type IntegrationTypeKeyMap = {
-  [key in IntegrationType]: key;
+  [key in IntegrationType]: IntegrationInfo<key>;
 };
 
 type IntegrationIdKeyMap = {

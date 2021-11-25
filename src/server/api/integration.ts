@@ -13,7 +13,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
   const currentUserId: string = res.locals.data.getCurrentUserId();
   const configuration: Config = res.locals.data.getConfiguration();
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
-  const appUrl: string = `${process.env.SSL_ENABLED ? 'https' : 'http'}://${req.hostname}`;
+  const appUrl: string = `${process.env.SSL_ENABLED ? 'https' : 'http'}://${req.headers.host}`;
   const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
 
   try {
