@@ -92,7 +92,7 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
             Fusebit automatically checks if the specific user (or user) has installed the integration in their account.
             You can use this information to enable / disable different actions in the system.
           </p>
-          {installedApp?.taskDescription && installedApp.taskDescription}
+          {installedApp?.taskDescription && <p>installedApp.taskDescription</p>}
         </StatusPaper>
       </PageItem>
       <PageItem>
