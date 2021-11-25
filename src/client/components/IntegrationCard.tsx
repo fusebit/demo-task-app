@@ -17,8 +17,8 @@ const IntegrationCard = (props: {
       flexDirection="column"
       mr="10px"
       mb="40px"
-      width="260px"
-      minHeight="100px"
+      width="240px"
+      minHeight="120px"
       padding="25px"
       borderRadius="4px"
       boxShadow={props.enabled && '0px 20px 48px rgba(52, 72, 123, 0.1)'}
@@ -42,6 +42,7 @@ const IntegrationCard = (props: {
         <Typography
           fontSize="14px"
           sx={{
+            minWidth: 'max-content',
             marginRight: '24px',
             color: props.enabled ? '#333333' : '#959595',
             cursor: props.enabled && 'pointer',
@@ -54,7 +55,12 @@ const IntegrationCard = (props: {
           <Box onClick={props.enabled && uninstallApp}>
             <Typography
               fontSize="14px"
-              sx={{ color: '#F44336', cursor: props.enabled && 'pointer', letterSpacing: '1.25px' }}
+              sx={{
+                width: 'max-content',
+                color: '#F44336',
+                cursor: props.enabled && 'pointer',
+                letterSpacing: '1.25px',
+              }}
             >
               UNINSTALL APP
             </Typography>
