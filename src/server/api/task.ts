@@ -4,7 +4,7 @@ import { DataKeyMap } from '../../constants';
 const router = express.Router();
 
 router.post('/', async (req, res, next) => {
-  const task = req.body;
+  const { integrationId, ...task } = req.body;
 
   // Update this with your preferred data storage
   const configuration: Config = res.locals.data.getConfiguration();
@@ -13,7 +13,7 @@ router.post('/', async (req, res, next) => {
   const userTasks: Task[] = tasks[currentUserId] || [];
   const users: Users = res.locals.data.getData(DataKeyMap.users);
   const currentUser: User = users[currentUserId];
-  const integrationIds: string[] = res.locals.data.getEnabledIntegrationIds();
+
 
   // Save Task
   userTasks.push(task);
@@ -22,8 +22,8 @@ router.post('/', async (req, res, next) => {
   res.send(userTasks);
 
   // Post to Integration
-  try {
-    integrationIds.forEach((integrationId) => {
+  if (integrationId) {
+    try {
       fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/postMessage/${currentUser.userId}`, {
         method: 'POST',
         headers: {
@@ -35,9 +35,9 @@ router.post('/', async (req, res, next) => {
           message: `A task has been created within the Sample App. \n\n Task Name: ${task.name} \n Task Description: ${task.description}`,
         }),
       });
-    });
-  } catch (e) {
-    console.log('Error posting message through integration', e);
+    } catch (e) {
+      console.log('Error posting message through integration', e);
+    }
   }
 });
 
