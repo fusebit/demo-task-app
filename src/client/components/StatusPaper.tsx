@@ -12,7 +12,7 @@ const StatusPaper = ({ title, children, ...props }: Props) => {
 
   if (open) {
     return (
-      <Paper {...props}>
+      <Paper {...props} sx={{ position: 'relative' }}>
         <Box position="absolute" right="5px" top="5px">
           <IconButton aria-label="close" onClick={() => setOpen(false)}>
             <CloseIcon fontSize="small" sx={{ color: '#333333' }} />
