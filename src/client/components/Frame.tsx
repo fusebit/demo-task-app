@@ -63,16 +63,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
         <Box style={{ backgroundColor: '#333333', height: '100%', padding: '32px 0', color: 'white' }}>
           <List disablePadding>
             <ListItem>
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="center"
-                width="100%"
-                border="1px dotted #FFFFFF"
-                borderRadius="8px"
-                padding="38px 0"
-                mb="40px"
-              >
+              <Box className="drawer-logo-container">
                 <Typography fontSize="18px" lineHeight="21px" sx={{ width: 'fit-content' }}>
                   Your Logo Here
                 </Typography>
@@ -87,9 +78,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
               <ListItemText sx={{ color: 'white' }}>{currentUser?.name}</ListItemText>
             </ListItem>
             <ListItem sx={{ marginBottom: '12px' }}>
-              <Typography fontWeight="700">
-                Sample App
-              </Typography>
+              <Typography fontWeight="700">Sample App</Typography>
             </ListItem>
             {sampleAppLinks.map((link) => {
               return (
@@ -106,9 +95,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
             })}
             <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '35px 0' }} />
             <ListItem sx={{ marginBottom: '12px' }}>
-              <Typography fontWeight="700">
-                Learn More
-              </Typography>
+              <Typography fontWeight="700">Learn More</Typography>
             </ListItem>
             {learnMoreLinks.map((link) => {
               return (
