@@ -13,9 +13,10 @@ const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 });
 
+const integrationName = 'Slack';
+
 const TaskInput = (props: { onTaskCreated: (task: Task) => void; isInstalled: boolean }) => {
   const [task, setTask] = useState<Task>({ name: '', description: '' });
-  const [tooltipOpen, setTooltipOpen] = useState(false);
   const handleAddTask = async () => {
     props.onTaskCreated(task);
     setTask({ name: '', description: '' });
@@ -28,10 +29,18 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; isInstalled: bo
   return (
     <Grid container spacing={2} display="flex" alignItems="center" mb="80px">
       <Grid item xs={4}>
-        <TextField label="Task Name" variant="outlined" fullWidth onChange={handleChange('name')} value={task.name} />
+        <TextField
+          color="secondary"
+          label="Task Name"
+          variant="outlined"
+          fullWidth
+          onChange={handleChange('name')}
+          value={task.name}
+        />
       </Grid>
       <Grid item xs={4} ml="15px">
         <TextField
+          color="secondary"
           label="Task Detail"
           variant="outlined"
           fullWidth
@@ -46,11 +55,16 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; isInstalled: bo
           title={
             props.isInstalled
               ? 'Your integration will be triggered when you click this button'
-              : 'Please install the Slack Integration from the Integrations Marketplace first'
+              : `Please install the ${integrationName} Integration from the Integrations Marketplace first`
           }
         >
           <span style={{ display: 'block' }}>
-            <Button disabled={!props.isInstalled} variant="contained" color="secondary" onClick={handleAddTask}>
+            <Button
+              disabled={!props.isInstalled || task.name === '' || task.description === ''}
+              variant="contained"
+              color="secondary"
+              onClick={handleAddTask}
+            >
               Add New Task
             </Button>
           </span>
