@@ -7,6 +7,9 @@ const theme = createTheme({
     primary: {
       main: '#333333',
     },
+    secondary: {
+      main: '#3F51B5',
+    },
   },
   components: {
     MuiListItemButton: {

@@ -3,6 +3,18 @@ import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 
+const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))({
+  [`& .${tooltipClasses.tooltip}`]: {
+    width: 200,
+    padding: '4px 12px',
+    textAlign: 'center',
+    fontSize: 12,
+    lineHeight: '16px',
+  },
+});
+
 const integrationName = 'Slack';
 
 const TaskInput = (props: {
@@ -43,7 +55,7 @@ const TaskInput = (props: {
         />
       </Grid>
       <Grid item xs={2}>
-        <Tooltip
+        <CustomWidthTooltip
           sx={{ m: 1 }}
           arrow
           title={
@@ -62,7 +74,7 @@ const TaskInput = (props: {
               Add New Task
             </Button>
           </Box>
-        </Tooltip>
+        </CustomWidthTooltip>
       </Grid>
     </Grid>
   );
