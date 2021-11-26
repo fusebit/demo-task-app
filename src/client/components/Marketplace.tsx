@@ -2,50 +2,85 @@ import React from 'react';
 import Page from './Page';
 import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
-import { Grid, Typography } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
 import { IntegrationTypeEnum } from '../../constants';
+import { getUserIntegrations } from '../utils/getUserIntegrations';
+
+// This represents the integrationsFeed json
+const MARKETPLACE_INTEGRATIONS = Object.keys(IntegrationTypeEnum) as IntegrationType[];
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
   const isInstalledList = Object.keys(props.userData.integrations);
   console.log('the following integrations are installed', isInstalledList);
+
+  const userIntegrations = getUserIntegrations();
+
+  const list = MARKETPLACE_INTEGRATIONS.reduce(
+    (acc, curr) => {
+      if (userIntegrations.find((i) => i.feedId === curr)) {
+        acc.available.push(curr);
+      } else {
+        acc.unavailable.push(curr);
+      }
+      return acc;
+    },
+    {
+      available: [] as IntegrationType[],
+      unavailable: [] as IntegrationType[],
+    }
+  );
+
   return (
     <Page>
       <PageItem>
-        <StatusPaper title="Fusebit handles Authentification for you!" elevation={24}>
-          <>
-            <p>
-              Fusebit handles all the overhead of authenticating users and wiring up their configurations to a specific
-              install for you. Once you've installed the app,{' '}
-              <strong>head on over the the Fusebit management portal</strong> to see it.
-            </p>
-            <p>Note: This sample app is currently limited to one integratino for demonstration purposes.</p>
-          </>
-        </StatusPaper>
+        <Box mb="74px" mt="36px">
+          <StatusPaper title="Fusebit handles Authentification for you!" elevation={24}>
+            <>
+              <Typography>
+                Fusebit handles all the overhead of authenticating tenants and wiring up their configurations to a
+                specific install for you. Once you’ve installed the app,{' '}
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  href="https://manage.fusebit.io/"
+                  style={{ color: '#333333', fontWeight: 700 }}
+                >
+                  head on over the fusebit management portal to see it.
+                </a>
+              </Typography>
+              <Box display="flex" alignItems="center" mt="24px">
+                <Typography fontWeight={700} sx={{ marginRight: '5px' }}>
+                  Note:
+                </Typography>
+                <Typography>
+                  This sample app is currently limited to one integration for demonstration purposes.
+                </Typography>
+              </Box>
+            </>
+          </StatusPaper>
+        </Box>
       </PageItem>
       <PageItem>
-        <Typography>Available Integrations</Typography>
+        <Typography fontSize="22px" fontWeight={500} sx={{ marginBottom: '24px' }}>
+          Available Integrations
+        </Typography>
       </PageItem>
       <PageItem>
-        <Grid container spacing={2}>
-          <Grid item xs={4}>
-            <IntegrationCard
-              onUninstall={props.onUninstall}
-              integration={IntegrationTypeEnum.SLACK.value}
-              isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK.value)}
-              enabledTypes={props.userData.integrationTypes}
-            />
-          </Grid>
-          <Grid item xs={2} />
-          <Grid item xs={4}>
-            <IntegrationCard
-              onUninstall={props.onUninstall}
-              integration={IntegrationTypeEnum.HUBSPOT.value}
-              isInstalled={isInstalledList.includes(IntegrationTypeEnum.HUBSPOT.value)}
-              enabledTypes={props.userData.integrationTypes}
-            />
-          </Grid>
-        </Grid>
+        {list.available.map((i) => (
+          <IntegrationCard
+            key={i}
+            onUninstall={props.onUninstall}
+            integration={IntegrationTypeEnum[i].value}
+            isInstalled={isInstalledList.includes(IntegrationTypeEnum[i].value)}
+            enabled
+          />
+        ))}
+        <Box display="flex" flexWrap="wrap">
+          {list.unavailable.map((i) => (
+            <IntegrationCard key={i} onUninstall={props.onUninstall} integration={IntegrationTypeEnum[i].value} />
+          ))}
+        </Box>
       </PageItem>
     </Page>
   );
