@@ -4,7 +4,7 @@ import { IntegrationTypeEnum } from '../../constants';
 
 const IntegrationCard = (props: {
   integration: IntegrationType;
-  isInstalled: boolean;
+  isInstalled?: boolean;
   onUninstall: Function;
   enabled?: boolean;
 }) => {
@@ -27,10 +27,9 @@ const IntegrationCard = (props: {
         </Typography>
       )}
       <img
-        src="static/SLACK.png"
-        height="52"
-        width="129"
-        style={{ objectFit: 'cover', margin: '8px 0 15px', filter: !props.enabled && 'grayscale(100%)' }}
+        src={`static/${props.integration}.png`}
+        height="52" 
+        style={{ objectFit: 'contain', margin: '8px 0 15px', filter: !props.enabled && 'grayscale(100%)' }}
       />
       <Box display="flex" alignItems="center">
         <Typography

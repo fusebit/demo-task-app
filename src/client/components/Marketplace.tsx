@@ -2,13 +2,35 @@ import React from 'react';
 import Page from './Page';
 import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
-import { Grid, Typography, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
 import { IntegrationTypeEnum } from '../../constants';
+import { getUserIntegrations } from '../utils/getUserIntegrations';
+
+// This represents the integrationsFeed json
+const MARKETPLACE_INTEGRATIONS = Object.keys(IntegrationTypeEnum) as IntegrationType[];
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
   const isInstalledList = Object.keys(props.userData.integrations);
   console.log('the following integrations are installed', isInstalledList);
+
+  const userIntegrations = getUserIntegrations();
+
+  const list = MARKETPLACE_INTEGRATIONS.reduce(
+    (acc, curr) => {
+      if (userIntegrations.find((i) => i.feedId === curr)) {
+        acc.available.push(curr);
+      } else {
+        acc.unavailable.push(curr);
+      }
+      return acc;
+    },
+    {
+      available: [] as IntegrationType[],
+      unavailable: [] as IntegrationType[],
+    }
+  );
+
   return (
     <Page>
       <PageItem>
@@ -45,18 +67,19 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
         </Typography>
       </PageItem>
       <PageItem>
-        <IntegrationCard
-          onUninstall={props.onUninstall}
-          integration={IntegrationTypeEnum.SLACK.value}
-          isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK.value)}
-          enabled
-        />
-        <Box display="flex" flexWrap="wrap">
+        {list.available.map((i) => (
           <IntegrationCard
+            key={i}
             onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK.value}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK.value)}
+            integration={IntegrationTypeEnum[i].value}
+            isInstalled={isInstalledList.includes(IntegrationTypeEnum[i].value)}
+            enabled
           />
+        ))}
+        <Box display="flex" flexWrap="wrap">
+          {list.unavailable.map((i) => (
+            <IntegrationCard key={i} onUninstall={props.onUninstall} integration={IntegrationTypeEnum[i].value} />
+          ))}
         </Box>
       </PageItem>
     </Page>
