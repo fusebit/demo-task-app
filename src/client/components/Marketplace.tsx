@@ -47,35 +47,15 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
       <PageItem>
         <IntegrationCard
           onUninstall={props.onUninstall}
-          integration={IntegrationTypeEnum.SLACK}
-          isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
+          integration={IntegrationTypeEnum.SLACK.value}
+          isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK.value)}
           enabled
         />
         <Box display="flex" flexWrap="wrap">
           <IntegrationCard
             onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
-          />
-          <IntegrationCard
-            onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
-          />
-          <IntegrationCard
-            onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
-          />
-          <IntegrationCard
-            onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
-          />
-          <IntegrationCard
-            onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum.SLACK}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK)}
+            integration={IntegrationTypeEnum.SLACK.value}
+            isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK.value)}
           />
         </Box>
       </PageItem>
