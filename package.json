@@ -24,7 +24,6 @@
     "@emotion/styled": "11.3.0",
     "@mui/icons-material": "^5.0.1",
     "@mui/material": "^5.0.1",
-    "buffer": "^6.0.3",
     "concurrently": "^6.4.0",
     "cookie-session": "^1.4.0",
     "cors": "^2.8.5",
