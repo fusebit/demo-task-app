@@ -8,6 +8,8 @@ router.get('/:integrationName/install', async (req, res, next) => {
   // Type check on integrationName
   AssertIntegrationName(req.params.integrationName);
 
+  console.log('qwewq')
+
   // Update this with your preferred data storage
   const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
   const currentUserId: string = res.locals.data.getCurrentUserId();

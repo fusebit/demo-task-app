@@ -38,7 +38,13 @@ const learnMoreLinks = [
     target: '_blank',
   },
   { id: 'blog', icon: <SubjectIcon sx={iconStyle} />, text: 'Blog', to: 'https://fusebit.io/blog/', target: '_blank' },
-  { id: 'github', icon: <GitHubIcon sx={iconStyle} />, text: 'Github', to: '/github', taget: '_self' },
+  {
+    id: 'github',
+    icon: <GitHubIcon sx={iconStyle} />,
+    text: 'Github',
+    to: 'https://github.com/fusebit/demo-task-app/zipball/main/',
+    taget: '_self',
+  },
 ];
 
 const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void }>) => {

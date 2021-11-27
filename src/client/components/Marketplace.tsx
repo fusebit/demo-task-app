@@ -4,11 +4,17 @@ import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
 import { Typography, Box } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
-import { IntegrationTypeEnum, urlOrSvgToImage } from '../../constants';
+import { IntegrationTypeEnum } from '../../constants';
+import { getUserIntegrations, getEnvPrefixFromFeedId, getIntegrationId } from '../utils/getUserIntegrations';
+
+// This represents the integrationsFeed json
+const MARKETPLACE_INTEGRATIONS = Object.keys(IntegrationTypeEnum) as IntegrationType[];
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
   const [integrations, setIntegrations] = useState<Feed[] | undefined>();
   const isInstalledList = Object.keys(props.userData.integrations);
+
+  console.log('the following integrations are installed', isInstalledList);
 
   useEffect(() => {
     fetch('https://stage-manage.fusebit.io/feed/integrationsFeed.json').then((res) => {
@@ -24,7 +30,31 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
     });
   }, []);
 
-  console.log('the following integrations are installed', isInstalledList);
+  const userIntegrations = getUserIntegrations();
+
+  const list = (integrations || []).reduce(
+    (acc, curr) => {
+      const envPrefix = getEnvPrefixFromFeedId(curr.id);
+
+      if (userIntegrations.includes(curr.id)) {
+        acc.available.push({
+          ...curr,
+          envPrefix,
+        });
+      } else {
+        acc.unavailable.push({
+          ...curr,
+          envPrefix,
+        });
+      }
+      return acc;
+    },
+    {
+      available: [] as Feed[],
+      unavailable: [] as Feed[],
+    }
+  );
+
   return (
     <Page>
       <PageItem>
@@ -61,15 +91,23 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
         </Typography>
       </PageItem>
       <PageItem>
-        <IntegrationCard
-          name="my-integration-842"
-          onUninstall={props.onUninstall}
-          isInstalled={isInstalledList.includes(IntegrationTypeEnum.SLACK.value)}
-          enabled
-        />
         <Box display="flex" flexWrap="wrap">
-          {integrations?.map((integration) => (
-            <IntegrationCard key={integration.id} image={urlOrSvgToImage(integration.largeIcon)} />
+          {list.available.map((i) => (
+            <IntegrationCard
+              key={i.id}
+              onUninstall={props.onUninstall}
+              integration={i.envPrefix}
+              isInstalled={isInstalledList.includes(i.envPrefix)}
+              enabled
+              name={getIntegrationId(i.envPrefix)}
+              imgUrl={i.largeIcon}
+            />
+          ))}
+        </Box>
+
+        <Box display="flex" flexWrap="wrap">
+          {list.unavailable.map((i) => (
+            <IntegrationCard key={i.id} imgUrl={i.largeIcon} />
           ))}
         </Box>
       </PageItem>

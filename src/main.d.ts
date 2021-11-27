@@ -1,7 +1,7 @@
 interface Config {
   FUSEBIT_INTEGRATION_URL: string;
   FUSEBIT_JWT: string;
-  SLACK_INTEGRATION_ID?: string;
+  SLACK_BOT_INTEGRATION_ID?: string;
   HUBSPOT_INTEGRATION_ID?: string;
 }
 
@@ -22,7 +22,7 @@ interface TaskMap {
   [key: string]: Task[];
 }
 
-type IntegrationType = 'SLACK' | 'HUBSPOT';
+type IntegrationType = 'SLACK_BOT' | 'HUBSPOT';
 
 interface Feed {
   id: string;
@@ -32,15 +32,16 @@ interface Feed {
   largeIcon: string;
   version: string;
   outOfPlan: boolean;
+  envPrefix: string;
   tags: {
     service: string;
     catalog: string;
   };
 }
 
-interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> {}
+interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> { }
 
-interface IntegrationIdMap extends IntegrationMap<string> {}
+interface IntegrationIdMap extends IntegrationMap<string> { }
 
 interface UserData {
   currentUserId: string;

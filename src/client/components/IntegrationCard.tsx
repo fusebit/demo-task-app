@@ -2,14 +2,17 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 const IntegrationCard = (props: {
-  name?: string;
-  image?: string;
+  integration?: string;
   isInstalled?: boolean;
   onUninstall?: Function;
   enabled?: boolean;
+  imgUrl?: string;
+  name?: string;
 }) => {
-  const installApp = () => (window.location.href = `/api/integration/${props.name}/install`);
-  const uninstallApp = () => props.onUninstall?.(props.name);
+  const installApp = () => (window.location.href = `/api/integration/${props.integration}/install`);
+  const uninstallApp = () => props.onUninstall?.(props.integration);
+
+  console.log('integration', props.integration);
 
   return (
     <Box
@@ -29,16 +32,12 @@ const IntegrationCard = (props: {
           {props.name}
         </Typography>
       )}
-      {props.image && (
-        <img
-          src={props.image}
-          height="52"
-          width="52"
-          style={{ objectFit: 'contain', margin: '8px 0 15px', filter: !props.enabled && 'grayscale(100%)' }}
-        />
-      )}
-
-      <Box display="flex" alignItems="center" marginTop="auto">
+      <img
+        src={`data:image/svg+xml;utf8,${encodeURIComponent(props.imgUrl)}`}
+        height="52"
+        style={{ objectFit: 'contain', margin: '8px 0 15px', filter: !props.enabled && 'grayscale(100%)' }}
+      />
+      <Box display="flex" alignItems="center">
         <Typography
           fontSize="14px"
           sx={{
