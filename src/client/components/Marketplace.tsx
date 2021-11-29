@@ -4,10 +4,6 @@ import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
 import { Typography, Box } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
-import { IntegrationTypeEnum } from '../../constants';
-
-// This represents the integrationsFeed json
-const MARKETPLACE_INTEGRATIONS = Object.keys(IntegrationTypeEnum) as IntegrationType[];
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
   const isInstalledList = Object.keys(props.userData.integrations);

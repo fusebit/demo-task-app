@@ -2,10 +2,6 @@ import express from 'express';
 import fetch from 'node-fetch';
 const router = express.Router();
 
-// TODO: Move to utils
-const getEnvPrefixFromFeedId = (feedId: string) => feedId.replaceAll('-', '_').toUpperCase()
-export const getFeedIdFromEnvPrefix = (envPrefix: string) => envPrefix.replaceAll('_', '-').toLowerCase()
-
 router.post('/login', async (req, res, next) => {
   res.locals.data.setUsers(req.body.users);
   res.locals.data.setCurrentUserId(req.body.currentUserId);
@@ -30,7 +26,7 @@ router.get('/me', async (req, res, next) => {
     const envPrefix = i.replace('_INTEGRATION_ID', '')
 
     return {
-      feedId: getFeedIdFromEnvPrefix(envPrefix),
+      feedId: envPrefix.replaceAll('_', '-').toLowerCase(),
       integrationId: configuration[i as keyof Config],
     }
   })
@@ -74,7 +70,7 @@ router.get('/me', async (req, res, next) => {
 
     const integrationList = (integrationsFeed || []).reduce(
       (acc, curr) => {
-        const envPrefix = getEnvPrefixFromFeedId(curr.id);
+        const envPrefix = curr.replaceAll('-', '_').toUpperCase();
         const userIntegration = userIntegrations.find(i => i.feedId === curr.id)
 
         if (userIntegration) {
