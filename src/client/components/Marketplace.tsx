@@ -11,49 +11,9 @@ import { getUserIntegrations, getEnvPrefixFromFeedId, getIntegrationId } from '.
 const MARKETPLACE_INTEGRATIONS = Object.keys(IntegrationTypeEnum) as IntegrationType[];
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
-  const [integrations, setIntegrations] = useState<Feed[] | undefined>();
   const isInstalledList = Object.keys(props.userData.integrations);
 
   console.log('the following integrations are installed', isInstalledList);
-
-  useEffect(() => {
-    fetch('https://stage-manage.fusebit.io/feed/integrationsFeed.json').then((res) => {
-      res
-        .json()
-        .then((feed: Feed[]) => {
-          setIntegrations(feed);
-          console.log(feed);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  }, []);
-
-  const userIntegrations = getUserIntegrations();
-
-  const list = (integrations || []).reduce(
-    (acc, curr) => {
-      const envPrefix = getEnvPrefixFromFeedId(curr.id);
-
-      if (userIntegrations.includes(curr.id)) {
-        acc.available.push({
-          ...curr,
-          envPrefix,
-        });
-      } else {
-        acc.unavailable.push({
-          ...curr,
-          envPrefix,
-        });
-      }
-      return acc;
-    },
-    {
-      available: [] as Feed[],
-      unavailable: [] as Feed[],
-    }
-  );
 
   return (
     <Page>
@@ -91,22 +51,20 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
         </Typography>
       </PageItem>
       <PageItem>
-        <Box display="flex" flexWrap="wrap">
-          {list.available.map((i) => (
-            <IntegrationCard
-              key={i.id}
-              onUninstall={props.onUninstall}
-              integration={i.envPrefix}
-              isInstalled={isInstalledList.includes(i.envPrefix)}
-              enabled
-              name={getIntegrationId(i.envPrefix)}
-              imgUrl={i.largeIcon}
-            />
-          ))}
-        </Box>
+        {props.userData.integrationList.available.map((i) => (
+          <IntegrationCard
+            enabled
+            key={i.id}
+            onUninstall={props.onUninstall}
+            integration={i?.envPrefix}
+            isInstalled={isInstalledList.includes(i.id)}
+            name={i?.integrationId}
+            imgUrl={i.largeIcon}
+          />
+        ))}
 
         <Box display="flex" flexWrap="wrap">
-          {list.unavailable.map((i) => (
+          {props.userData.integrationList.unavailable.map((i) => (
             <IntegrationCard key={i.id} imgUrl={i.largeIcon} />
           ))}
         </Box>

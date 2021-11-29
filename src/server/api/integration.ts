@@ -1,22 +1,22 @@
 import express from 'express';
 import fetch from 'node-fetch';
-import { AssertIntegrationName } from '../../constants';
 
 const router = express.Router();
 
 router.get('/:integrationName/install', async (req, res, next) => {
-  // Type check on integrationName
-  AssertIntegrationName(req.params.integrationName);
-
-  console.log('qwewq')
-
   // Update this with your preferred data storage
   const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
+
+  if (!integrationId) {
+    res.sendStatus(404);
+  }
+
   const currentUserId: string = res.locals.data.getCurrentUserId();
   const configuration: Config = res.locals.data.getConfiguration();
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
   const appUrl: string = `${process.env.SSL_ENABLED ? 'https' : 'http'}://${req.headers.host}`;
   const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
+
 
   try {
     const body = JSON.stringify({
@@ -36,6 +36,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
       method: 'POST',
     });
     const session = await createSessionResponse.json();
+
     if (session.status > 299) {
       res.status(session.status);
       res.send({});
@@ -51,19 +52,16 @@ router.get('/:integrationName/install', async (req, res, next) => {
 
 router.get('/:integrationName/callback', async (req, res, next) => {
   const integrationName = req.params.integrationName.toUpperCase();
-  try {
-    // Type check on integrationName
-    AssertIntegrationName(integrationName);
-  } catch (e) {
-    res.status(500);
-    res.send(e);
-    return;
-  }
 
   try {
     // Update this with your preferred data storage
     const configuration: Config = res.locals.data.getConfiguration();
     const integrationId: string = res.locals.data.getIntegrationId(integrationName);
+
+    if (!integrationId) {
+      res.sendStatus(404);
+    }
+
     const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
     const fusebitJwt: string = configuration.FUSEBIT_JWT;
 
@@ -91,12 +89,14 @@ router.get('/:integrationName/callback', async (req, res, next) => {
 });
 
 router.delete('/:integrationName/install', async (req, res) => {
-  // Type check on integrationName
-  AssertIntegrationName(req.params.integrationName);
-
   // Update this with your preferred data storage
   const configuration: Config = res.locals.data.getConfiguration();
   const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
+
+  if (!integrationId) {
+    res.sendStatus(404);
+  }
+
   const currentUserId: string = res.locals.data.getCurrentUserId();
   const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
   const fusebitJwt: string = configuration.FUSEBIT_JWT;

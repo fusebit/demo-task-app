@@ -2,6 +2,10 @@ import express from 'express';
 import fetch from 'node-fetch';
 const router = express.Router();
 
+// TODO: Move to utils
+const getEnvPrefixFromFeedId = (feedId: string) => feedId.replaceAll('-', '_').toUpperCase()
+export const getFeedIdFromEnvPrefix = (envPrefix: string) => envPrefix.replaceAll('_', '-').toLowerCase()
+
 router.post('/login', async (req, res, next) => {
   res.locals.data.setUsers(req.body.users);
   res.locals.data.setCurrentUserId(req.body.currentUserId);
@@ -22,6 +26,15 @@ router.get('/me', async (req, res, next) => {
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
   const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
 
+  const userIntegrations = Object.keys(configuration).filter(key => key.endsWith('_INTEGRATION_ID') && !!configuration[key as keyof Config]).map(i => {
+    const envPrefix = i.replace('_INTEGRATION_ID', '')
+
+    return {
+      feedId: getFeedIdFromEnvPrefix(envPrefix),
+      integrationId: configuration[i as keyof Config],
+    }
+  })
+
   if (!currentUserId) {
     return res.sendStatus(403);
   }
@@ -30,11 +43,10 @@ router.get('/me', async (req, res, next) => {
     // Check which integrations are installed
     const integrations = (
       await Promise.all(
-        integrationTypes.map(async (integrationType) => {
+        userIntegrations.map(async (integrationType) => {
           // Check if this integrationType is installed
-          const integrationId = res.locals.data.getIntegrationId(integrationType);
           const response = await fetch(
-            `${fusebitIntegrationUrl}/${integrationId}/install?tag=fusebit.tenantId=${currentUserId}`,
+            `${fusebitIntegrationUrl}/${integrationType.integrationId}/install?tag=fusebit.tenantId=${currentUserId}`,
             {
               headers: {
                 Accept: 'application/json, text/plain, */*',
@@ -48,12 +60,43 @@ router.get('/me', async (req, res, next) => {
           return { integrationType, integration };
         })
       )
-    ).reduce<Partial<Record<IntegrationType, any>>>((acc, { integrationType, integration }) => {
-      acc[integrationType] = integration;
+    ).reduce<Partial<Record<string, any>>>((acc, { integrationType, integration }) => {
+      if (Object.keys(integration || {}).length > 0) {
+        acc[integrationType.feedId] = integration;
+      }
       return acc;
     }, {});
 
-    res.send({ currentUserId, users, integrations, integrationTypes });
+    const integrationsFeed = await fetch(process.env.INTEGRATIONS_FEED_URL).then((res) =>
+      res.json() as Promise<Feed[]>
+    );
+
+
+    const integrationList = (integrationsFeed || []).reduce(
+      (acc, curr) => {
+        const envPrefix = getEnvPrefixFromFeedId(curr.id);
+        const userIntegration = userIntegrations.find(i => i.feedId === curr.id)
+
+        if (userIntegration) {
+          acc.available.push({
+            ...curr,
+            envPrefix,
+            integrationId: userIntegration.integrationId
+          });
+        } else {
+          acc.unavailable.push({
+            ...curr,
+          });
+        }
+        return acc;
+      },
+      {
+        available: [] as Feed[],
+        unavailable: [] as Feed[],
+      }
+    );
+
+    res.send({ currentUserId, users, integrations, integrationTypes, integrationList });
   } catch (e) {
     console.log('Error fetching integration installation status', e);
     res.sendStatus(500);

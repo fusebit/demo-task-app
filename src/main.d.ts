@@ -32,7 +32,8 @@ interface Feed {
   largeIcon: string;
   version: string;
   outOfPlan: boolean;
-  envPrefix: string;
+  envPrefix?: string;
+  integrationId?: string;
   tags: {
     service: string;
     catalog: string;
@@ -48,6 +49,10 @@ interface UserData {
   users: Users;
   integrations: IntegrationMap<any>;
   integrationTypes: IntegrationType[];
+  integrationList: {
+    available: Feed[];
+    unavailable: Feed[];
+  }
 }
 
 interface Users {

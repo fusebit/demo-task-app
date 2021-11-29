@@ -12,8 +12,6 @@ const IntegrationCard = (props: {
   const installApp = () => (window.location.href = `/api/integration/${props.integration}/install`);
   const uninstallApp = () => props.onUninstall?.(props.integration);
 
-  console.log('integration', props.integration);
-
   return (
     <Box
       display="flex"
