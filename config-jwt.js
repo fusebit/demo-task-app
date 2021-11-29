@@ -9,7 +9,6 @@ exec('fuse token -o raw', (error, stdout, stderr) => {
       SLACK_BOT_INTEGRATION_ID: process.env.SLACK_BOT_INTEGRATION_ID,
       FUSEBIT_INTEGRATION_URL: process.env.FUSEBIT_INTEGRATION_URL,
       FUSEBIT_JWT: process.env.FUSEBIT_JWT,
-      E2E_HUBSPOT_SLACK_BOT_INTEGRATION_ID: process.env.E2E_HUBSPOT_SLACK_BOT_INTEGRATION_ID,
     },
     process.env.SAMPLE_APP_TASK_JWT_SECRET,
     { expiresIn: 60 * 60 * 24 }

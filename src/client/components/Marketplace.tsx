@@ -5,7 +5,6 @@ import StatusPaper from './StatusPaper';
 import { Typography, Box } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
 import { IntegrationTypeEnum } from '../../constants';
-import { getUserIntegrations, getEnvPrefixFromFeedId, getIntegrationId } from '../utils/getUserIntegrations';
 
 // This represents the integrationsFeed json
 const MARKETPLACE_INTEGRATIONS = Object.keys(IntegrationTypeEnum) as IntegrationType[];
