@@ -66,7 +66,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
         variant="permanent"
         anchor="left"
       >
-        <Box style={{ backgroundColor: '#333333', height: '100%', padding: '32px 0', color: 'white' }}>
+        <Box style={{ backgroundColor: '#333333', height: '100%', padding: '12px 0', color: 'white' }}>
           <List disablePadding>
             <ListItem>
               <Box className="drawer-logo-container">
@@ -75,7 +75,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
                 </Typography>
               </Box>
             </ListItem>
-            <ListItem sx={{ marginBottom: '32px' }}>
+            <ListItem sx={{ marginBottom: '12px' }}>
               <ListItemIcon>
                 <Avatar sx={{ bgcolor: '#BBDEFB' }}>
                   <PersonIcon sx={{ color: '#1F2937' }} />
@@ -99,7 +99,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
                 </RouterLink>
               );
             })}
-            <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '35px 0' }} />
+            <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '20px 0' }} />
             <ListItem sx={{ marginBottom: '12px' }}>
               <Typography fontWeight="700">Learn More</Typography>
             </ListItem>
