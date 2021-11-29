@@ -19,9 +19,8 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       env: {
-        SLACK_INTEGRATION: JSON.stringify(process.env.SLACK_INTEGRATION),
-        HUBSPOT_INTEGRATION: JSON.stringify(process.env.HUBSPOT_INTEGRATION),
-        FUSEBIT_URL: JSON.stringify(process.env.FUSEBIT_URL),
+        SLACK_INTEGRATION_ID: JSON.stringify(process.env.SLACK_INTEGRATION_ID),
+        HUBSPOT_INTEGRATION_ID: JSON.stringify(process.env.HUBSPOT_INTEGRATION_ID),
       },
 
       LAST_BUILD_TIME: JSON.stringify(new Date().toISOString()),
