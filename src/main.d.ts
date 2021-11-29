@@ -38,16 +38,23 @@ interface Feed {
     service: string;
     catalog: string;
   };
+  sampleConfig: {
+    enabled?: boolean;
+    imageSvg: string;
+    getEnabled?: boolean;
+    postEnabled?: boolean;
+    taskDoneText?: string
+  }
 }
 
-interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> { }
+interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> {}
 
-interface IntegrationIdMap extends IntegrationMap<string> { }
+interface IntegrationIdMap extends IntegrationMap<string> {}
 
 interface UserData {
   currentUserId: string;
   users: Users;
-  integrations: IntegrationMap<any>;
+  integrations: Record<string, any>;
   integrationTypes: IntegrationType[];
   integrationList: {
     available: Feed[];

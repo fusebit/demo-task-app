@@ -6,13 +6,15 @@ import TaskTable from './TaskTable';
 import PageItem from './PageItem';
 import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
-import { IntegrationTypeEnum } from '../../constants';
 
-export default (props: { integrations: Partial<Record<IntegrationType, any>> }) => {
+export default (props: { userData: UserData }) => {
   // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
-  const [currentIntegration] = Object.keys(props.integrations || {}) as IntegrationType[];
-  const integrationId = props.integrations[currentIntegration]?.tags['fusebit.parentEntityId'] || '';
-  const installedApp = IntegrationTypeEnum[currentIntegration];
+  const installedAppsKeys = Object.keys(props.userData.integrations || {});
+  const installedApp =
+    installedAppsKeys.length > 0
+      ? props.userData.integrationList.available.find((i) => i.id === installedAppsKeys[0])
+      : null;
+  const { integrationId } = installedApp;
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);
@@ -61,7 +63,7 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
     const severity = installedApp ? 'success' : 'warning';
 
     const message = installedApp
-      ? installedApp.taskDoneText
+      ? installedApp?.sampleConfig.taskDoneText
       : 'Head to the Integration Marketplace to pick one integration';
 
     setAlertProps({ severity, text: message });
