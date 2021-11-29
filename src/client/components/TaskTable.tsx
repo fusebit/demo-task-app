@@ -19,9 +19,6 @@ const TaskTable = (props: { tasks: Task[]; isInstalled: boolean }) => {
 
   return (
     <>
-      <Typography fontSize="22px" fontWeight={500} sx={{ marginBottom: '32px' }}>
-        Your Tasks
-      </Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
