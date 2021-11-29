@@ -70,7 +70,7 @@ router.get('/me', async (req, res, next) => {
 
     const integrationList = (integrationsFeed || []).reduce(
       (acc, curr) => {
-        const envPrefix = curr.replaceAll('-', '_').toUpperCase();
+        const envPrefix = curr.id.replaceAll('-', '_').toUpperCase();
         const userIntegration = userIntegrations.find(i => i.feedId === curr.id)
 
         if (userIntegration) {
