@@ -26,7 +26,7 @@ router.get('/me', async (req, res, next) => {
     const envPrefix = i.replace('_INTEGRATION_ID', '')
 
     return {
-      feedId: envPrefix.replaceAll('_', '-').toLowerCase(),
+      feedId: (envPrefix || '').replace(/_/g, '-').toLowerCase(),
       integrationId: configuration[i as keyof Config],
     }
   })
