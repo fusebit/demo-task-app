@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Page from './Page';
 import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Grid } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
@@ -46,23 +46,31 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
         </Typography>
       </PageItem>
       <PageItem>
-        {props.userData.integrationList.available.map((i) => (
-          <IntegrationCard
-            enabled
-            key={i.id}
-            onUninstall={props.onUninstall}
-            integration={i?.envPrefix}
-            isInstalled={isInstalledList.includes(i.id)}
-            name={i?.integrationId}
-            imgUrl={i.largeIcon}
-          />
-        ))}
-
-        <Box display="flex" flexWrap="wrap">
-          {props.userData.integrationList.unavailable.map((i) => (
-            <IntegrationCard key={i.id} imgUrl={i.largeIcon} />
+        <Grid container spacing={3} sx={{ marginBottom: 6 }}>
+          {props.userData.integrationList.available.map((i) => (
+            <Grid item xs={12} sm={6} md={4} key={i.id}>
+              <IntegrationCard
+                enabled
+                key={i.id}
+                onUninstall={props.onUninstall}
+                integration={i?.envPrefix}
+                isInstalled={isInstalledList.includes(i.id)}
+                name={i?.integrationId}
+                imgUrl={i.largeIcon}
+                integrationName={i?.name}
+                docsUrl={i?.resources?.configureAppDocUrl}
+              />
+            </Grid>
           ))}
-        </Box>
+        </Grid>
+
+        <Grid container spacing={3}>
+          {props.userData.integrationList.unavailable.map((i) => (
+            <Grid item xs={12} sm={6} md={4} key={i.id}>
+              <IntegrationCard imgUrl={i.largeIcon} integrationName={i?.name} />
+            </Grid>
+          ))}
+        </Grid>
       </PageItem>
     </Page>
   );

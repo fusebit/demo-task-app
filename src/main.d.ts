@@ -44,12 +44,15 @@ interface Feed {
     getEnabled?: boolean;
     postEnabled?: boolean;
     taskDoneText?: string
-  }
+  };
+  resources: {
+    configureAppDocUrl: string
+  },
 }
 
-interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> {}
+interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> { }
 
-interface IntegrationIdMap extends IntegrationMap<string> {}
+interface IntegrationIdMap extends IntegrationMap<string> { }
 
 interface UserData {
   currentUserId: string;
