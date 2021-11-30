@@ -59,6 +59,7 @@ const IntegrationCard = (props: {
       <Box>
         <img
           src={`data:image/svg+xml;utf8,${encodeURIComponent(props.imgUrl)}`}
+          onError={(e) => ((e.target as HTMLImageElement).src = '/static/fusebit-logo.svg')}
           height="52"
           style={{ objectFit: 'contain', margin: '8px 0 15px', filter: !props.enabled && 'grayscale(100%)' }}
           alt={props.integrationName || 'Integration App'}
