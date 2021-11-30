@@ -14,7 +14,7 @@ export default (props: { userData: UserData }) => {
     installedAppsKeys.length > 0
       ? props.userData.integrationList.available.find((i) => i.id === installedAppsKeys[0])
       : null;
-  const { integrationId } = installedApp;
+  const integrationId = installedApp?.integrationId;
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);

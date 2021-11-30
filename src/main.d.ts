@@ -1,10 +1,4 @@
-interface Config {
-  FUSEBIT_INTEGRATION_URL: string;
-  FUSEBIT_JWT: string;
-  SLACK_BOT_INTEGRATION_ID?: string;
-  HUBSPOT_INTEGRATION_ID?: string;
-}
-
+type Config = Record<string, string>
 interface User {
   userId: string;
   color?: string;
