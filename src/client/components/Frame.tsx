@@ -42,8 +42,8 @@ const learnMoreLinks = [
     id: 'github',
     icon: <GitHubIcon sx={iconStyle} />,
     text: 'Github',
-    to: 'https://github.com/fusebit/demo-task-app/zipball/main/',
-    taget: '_self',
+    to: 'https://github.com/fusebit/demo-task-app',
+    target: '_blank',
   },
 ];
 
