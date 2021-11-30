@@ -5,12 +5,6 @@ const router = express.Router();
 
 router.get('/:integrationName/install', async (req, res, next) => {
   // Update this with your preferred data storage
-  const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
-
-  if (!integrationId) {
-    res.sendStatus(404);
-  }
-
   const currentUserId: string = res.locals.data.getCurrentUserId();
   const configuration: Config = res.locals.data.getConfiguration();
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
@@ -19,6 +13,7 @@ router.get('/:integrationName/install', async (req, res, next) => {
 
 
   try {
+    const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
     const body = JSON.stringify({
       redirectUrl: `${appUrl}/api/integration/${req.params.integrationName}/callback`,
       tags: {
@@ -57,11 +52,6 @@ router.get('/:integrationName/callback', async (req, res, next) => {
     // Update this with your preferred data storage
     const configuration: Config = res.locals.data.getConfiguration();
     const integrationId: string = res.locals.data.getIntegrationId(integrationName);
-
-    if (!integrationId) {
-      res.sendStatus(404);
-    }
-
     const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
     const fusebitJwt: string = configuration.FUSEBIT_JWT;
 
@@ -91,17 +81,12 @@ router.get('/:integrationName/callback', async (req, res, next) => {
 router.delete('/:integrationName/install', async (req, res) => {
   // Update this with your preferred data storage
   const configuration: Config = res.locals.data.getConfiguration();
-  const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
-
-  if (!integrationId) {
-    res.sendStatus(404);
-  }
-
   const currentUserId: string = res.locals.data.getCurrentUserId();
   const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
 
   try {
+    const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
     // Get installation
     const lookupResponse = await fetch(
       `${fusebitIntegrationUrl}/${integrationId}/install?tag=fusebit.tenantId=${currentUserId}`,

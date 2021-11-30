@@ -92,7 +92,11 @@ class DAO {
 
   getIntegrationId = (integrationType: IntegrationType) => {
     const configuration = this.getConfiguration();
-    return configuration[`${integrationType}_INTEGRATION_ID`];
+    const id = configuration[`${integrationType}_INTEGRATION_ID`];
+    if (!id) {
+      throw `Integration ${integrationType} wasn't found`
+    }
+    return id
   };
 }
 
