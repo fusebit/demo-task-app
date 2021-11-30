@@ -19,8 +19,9 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       env: {
-        SLACK_INTEGRATION_ID: JSON.stringify(process.env.SLACK_INTEGRATION_ID),
+        SLACK_BOT_INTEGRATION_ID: JSON.stringify(process.env.SLACK_BOT_INTEGRATION_ID),
         HUBSPOT_INTEGRATION_ID: JSON.stringify(process.env.HUBSPOT_INTEGRATION_ID),
+        E2E_HUBSPOT_SLACK_BOT_INTEGRATION_ID: JSON.stringify(process.env.E2E_HUBSPOT_SLACK_BOT_INTEGRATION_ID),
       },
 
       LAST_BUILD_TIME: JSON.stringify(new Date().toISOString()),

@@ -1,10 +1,4 @@
-interface Config {
-  FUSEBIT_INTEGRATION_URL: string;
-  FUSEBIT_JWT: string;
-  SLACK_INTEGRATION_ID?: string;
-  HUBSPOT_INTEGRATION_ID?: string;
-}
-
+type Config = Record<string, string>
 interface User {
   userId: string;
   color?: string;
@@ -22,17 +16,47 @@ interface TaskMap {
   [key: string]: Task[];
 }
 
-type IntegrationType = 'SLACK' | 'HUBSPOT';
+type IntegrationType = 'SLACK_BOT' | 'HUBSPOT';
 
-interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> {}
+interface Feed {
+  id: string;
+  name: string;
+  description: string;
+  smallIcon: string;
+  largeIcon: string;
+  version: string;
+  outOfPlan: boolean;
+  envPrefix?: string;
+  integrationId?: string;
+  tags: {
+    service: string;
+    catalog: string;
+  };
+  sampleConfig: {
+    enabled?: boolean;
+    imageSvg: string;
+    getEnabled?: boolean;
+    postEnabled?: boolean;
+    taskDoneText?: string
+  };
+  resources: {
+    configureAppDocUrl: string
+  },
+}
 
-interface IntegrationIdMap extends IntegrationMap<string> {}
+interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> { }
+
+interface IntegrationIdMap extends IntegrationMap<string> { }
 
 interface UserData {
   currentUserId: string;
   users: Users;
-  integrations: IntegrationMap<any>;
+  integrations: Record<string, any>;
   integrationTypes: IntegrationType[];
+  integrationList: {
+    available: Feed[];
+    unavailable: Feed[];
+  }
 }
 
 interface Users {

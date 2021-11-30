@@ -1,6 +1,6 @@
 export const IntegrationTypeEnum: IntegrationTypeKeyMap = {
-  SLACK: {
-    value: 'SLACK',
+  SLACK_BOT: {
+    value: 'SLACK_BOT',
     action: 'Get slack notifications when a new task is created.',
     taskDoneText: 'A message is being sent to your slack account.',
     taskDescription: 'In this example, the "Add New Task" Button, if installed, will use your integration code to immediately update your user via Slack! Look at the code to see how it works, and learn more in the docs here.'
@@ -32,3 +32,6 @@ export const AssertIntegrationName: (integrationName: string) => asserts integra
 ) => {
   AssertsIsKeyOf(integrationName, IntegrationTypeEnum);
 };
+
+export const urlOrSvgToImage = (img = '') =>
+  img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
