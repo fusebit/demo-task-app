@@ -63,7 +63,7 @@ export default (props: { userData: UserData }) => {
     const severity = installedApp ? 'success' : 'warning';
 
     const message = installedApp
-      ? installedApp?.sampleConfig.taskDoneText
+      ? installedApp?.sampleConfig?.taskDoneText || 'Integration triggered!'
       : 'Head to the Integration Marketplace to pick one integration';
 
     setAlertProps({ severity, text: message });
