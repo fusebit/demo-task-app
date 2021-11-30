@@ -5,12 +5,12 @@ class DAO {
   constructor(req: Request, res: Response) {
     this.req = req;
     this.res = res;
-    if (this.req.headers.cookie) {
-      const data = this.req.headers.cookie
-        .split(';')
-        .find((item) => item.includes('sample-app'))
-        .split('=')[1]
-        .split('%3D')[0];
+    const cookieList = this.req.headers.cookie ? this.req.headers.cookie
+      .split(';') : [];
+    const sampleAppCookie = cookieList.find(cookie => cookie.includes('sample-app'));
+
+    if (sampleAppCookie) {
+      const data = sampleAppCookie.split('=')[1].split('%3D')[0];
       const dataString = Buffer.from(data, 'base64').toString();
       this.data = JSON.parse(dataString);
     } else {
