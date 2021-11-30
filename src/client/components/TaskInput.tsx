@@ -48,7 +48,7 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: F
           value={task.description}
         />
       </Grid>
-      <Grid item xs={2}>
+      <Grid item xs={3}>
         <CustomWidthTooltip
           sx={{ m: 1 }}
           arrow
