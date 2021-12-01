@@ -6,6 +6,12 @@ const router = express.Router();
 router.post('/', async (req, res, next) => {
   const { integrationId, ...task } = req.body;
 
+  if (!integrationId) {
+    res.status(404).send('Integration id is required');
+
+    return
+  }
+
   // Update this with your preferred data storage
   const configuration: Config = res.locals.data.getConfiguration();
   const currentUserId: string = res.locals.data.getCurrentUserId();
@@ -19,25 +25,32 @@ router.post('/', async (req, res, next) => {
   userTasks.push(task);
   tasks[currentUserId] = userTasks;
   res.locals.data.setTasks(tasks);
-  res.send(userTasks);
 
   // Post to Integration
-  if (integrationId) {
-    try {
-      fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/postMessage/${currentUser.userId}`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
-        },
-        body: JSON.stringify({
-          message: `A task has been created within the Sample App. \n\n Task Name: ${task.name} \n Task Description: ${task.description}`,
-        }),
-      });
-    } catch (e) {
-      console.log('Error posting message through integration', e);
+  try {
+    const response = await fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/postMessage/${currentUser.userId}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+      },
+      body: JSON.stringify({
+        message: `A task has been created within the Sample App. \n\n Task Name: ${task.name} \n Task Description: ${task.description}`,
+      }),
+    });
+
+    if (!response.ok) {
+      const text = await response.text()
+
+      throw new Error(text);
     }
+
+    res.send(userTasks);
+
+  } catch (e) {
+    console.log('Error posting message through integration', e);
+    res.status(500).send(e)
   }
 });
 

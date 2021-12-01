@@ -46,17 +46,28 @@ export default (props: { userData: UserData }) => {
   }, [refreshFlag]);
 
   const saveTask = async (task: Task) => {
-    const response = await fetch('/api/task', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('configuration')}`,
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      method: 'POST',
-      body: JSON.stringify({ ...task, integrationId }),
-      credentials: 'include',
-    });
-    setTasks(await response.json());
-    alert();
+    try {
+      const response = await fetch('/api/task', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('configuration')}`,
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        method: 'POST',
+        body: JSON.stringify({ ...task, integrationId }),
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        const text = await response.text()
+        throw new Error(text);
+      }
+
+      setTasks(await response.json());
+      alert();
+    } catch (error) {
+      console.log(error);
+      setAlertProps({ severity: 'warning', text: 'There was an error calling triggering the integration.' });
+    }
   };
 
   const alert = () => {
