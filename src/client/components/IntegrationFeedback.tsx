@@ -23,7 +23,12 @@ const IntegrationFeedback = (
   return (
     <React.Fragment>
       <Stack spacing={2} sx={{ width: '100%' }}>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+        >
           <Alert onClose={handleClose} severity={props.severity} sx={{ width: '100%' }}>
             {props.text}
           </Alert>
