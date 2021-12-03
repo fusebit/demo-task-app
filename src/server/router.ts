@@ -32,6 +32,7 @@ router.use(
         const secret = process.env.SAMPLE_APP_TASK_JWT_SECRET || process.env.SAMPLE_APP_FALLBACK_SECRET;
         const config: Config = jwt.verify(token, secret) as Config;
         dao.saveData(DataKeyMap.configuration, config);
+        console.log('config', config)
         return next();
       } catch (e) {
         console.log('Unable to verify JWT');

@@ -18,7 +18,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
   const [isSavingTask, setSavingTask] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!refreshFlag || !props.installedApp) {
+    if (!refreshFlag || !props.installedApp || !props.installedApp?.resources?.sampleConfig?.isGetEnabled) {
       setHasLoaded(true);
       return;
     }
@@ -103,10 +103,16 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
     }
   };
 
-  const Body = () =>
-    hasLoaded ? (
-      <TaskTable tasks={tasks} installedApp={props.installedApp} />
-    ) : (
+  const getBody = () => {
+    if (props.installedApp && !props.installedApp?.resources?.sampleConfig?.isGetEnabled) {
+      return null;
+    }
+
+    if (hasLoaded) {
+      return <TaskTable tasks={tasks} installedApp={props.installedApp} />;
+    }
+
+    return (
       <Fade
         in
         style={{
@@ -118,6 +124,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
         <CircularProgress size="400" style={{ margin: 'auto', display: 'flex', padding: 20 }} />
       </Fade>
     );
+  };
 
   return (
     <Page>
@@ -140,11 +147,11 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
         </Box>
       </PageItem>
       <PageItem>
-        <TaskInput installedApp={props.installedApp} onTaskCreated={saveTask} isLoading={isSavingTask} />
+        {(!props.installedApp || props.installedApp?.resources?.sampleConfig?.isPostEnabled) && (
+          <TaskInput installedApp={props.installedApp} onTaskCreated={saveTask} isLoading={isSavingTask} />
+        )}
       </PageItem>
-      <PageItem>
-        <Body />
-      </PageItem>
+      <PageItem>{getBody()}</PageItem>
       <IntegrationFeedback {...alertProps} />
     </Page>
   );
