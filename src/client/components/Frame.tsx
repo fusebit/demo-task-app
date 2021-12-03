@@ -51,7 +51,6 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
   const sampleAppLinks = [
     { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: `Your ${getItemName(props.installedApp, true)}`, to: '/' },
     { id: 'marketplace', icon: <StarIcon sx={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
-    { id: 'logout', icon: <ExitToAppIcon sx={iconStyle} />, text: 'Logout', logout: true },
   ];
 
   return (
@@ -93,7 +92,6 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
                 <RouterLink key={link.id} to={link.to || ''} style={{ textDecoration: 'none', color: 'white' }}>
                   <ListItemButton
                     sx={{ backgroundColor: link.to && link.to === window.location.pathname && 'rgba(255,255,255,0.2)' }}
-                    onClick={link.logout && props.onLogout}
                   >
                     <ListItemIcon>{link.icon}</ListItemIcon>
                     <ListItemText>{link.text}</ListItemText>
@@ -101,6 +99,12 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
                 </RouterLink>
               );
             })}
+            <ListItemButton onClick={props.onLogout}>
+              <ListItemIcon>
+                <ExitToAppIcon sx={iconStyle} />
+              </ListItemIcon>
+              <ListItemText>Logout</ListItemText>
+            </ListItemButton>
             <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '35px 0' }} />
             <ListItem sx={{ marginBottom: '12px' }}>
               <Typography fontWeight="700">Learn More</Typography>

@@ -32,7 +32,7 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: F
       <Grid item xs={4}>
         <TextField
           color="secondary"
-          label={getPropertyFromIntegration(props.installedApp, 0, 'label')}
+          label={getPropertyFromIntegration(props.installedApp, 0, 'label') || 'Item Name'}
           variant="outlined"
           fullWidth
           onChange={handleChange('name')}
@@ -42,7 +42,7 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: F
       <Grid item xs={4} ml="15px">
         <TextField
           color="secondary"
-          label={getPropertyFromIntegration(props.installedApp, 1, 'label')}
+          label={getPropertyFromIntegration(props.installedApp, 1, 'label') || 'Item Description'}
           variant="outlined"
           fullWidth
           onChange={handleChange('description')}
@@ -55,10 +55,9 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: F
           arrow
           title={
             !!props.installedApp
-              ? 'Your integration will be triggered when you click this button'
-              : `Please install a Integration from the Integrations Marketplace first`
+              ? `${props.installedApp.name} will be triggered when you click this button`
+              : `Please install an Integration from the Integrations Marketplace first`
           }
-          
         >
           <Box display="inline-block">
             <Button

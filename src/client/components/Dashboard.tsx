@@ -6,7 +6,7 @@ import TaskTable from './TaskTable';
 import PageItem from './PageItem';
 import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
-import { getPropertyFromIntegration, getTextFromIntegration } from '../utils';
+import { getPropertyFromIntegration, getTextFromIntegration, getItemName } from '../utils';
 
 export default (props: { userData: UserData; installedApp: Feed }) => {
   const integrationId = props.installedApp?.integrationId;
@@ -19,6 +19,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
 
   useEffect(() => {
     if (!refreshFlag || !props.installedApp) {
+      setHasLoaded(true);
       return;
     }
     let mounted = true;
@@ -90,6 +91,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
         severity: 'success',
         text: getTextFromIntegration(props.installedApp, 'postSuccess', 'Integration triggered!'),
       });
+      setRefreshFlag(true);
     } catch (error) {
       console.log(error);
       setAlertProps({
@@ -98,7 +100,6 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
       });
     } finally {
       setSavingTask(false);
-      setRefreshFlag(true);
     }
   };
 
@@ -129,8 +130,10 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
                 account. You can use this information to enable / disable different actions in the system.
               </Typography>
               <Typography>
-                In this example, the "Add New Task" Button, if installed, will use your integration code to immediately
-                update your user via Slack! Look at the code to see how it works, and learn more in the docs here.
+                {`In this example, the "Add New ${getItemName(
+                  props.installedApp
+                )}" Button, if installed, will use your integration code to immediately
+                update your user via Slack! Look at the code to see how it works, and learn more in the docs here.`}
               </Typography>
             </>
           </StatusPaper>

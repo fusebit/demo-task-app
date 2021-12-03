@@ -27,7 +27,9 @@ const Routes = () => {
   // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
   const installedAppsKeys = Object.keys(userData?.integrations || {});
   const installedApp =
-    installedAppsKeys.length > 0 ? userData?.integrationList.available.find((i) => i.id === installedAppsKeys[0]) : null;
+    installedAppsKeys.length > 0
+      ? userData?.integrationList.available.find((i) => i.id === installedAppsKeys[0])
+      : null;
 
   useEffect(() => {
     let mounted = true;
