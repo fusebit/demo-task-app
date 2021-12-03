@@ -12,39 +12,41 @@ import {
 } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Link as RouterLink } from 'react-router-dom';
+import { getItemName, getPropertyFromIntegration } from '../utils';
 
-const TaskTable = (props: { tasks: Task[]; isInstalled: boolean }) => {
-  const tasks = props?.tasks?.map((task, index) => ({ ...task, index })) || [];
-  const cellStyle = { color: props.isInstalled ? '#3F51B5' : '#959595', fontWeight: 400 };
+const TaskTable = (props: { tasks: Task[]; installedApp: Feed }) => {
+  const cellStyle = { color: !!props.installedApp ? '#3F51B5' : '#959595', fontWeight: 400 };
 
   return (
     <>
       <Typography fontSize="22px" fontWeight={500} sx={{ marginBottom: '32px' }}>
-        Your Tasks
+        Your {getItemName(props.installedApp, true)}
       </Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={cellStyle}>Task Name</TableCell>
+              <TableCell sx={cellStyle}>{getPropertyFromIntegration(props.installedApp, 0, 'label')}</TableCell>
               <TableCell sx={cellStyle} align="left">
-                Task Detail
+                {getPropertyFromIntegration(props.installedApp, 1, 'label')}
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {tasks?.reverse().map((task) => (
+            {props.tasks.map((task) => (
               <TableRow key={task.index}>
                 <TableCell component="th" scope="row">
-                  {task.name}
+                  {task[getPropertyFromIntegration(props.installedApp, 0, 'name') as keyof typeof task]}
                 </TableCell>
-                <TableCell align="left">{task.description}</TableCell>
+                <TableCell align="left">
+                  {task[getPropertyFromIntegration(props.installedApp, 1, 'name') as keyof typeof task]}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-      {!props.isInstalled && (
+      {!props.installedApp && (
         <Box display="flex" alignItems="center" mt="80px">
           <WarningIcon color="error" sx={{ marginRight: '13px' }} />
           <Typography color="#333333">

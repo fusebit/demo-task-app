@@ -13,8 +13,16 @@ const IntegrationFeedback = (
   useEffect(() => {
     if (!!props.text) {
       setOpen(true);
+
+      setTimeout(() => {
+        setOpen(false);
+      }, 2500);
     }
-  }, [props]);
+
+    return () => {
+      setOpen(false);
+    }
+  }, [props.text]);
 
   const handleClose = (event: React.SyntheticEvent<Element, Event>) => {
     setOpen(false);
@@ -23,7 +31,7 @@ const IntegrationFeedback = (
   return (
     <React.Fragment>
       <Stack spacing={2} sx={{ width: '100%' }}>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar open={open} onClose={handleClose}>
           <Alert onClose={handleClose} severity={props.severity} sx={{ width: '100%' }}>
             {props.text}
           </Alert>
