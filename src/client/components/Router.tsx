@@ -20,7 +20,7 @@ const AuthedRoute = (props: { onLogin: Function; userData: UserData } & RoutePro
 };
 
 const Routes = () => {
-  const [userData, setUserData] = useState<UserData>({});
+  const [userData, setUserData] = useState<UserData>();
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { hash } = useLocation();
 

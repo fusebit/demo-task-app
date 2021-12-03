@@ -2,6 +2,7 @@ import { Button, Grid, TextField, Tooltip, Box } from '@mui/material';
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import { getPropertyFromIntegration } from '../utils';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -31,7 +32,7 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: F
       <Grid item xs={4}>
         <TextField
           color="secondary"
-          label="Task Name"
+          label={getPropertyFromIntegration(props.installedApp, 0, 'label')}
           variant="outlined"
           fullWidth
           onChange={handleChange('name')}
@@ -41,7 +42,7 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: F
       <Grid item xs={4} ml="15px">
         <TextField
           color="secondary"
-          label="Task Detail"
+          label={getPropertyFromIntegration(props.installedApp, 1, 'label')}
           variant="outlined"
           fullWidth
           onChange={handleChange('description')}

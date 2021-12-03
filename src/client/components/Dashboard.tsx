@@ -6,6 +6,7 @@ import TaskTable from './TaskTable';
 import PageItem from './PageItem';
 import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
+import { getPropertyFromIntegration } from '../utils';
 
 export default (props: { userData: UserData; installedApp: Feed }) => {
   const integrationId = props.installedApp?.integrationId;
@@ -47,7 +48,11 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
           'Content-Type': 'application/json; charset=utf-8',
         },
         method: 'POST',
-        body: JSON.stringify({ ...task, integrationId }),
+        body: JSON.stringify({
+          [getPropertyFromIntegration(props.installedApp, 0, 'name')]: task.name,
+          [getPropertyFromIntegration(props.installedApp, 1, 'name')]: task.description,
+          integrationId,
+        }),
         credentials: 'include',
       });
 
@@ -56,7 +61,6 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
         throw new Error(text);
       }
 
-      setTasks(await response.json());
       alert();
     } catch (error) {
       console.log(error);
@@ -65,11 +69,11 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
   };
 
   const alert = () => {
-    const severity = props.installedApp ? 'success' : 'warning';
+    const severity = props.installedApp ? 'success' : 'error';
 
     const message = props.installedApp
       ? props.installedApp?.resources?.sampleConfig?.terms.postSuccess || 'Integration triggered!'
-      : 'Head to the Integration Marketplace to pick one integration';
+      : props.installedApp?.resources?.sampleConfig?.terms.postFail || 'There was an error triggering the integration.';
 
     setAlertProps({ severity, text: message });
   };
