@@ -6,7 +6,7 @@ import TaskTable from './TaskTable';
 import PageItem from './PageItem';
 import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
-import { getPropertyFromIntegration } from '../utils';
+import { getPropertyFromIntegration, getTextFromIntegration } from '../utils';
 
 export default (props: { userData: UserData; installedApp: Feed }) => {
   const integrationId = props.installedApp?.integrationId;
@@ -18,25 +18,47 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
   const [isSavingTask, setSavingTask] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!refreshFlag) {
+    if (!refreshFlag || !props.installedApp) {
       return;
     }
     let mounted = true;
-    fetch('/api/task', {
+    fetch(`/api/task?${new URLSearchParams({ integrationId })}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('configuration')}`,
         'Content-Type': 'application/json; charset=utf-8',
       },
       credentials: 'include',
     })
-      .then((response) => response.json())
+      .then(async (response) => {
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text);
+        }
+        return response.json();
+      })
       .then((tasks) => {
         if (mounted) {
           setTasks(tasks);
-          setRefreshFlag(false);
-          setHasLoaded(true);
         }
+      })
+      .catch((error) => {
+        console.log(error);
+        if (mounted) {
+          setAlertProps({
+            severity: 'error',
+            text: getTextFromIntegration(
+              props.installedApp,
+              'getFail',
+              'There was an error getting the integration items.'
+            ),
+          });
+        }
+      })
+      .finally(() => {
+        setRefreshFlag(false);
+        setHasLoaded(true);
       });
+
     return () => {
       mounted = false;
     };
@@ -64,23 +86,20 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
         throw new Error(text);
       }
 
-      alert();
+      setAlertProps({
+        severity: 'success',
+        text: getTextFromIntegration(props.installedApp, 'postSuccess', 'Integration triggered!'),
+      });
     } catch (error) {
       console.log(error);
-      setAlertProps({ severity: 'warning', text: 'There was an error calling triggering the integration.' });
+      setAlertProps({
+        severity: 'error',
+        text: getTextFromIntegration(props.installedApp, 'postFail', 'There was an error triggering the integration.'),
+      });
     } finally {
       setSavingTask(false);
+      setRefreshFlag(true);
     }
-  };
-
-  const alert = () => {
-    const severity = props.installedApp ? 'success' : 'error';
-
-    const message = props.installedApp
-      ? props.installedApp?.resources?.sampleConfig?.terms.postSuccess || 'Integration triggered!'
-      : props.installedApp?.resources?.sampleConfig?.terms.postFail || 'There was an error triggering the integration.';
-
-    setAlertProps({ severity, text: message });
   };
 
   const Body = () =>

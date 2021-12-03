@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { getPropertyFromIntegration, getItemName } from '../utils';
 
-const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))({
   [`& .${tooltipClasses.tooltip}`]: {
@@ -50,7 +50,7 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: F
         />
       </Grid>
       <Grid item xs={3}>
-        <CustomWidthTooltip
+        <StyledTooltip
           sx={{ m: 1 }}
           arrow
           title={
@@ -58,18 +58,19 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: F
               ? 'Your integration will be triggered when you click this button'
               : `Please install a Integration from the Integrations Marketplace first`
           }
+          
         >
-          <Box>
+          <Box display="inline-block">
             <Button
               disabled={!props.installedApp || props.isLoading || task.name === '' || task.description === ''}
               variant="contained"
               color="secondary"
               onClick={handleAddTask}
             >
-               Add New {getItemName(props.installedApp)}
+              {props.isLoading ? 'Adding new' : 'Add New'} {getItemName(props.installedApp)}
             </Button>
           </Box>
-        </CustomWidthTooltip>
+        </StyledTooltip>
       </Grid>
     </Grid>
   );

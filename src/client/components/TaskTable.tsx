@@ -15,7 +15,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { getItemName, getPropertyFromIntegration } from '../utils';
 
 const TaskTable = (props: { tasks: Task[]; installedApp: Feed }) => {
-  const tasks = props?.tasks?.map((task, index) => ({ ...task, index })) || [];
   const cellStyle = { color: !!props.installedApp ? '#3F51B5' : '#959595', fontWeight: 400 };
 
   return (
@@ -34,12 +33,14 @@ const TaskTable = (props: { tasks: Task[]; installedApp: Feed }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tasks?.reverse().map((task) => (
+            {props.tasks.map((task) => (
               <TableRow key={task.index}>
                 <TableCell component="th" scope="row">
-                  {task.name}
+                  {task[getPropertyFromIntegration(props.installedApp, 0, 'name') as keyof typeof task]}
                 </TableCell>
-                <TableCell align="left">{task.description}</TableCell>
+                <TableCell align="left">
+                  {task[getPropertyFromIntegration(props.installedApp, 1, 'name') as keyof typeof task]}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

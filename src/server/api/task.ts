@@ -38,17 +38,43 @@ router.post('/', async (req, res, next) => {
 
     res.status(204).send();
   } catch (e) {
-    console.log('Error posting message through integration', e);
+    console.log('Error posting item through integration', e);
     res.status(500).send(e)
   }
 });
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
   // Update this with your preferred data storage
+  const configuration: Config = res.locals.data.getConfiguration();
   const currentUserId: string = res.locals.data.getCurrentUserId();
-  const userTasks: Task[] = res.locals.data.getTasks()[currentUserId] || [];
+  const users: Users = res.locals.data.getData(DataKeyMap.users);
+  const currentUser: User = users[currentUserId];
+  const { integrationId } = req.query;
 
-  res.send(userTasks);
+
+  // Getting integration items
+  try {
+    const response = await fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/tenant/${currentUser.userId}/items`, {
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+      },
+    });
+
+    if (!response.ok) {
+      const text = await response.text()
+
+      throw new Error(text);
+    }
+
+    const data = await response.json();
+
+    res.status(200).send(data);
+  } catch (e) {
+    console.log('Error getting integration items', e);
+    res.status(500).send(e)
+  }
 });
 
 export default router;

@@ -6,11 +6,7 @@ interface User {
   index: number;
 }
 
-interface Task {
-  name: string;
-  description: string;
-  index?: number;
-}
+type Task = Record<string, string>
 
 interface TaskMap {
   [key: string]: Task[];
