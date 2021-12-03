@@ -20,9 +20,14 @@ const AuthedRoute = (props: { onLogin: Function; userData: UserData } & RoutePro
 };
 
 const Routes = () => {
-  const [userData, setUserData] = useState<UserData>();
+  const [userData, setUserData] = useState<UserData>({});
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { hash } = useLocation();
+
+  // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
+  const installedAppsKeys = Object.keys(userData?.integrations || {});
+  const installedApp =
+    installedAppsKeys.length > 0 ? userData?.integrationList.available.find((i) => i.id === installedAppsKeys[0]) : null;
 
   useEffect(() => {
     let mounted = true;
@@ -101,7 +106,9 @@ const Routes = () => {
     <AuthedRoute {...props} onLogin={handleLogin} userData={userData} />
   );
 
-  const FrameWithProps = (props: RouteProps) => <Frame {...props} onLogout={handleLogout} userData={userData} />;
+  const FrameWithProps = (props: RouteProps) => (
+    <Frame {...props} installedApp={installedApp} onLogout={handleLogout} userData={userData} />
+  );
 
   const handleUninstall = async (integrationName: string) => {
     await fetch(`/api/integration/${integrationName}/install`, {
@@ -126,7 +133,7 @@ const Routes = () => {
       </AuthedRouteWithProps>
       <AuthedRouteWithProps path="/">
         <FrameWithProps>
-          <Dashboard userData={userData} />
+          <Dashboard userData={userData} installedApp={installedApp} />
         </FrameWithProps>
       </AuthedRouteWithProps>
     </Switch>

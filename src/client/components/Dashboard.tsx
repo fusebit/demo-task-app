@@ -7,14 +7,8 @@ import PageItem from './PageItem';
 import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
 
-export default (props: { userData: UserData }) => {
-  // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
-  const installedAppsKeys = Object.keys(props.userData.integrations || {});
-  const installedApp =
-    installedAppsKeys.length > 0
-      ? props.userData.integrationList.available.find((i) => i.id === installedAppsKeys[0])
-      : null;
-  const integrationId = installedApp?.integrationId;
+export default (props: { userData: UserData; installedApp: Feed }) => {
+  const integrationId = props.installedApp?.integrationId;
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);
@@ -58,7 +52,7 @@ export default (props: { userData: UserData }) => {
       });
 
       if (!response.ok) {
-        const text = await response.text()
+        const text = await response.text();
         throw new Error(text);
       }
 
@@ -71,10 +65,10 @@ export default (props: { userData: UserData }) => {
   };
 
   const alert = () => {
-    const severity = installedApp ? 'success' : 'warning';
+    const severity = props.installedApp ? 'success' : 'warning';
 
-    const message = installedApp
-      ? installedApp?.sampleConfig?.taskDoneText || 'Integration triggered!'
+    const message = props.installedApp
+      ? props.installedApp?.resources?.sampleConfig?.terms.postSuccess || 'Integration triggered!'
       : 'Head to the Integration Marketplace to pick one integration';
 
     setAlertProps({ severity, text: message });
@@ -82,7 +76,7 @@ export default (props: { userData: UserData }) => {
 
   const Body = () =>
     hasLoaded ? (
-      <TaskTable tasks={tasks} isInstalled={!!installedApp} />
+      <TaskTable tasks={tasks} installedApp={props.installedApp} />
     ) : (
       <Fade
         in
@@ -115,7 +109,7 @@ export default (props: { userData: UserData }) => {
         </Box>
       </PageItem>
       <PageItem>
-        <TaskInput installedApp={installedApp} onTaskCreated={saveTask} />
+        <TaskInput installedApp={props.installedApp} onTaskCreated={saveTask} />
       </PageItem>
       <PageItem>
         <Body />

@@ -20,14 +20,9 @@ import SubjectIcon from '@mui/icons-material/Subject';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { Link as RouterLink } from 'react-router-dom';
+import { getItemNamePlural } from '../utils';
 
 const iconStyle = { color: 'white' };
-
-const sampleAppLinks = [
-  { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: 'Your Tasks', to: '/' },
-  { id: 'marketplace', icon: <StarIcon sx={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
-  { id: 'logout', icon: <ExitToAppIcon sx={iconStyle} />, text: 'Logout', logout: true },
-];
 
 const learnMoreLinks = [
   {
@@ -47,11 +42,18 @@ const learnMoreLinks = [
   },
 ];
 
-const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void }>) => {
+const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void; installedApp: Feed }>) => {
   if (!props.userData.currentUserId) {
     return <React.Fragment />;
   }
   const currentUser = props.userData.users[props.userData.currentUserId];
+
+  const sampleAppLinks = [
+    { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: `Your ${getItemNamePlural(props.installedApp)}`, to: '/' },
+    { id: 'marketplace', icon: <StarIcon sx={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
+    { id: 'logout', icon: <ExitToAppIcon sx={iconStyle} />, text: 'Logout', logout: true },
+  ];
+
   return (
     <Box display="flex">
       <Drawer

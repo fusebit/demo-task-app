@@ -12,23 +12,24 @@ import {
 } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Link as RouterLink } from 'react-router-dom';
+import { getItemNamePlural, getPropertyFromIntegration } from '../utils';
 
-const TaskTable = (props: { tasks: Task[]; isInstalled: boolean }) => {
+const TaskTable = (props: { tasks: Task[]; installedApp: Feed }) => {
   const tasks = props?.tasks?.map((task, index) => ({ ...task, index })) || [];
-  const cellStyle = { color: props.isInstalled ? '#3F51B5' : '#959595', fontWeight: 400 };
+  const cellStyle = { color: !!props.installedApp ? '#3F51B5' : '#959595', fontWeight: 400 };
 
   return (
     <>
       <Typography fontSize="22px" fontWeight={500} sx={{ marginBottom: '32px' }}>
-        Your Tasks
+        Your {getItemNamePlural(props.installedApp)}
       </Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={cellStyle}>Task Name</TableCell>
+              <TableCell sx={cellStyle}>{getPropertyFromIntegration(props.installedApp, 0, 'label')}</TableCell>
               <TableCell sx={cellStyle} align="left">
-                Task Detail
+                {getPropertyFromIntegration(props.installedApp, 1, 'label')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -44,7 +45,7 @@ const TaskTable = (props: { tasks: Task[]; isInstalled: boolean }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {!props.isInstalled && (
+      {!props.installedApp && (
         <Box display="flex" alignItems="center" mt="80px">
           <WarningIcon color="error" sx={{ marginRight: '13px' }} />
           <Typography color="#333333">

@@ -77,7 +77,31 @@ router.get('/me', async (req, res, next) => {
           acc.available.push({
             ...curr,
             envPrefix,
-            integrationId: userIntegration.integrationId
+            integrationId: userIntegration.integrationId,
+            resources: {
+              ...curr.resources,
+              sampleConfig: {
+                isEnabled: true,
+                isGetEnabled: true,
+                isPostEnabled: true,
+                terms: {
+                  postSuccess: "Your Contact was successfully added to Hubspot",
+                  postFail: "Oops! Something went wrong and we couldn't add your Contact",
+                  getFail: "Oops! Something went wrong and we couldn't retrieve your Contacts",
+                  itemName: "Contact",
+                  properties: [
+                    {
+                      name: "firstName",
+                      label: "First Name"
+                    },
+                    {
+                      name: "email",
+                      label: "Email"
+                    }
+                  ]
+                }
+              }
+            }
           });
         } else {
           acc.unavailable.push({

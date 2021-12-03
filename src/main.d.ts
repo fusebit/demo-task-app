@@ -32,15 +32,24 @@ interface Feed {
     service: string;
     catalog: string;
   };
-  sampleConfig: {
-    enabled?: boolean;
-    imageSvg: string;
-    getEnabled?: boolean;
-    postEnabled?: boolean;
-    taskDoneText?: string
-  };
   resources: {
-    configureAppDocUrl: string
+    configureAppDocUrl: string;
+    sampleConfig?: {
+      isEnabled?: boolean;
+      isGetEnabled?: boolean;
+      isPostEnabled?: boolean;
+      terms?: {
+        postSuccess?: string;
+        postFail?: string;
+        getFail?: string;
+        itemName?: string;
+        itemNamePlural?: string;
+        properties?: {
+          name?: string;
+          label?: string;
+        }[];
+      };
+    };
   },
 }
 
