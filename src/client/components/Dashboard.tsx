@@ -15,6 +15,8 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);
   const [alertProps, setAlertProps] = useState<{ text: string; severity: 'error' | 'warning' | 'info' | 'success' }>();
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
+  const [isSavingTask, setSavingTask] = useState<boolean>(false);
+
   useEffect(() => {
     if (!refreshFlag) {
       return;
@@ -42,6 +44,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
 
   const saveTask = async (task: Task) => {
     try {
+      setSavingTask(true);
       const response = await fetch('/api/task', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('configuration')}`,
@@ -65,6 +68,8 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
     } catch (error) {
       console.log(error);
       setAlertProps({ severity: 'warning', text: 'There was an error calling triggering the integration.' });
+    } finally {
+      setSavingTask(false);
     }
   };
 
@@ -113,7 +118,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
         </Box>
       </PageItem>
       <PageItem>
-        <TaskInput installedApp={props.installedApp} onTaskCreated={saveTask} />
+        <TaskInput installedApp={props.installedApp} onTaskCreated={saveTask} isLoading={isSavingTask} />
       </PageItem>
       <PageItem>
         <Body />

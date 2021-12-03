@@ -1,8 +1,8 @@
-import { Button, Grid, TextField, Tooltip, Box } from '@mui/material';
+import { Button, Grid, TextField, Tooltip, Box, CircularProgress } from '@mui/material';
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
-import { getPropertyFromIntegration } from '../utils';
+import { getPropertyFromIntegration, getItemName } from '../utils';
 
 const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -16,7 +16,7 @@ const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 });
 
-const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: Feed }) => {
+const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: Feed; isLoading: boolean }) => {
   const [task, setTask] = useState<Task>({ name: '', description: '' });
   const handleAddTask = async () => {
     props.onTaskCreated(task);
@@ -61,12 +61,12 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: F
         >
           <Box>
             <Button
-              disabled={!props.installedApp || task.name === '' || task.description === ''}
+              disabled={!props.installedApp || props.isLoading || task.name === '' || task.description === ''}
               variant="contained"
               color="secondary"
               onClick={handleAddTask}
             >
-              Add New Task
+               Add New {getItemName(props.installedApp)}
             </Button>
           </Box>
         </CustomWidthTooltip>

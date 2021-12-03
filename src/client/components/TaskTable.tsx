@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Link as RouterLink } from 'react-router-dom';
-import { getItemNamePlural, getPropertyFromIntegration } from '../utils';
+import { getItemName, getPropertyFromIntegration } from '../utils';
 
 const TaskTable = (props: { tasks: Task[]; installedApp: Feed }) => {
   const tasks = props?.tasks?.map((task, index) => ({ ...task, index })) || [];
@@ -21,7 +21,7 @@ const TaskTable = (props: { tasks: Task[]; installedApp: Feed }) => {
   return (
     <>
       <Typography fontSize="22px" fontWeight={500} sx={{ marginBottom: '32px' }}>
-        Your {getItemNamePlural(props.installedApp)}
+        Your {getItemName(props.installedApp, true)}
       </Typography>
       <TableContainer component={Paper}>
         <Table>

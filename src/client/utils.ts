@@ -1,3 +1,3 @@
 export const getPropertyFromIntegration = (feed?: Feed, propertyIndex?: number, type?: 'label' | 'name') => feed?.resources?.sampleConfig?.terms?.properties[propertyIndex][type] || ''
 export const getTextFromIntegration = (feed?: Feed, key?: string) => feed?.resources?.sampleConfig?.terms?.[(key) as keyof Feed['resources']['sampleConfig']['terms']] || ''
-export const getItemNamePlural = (feed?: Feed) => feed?.resources?.sampleConfig?.terms?.itemNamePlural || `${feed?.resources?.sampleConfig?.terms?.itemName}s`
+export const getItemName = (feed?: Feed, plural?: boolean) => plural ? getTextFromIntegration(feed, 'itemNamePlural') || `${getTextFromIntegration(feed, 'itemName')}s}` : getTextFromIntegration(feed, 'itemName') || 'item'

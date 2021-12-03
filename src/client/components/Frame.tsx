@@ -20,7 +20,7 @@ import SubjectIcon from '@mui/icons-material/Subject';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { Link as RouterLink } from 'react-router-dom';
-import { getItemNamePlural } from '../utils';
+import { getItemName } from '../utils';
 
 const iconStyle = { color: 'white' };
 
@@ -49,7 +49,7 @@ const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: (
   const currentUser = props.userData.users[props.userData.currentUserId];
 
   const sampleAppLinks = [
-    { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: `Your ${getItemNamePlural(props.installedApp)}`, to: '/' },
+    { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: `Your ${getItemName(props.installedApp, true)}`, to: '/' },
     { id: 'marketplace', icon: <StarIcon sx={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
     { id: 'logout', icon: <ExitToAppIcon sx={iconStyle} />, text: 'Logout', logout: true },
   ];
