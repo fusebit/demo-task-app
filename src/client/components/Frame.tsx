@@ -42,14 +42,14 @@ const learnMoreLinks = [
   },
 ];
 
-const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void; installedApp: Feed }>) => {
+const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void; appToTest: Feed }>) => {
   if (!props.userData.currentUserId) {
     return <React.Fragment />;
   }
   const currentUser = props.userData.users[props.userData.currentUserId];
 
   const sampleAppLinks = [
-    { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: `Your ${getItemName(props.installedApp, true)}`, to: '/' },
+    { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: `Your ${getItemName(props.appToTest, true)}`, to: '/' },
     { id: 'marketplace', icon: <StarIcon sx={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
   ];
 

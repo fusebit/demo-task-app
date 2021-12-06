@@ -8,8 +8,8 @@ import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
 import { getPropertyFromIntegration, getTextFromIntegration, getItemName } from '../utils';
 
-export default (props: { userData: UserData; installedApp: Feed }) => {
-  const integrationId = props.installedApp?.integrationId;
+export default (props: { userData: UserData; appToTest: Feed; isInstalled: boolean }) => {
+  const integrationId = props.appToTest?.integrationId;
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);
@@ -18,12 +18,21 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
   const [isSavingTask, setSavingTask] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!refreshFlag || !props.installedApp || !props.installedApp?.resources?.sampleConfig?.isGetEnabled) {
+    if (!refreshFlag || !props.isInstalled) {
       setHasLoaded(true);
       return;
     }
+
     let mounted = true;
-    fetch(`/api/task?${new URLSearchParams({ integrationId })}`, {
+    const query: Record<string, string> = {
+      integrationId,
+    };
+
+    if (props.appToTest?.resources?.sampleConfig?.isGetEnabled) {
+      query.isGetEnabled = 'true';
+    }
+
+    fetch(`/api/task?${new URLSearchParams(query)}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('configuration')}`,
         'Content-Type': 'application/json; charset=utf-8',
@@ -48,7 +57,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
           setAlertProps({
             severity: 'error',
             text: getTextFromIntegration(
-              props.installedApp,
+              props.appToTest,
               'getFail',
               'There was an error getting the integration items.'
             ),
@@ -63,7 +72,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
     return () => {
       mounted = false;
     };
-  }, [refreshFlag]);
+  }, [refreshFlag, props.appToTest]);
 
   const saveTask = async (task: Task) => {
     try {
@@ -75,9 +84,10 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
         },
         method: 'POST',
         body: JSON.stringify({
-          [getPropertyFromIntegration(props.installedApp, 0, 'name')]: task.name,
-          [getPropertyFromIntegration(props.installedApp, 1, 'name')]: task.description,
+          [getPropertyFromIntegration(props.appToTest, 0, 'name')]: task.name,
+          [getPropertyFromIntegration(props.appToTest, 1, 'name')]: task.description,
           integrationId,
+          isGetEnabled: props.appToTest?.resources?.sampleConfig?.isGetEnabled || false,
         }),
         credentials: 'include',
       });
@@ -89,14 +99,14 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
 
       setAlertProps({
         severity: 'success',
-        text: getTextFromIntegration(props.installedApp, 'postSuccess', 'Integration triggered!'),
+        text: getTextFromIntegration(props.appToTest, 'postSuccess', 'Integration triggered!'),
       });
       setRefreshFlag(true);
     } catch (error) {
       console.log(error);
       setAlertProps({
         severity: 'error',
-        text: getTextFromIntegration(props.installedApp, 'postFail', 'There was an error triggering the integration.'),
+        text: getTextFromIntegration(props.appToTest, 'postFail', 'There was an error triggering the integration.'),
       });
     } finally {
       setSavingTask(false);
@@ -104,12 +114,8 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
   };
 
   const getBody = () => {
-    if (props.installedApp && !props.installedApp?.resources?.sampleConfig?.isGetEnabled) {
-      return null;
-    }
-
     if (hasLoaded) {
-      return <TaskTable tasks={tasks} installedApp={props.installedApp} />;
+      return <TaskTable tasks={tasks} appToTest={props.appToTest} />;
     }
 
     return (
@@ -138,7 +144,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
               </Typography>
               <Typography>
                 {`In this example, the "Add New ${getItemName(
-                  props.installedApp
+                  props.appToTest
                 )}" Button, if installed, will use your integration code to immediately
                 update your user via Slack! Look at the code to see how it works, and learn more in the docs here.`}
               </Typography>
@@ -147,8 +153,13 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
         </Box>
       </PageItem>
       <PageItem>
-        {(!props.installedApp || props.installedApp?.resources?.sampleConfig?.isPostEnabled) && (
-          <TaskInput installedApp={props.installedApp} onTaskCreated={saveTask} isLoading={isSavingTask} />
+        {(!props.appToTest || props.appToTest?.resources?.sampleConfig?.isPostEnabled) && (
+          <TaskInput
+            appToTest={props.appToTest}
+            onTaskCreated={saveTask}
+            isLoading={isSavingTask}
+            isInstalled={props.isInstalled}
+          />
         )}
       </PageItem>
       <PageItem>{getBody()}</PageItem>
