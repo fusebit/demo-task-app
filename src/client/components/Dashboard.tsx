@@ -8,8 +8,8 @@ import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
 import { getPropertyFromIntegration, getTextFromIntegration, getItemName } from '../utils';
 
-export default (props: { userData: UserData; installedApp: Feed; isInstalled: boolean }) => {
-  const integrationId = props.installedApp?.integrationId;
+export default (props: { userData: UserData; appToTest: Feed; isInstalled: boolean }) => {
+  const integrationId = props.appToTest?.integrationId;
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);
@@ -28,7 +28,7 @@ export default (props: { userData: UserData; installedApp: Feed; isInstalled: bo
       integrationId,
     };
 
-    if (props.installedApp?.resources?.sampleConfig?.isGetEnabled) {
+    if (props.appToTest?.resources?.sampleConfig?.isGetEnabled) {
       query.isGetEnabled = 'true';
     }
 
@@ -57,7 +57,7 @@ export default (props: { userData: UserData; installedApp: Feed; isInstalled: bo
           setAlertProps({
             severity: 'error',
             text: getTextFromIntegration(
-              props.installedApp,
+              props.appToTest,
               'getFail',
               'There was an error getting the integration items.'
             ),
@@ -72,7 +72,7 @@ export default (props: { userData: UserData; installedApp: Feed; isInstalled: bo
     return () => {
       mounted = false;
     };
-  }, [refreshFlag, props.installedApp]);
+  }, [refreshFlag, props.appToTest]);
 
   const saveTask = async (task: Task) => {
     try {
@@ -84,10 +84,10 @@ export default (props: { userData: UserData; installedApp: Feed; isInstalled: bo
         },
         method: 'POST',
         body: JSON.stringify({
-          [getPropertyFromIntegration(props.installedApp, 0, 'name')]: task.name,
-          [getPropertyFromIntegration(props.installedApp, 1, 'name')]: task.description,
+          [getPropertyFromIntegration(props.appToTest, 0, 'name')]: task.name,
+          [getPropertyFromIntegration(props.appToTest, 1, 'name')]: task.description,
           integrationId,
-          isGetEnabled: props.installedApp?.resources?.sampleConfig?.isGetEnabled || false,
+          isGetEnabled: props.appToTest?.resources?.sampleConfig?.isGetEnabled || false,
         }),
         credentials: 'include',
       });
@@ -99,14 +99,14 @@ export default (props: { userData: UserData; installedApp: Feed; isInstalled: bo
 
       setAlertProps({
         severity: 'success',
-        text: getTextFromIntegration(props.installedApp, 'postSuccess', 'Integration triggered!'),
+        text: getTextFromIntegration(props.appToTest, 'postSuccess', 'Integration triggered!'),
       });
       setRefreshFlag(true);
     } catch (error) {
       console.log(error);
       setAlertProps({
         severity: 'error',
-        text: getTextFromIntegration(props.installedApp, 'postFail', 'There was an error triggering the integration.'),
+        text: getTextFromIntegration(props.appToTest, 'postFail', 'There was an error triggering the integration.'),
       });
     } finally {
       setSavingTask(false);
@@ -115,7 +115,7 @@ export default (props: { userData: UserData; installedApp: Feed; isInstalled: bo
 
   const getBody = () => {
     if (hasLoaded) {
-      return <TaskTable tasks={tasks} installedApp={props.installedApp} />;
+      return <TaskTable tasks={tasks} appToTest={props.appToTest} />;
     }
 
     return (
@@ -144,7 +144,7 @@ export default (props: { userData: UserData; installedApp: Feed; isInstalled: bo
               </Typography>
               <Typography>
                 {`In this example, the "Add New ${getItemName(
-                  props.installedApp
+                  props.appToTest
                 )}" Button, if installed, will use your integration code to immediately
                 update your user via Slack! Look at the code to see how it works, and learn more in the docs here.`}
               </Typography>
@@ -153,9 +153,9 @@ export default (props: { userData: UserData; installedApp: Feed; isInstalled: bo
         </Box>
       </PageItem>
       <PageItem>
-        {(!props.installedApp || props.installedApp?.resources?.sampleConfig?.isPostEnabled) && (
+        {(!props.appToTest || props.appToTest?.resources?.sampleConfig?.isPostEnabled) && (
           <TaskInput
-            installedApp={props.installedApp}
+            appToTest={props.appToTest}
             onTaskCreated={saveTask}
             isLoading={isSavingTask}
             isInstalled={props.isInstalled}

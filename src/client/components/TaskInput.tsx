@@ -18,7 +18,7 @@ const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 const TaskInput = (props: {
   onTaskCreated: (task: Task) => void;
-  installedApp: Feed;
+  appToTest: Feed;
   isLoading: boolean;
   isInstalled: boolean;
 }) => {
@@ -37,7 +37,7 @@ const TaskInput = (props: {
       <Grid item xs={4}>
         <TextField
           color="secondary"
-          label={getPropertyFromIntegration(props.installedApp, 0, 'label') || 'Item Name'}
+          label={getPropertyFromIntegration(props.appToTest, 0, 'label') || 'Item Name'}
           variant="outlined"
           fullWidth
           onChange={handleChange('name')}
@@ -47,7 +47,7 @@ const TaskInput = (props: {
       <Grid item xs={4} ml="15px">
         <TextField
           color="secondary"
-          label={getPropertyFromIntegration(props.installedApp, 1, 'label') || 'Item Description'}
+          label={getPropertyFromIntegration(props.appToTest, 1, 'label') || 'Item Description'}
           variant="outlined"
           fullWidth
           onChange={handleChange('description')}
@@ -60,7 +60,7 @@ const TaskInput = (props: {
           arrow
           title={
             props.isInstalled
-              ? `${props.installedApp.name} will be triggered when you click this button`
+              ? `${props.appToTest.name} will be triggered when you click this button`
               : `Please install an Integration from the Integrations Marketplace first`
           }
         >
@@ -71,7 +71,7 @@ const TaskInput = (props: {
               color="secondary"
               onClick={handleAddTask}
             >
-              {props.isLoading ? 'Adding new' : 'Add New'} {getItemName(props.installedApp)}
+              {props.isLoading ? 'Adding new' : 'Add New'} {getItemName(props.appToTest)}
             </Button>
           </Box>
         </StyledTooltip>

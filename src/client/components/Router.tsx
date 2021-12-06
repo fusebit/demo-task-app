@@ -27,7 +27,7 @@ const Routes = () => {
   // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
   const installedAppsKeys = Object.keys(userData?.integrations || {});
   const isInstalled = installedAppsKeys.length > 0;
-  const installedApp = isInstalled
+  const appToTest = isInstalled
     ? userData?.integrationList.available.find((i) => i.id === installedAppsKeys[0])
     : userData?.integrationList?.available[0] || null;
 
@@ -109,7 +109,7 @@ const Routes = () => {
   );
 
   const FrameWithProps = (props: RouteProps) => (
-    <Frame {...props} installedApp={installedApp} onLogout={handleLogout} userData={userData} />
+    <Frame {...props} appToTest={appToTest} onLogout={handleLogout} userData={userData} />
   );
 
   const handleUninstall = async (integrationName: string) => {
@@ -135,7 +135,7 @@ const Routes = () => {
       </AuthedRouteWithProps>
       <AuthedRouteWithProps path="/">
         <FrameWithProps>
-          <Dashboard userData={userData} installedApp={installedApp} isInstalled={isInstalled} />
+          <Dashboard userData={userData} appToTest={appToTest} isInstalled={isInstalled} />
         </FrameWithProps>
       </AuthedRouteWithProps>
     </Switch>
