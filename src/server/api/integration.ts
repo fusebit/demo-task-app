@@ -109,6 +109,9 @@ router.delete('/:integrationName/install', async (req, res) => {
       },
       method: 'DELETE',
     });
+
+    res.locals.data.clearTasks(currentUserId);
+
     res.sendStatus(200);
   } catch (e) {
     console.log('Error deleting Fusebit installation', e);

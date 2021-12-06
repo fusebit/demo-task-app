@@ -45,6 +45,19 @@ class DAO {
     this.res.cookie('sample-app', encodedCookieString, { path: '/' });
   };
 
+  clearTasks = (userId: string) => {
+    this.data = {
+      ...this.data,
+      tasks: {
+        ...this.data.tasks,
+        [userId]: []
+      },
+    };
+
+    const encodedCookieString = Buffer.from(JSON.stringify(this.data)).toString('base64');
+    this.res.cookie('sample-app', encodedCookieString, { path: '/' });
+  };
+
   getUsers = () => {
     return this.getData(DataKeyMap.users) || {};
   };

@@ -8,7 +8,7 @@ import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
 import { getPropertyFromIntegration, getTextFromIntegration, getItemName } from '../utils';
 
-export default (props: { userData: UserData; installedApp: Feed }) => {
+export default (props: { userData: UserData; installedApp: Feed; isInstalled: boolean }) => {
   const integrationId = props.installedApp?.integrationId;
 
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -18,12 +18,21 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
   const [isSavingTask, setSavingTask] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!refreshFlag || !props.installedApp || !props.installedApp?.resources?.sampleConfig?.isGetEnabled) {
+    if (!refreshFlag || !props.isInstalled) {
       setHasLoaded(true);
       return;
     }
+
     let mounted = true;
-    fetch(`/api/task?${new URLSearchParams({ integrationId })}`, {
+    const query: Record<string, string> = {
+      integrationId,
+    };
+
+    if (props.installedApp?.resources?.sampleConfig?.isGetEnabled) {
+      query.isGetEnabled = 'true';
+    }
+
+    fetch(`/api/task?${new URLSearchParams(query)}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('configuration')}`,
         'Content-Type': 'application/json; charset=utf-8',
@@ -63,7 +72,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
     return () => {
       mounted = false;
     };
-  }, [refreshFlag]);
+  }, [refreshFlag, props.installedApp]);
 
   const saveTask = async (task: Task) => {
     try {
@@ -78,6 +87,7 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
           [getPropertyFromIntegration(props.installedApp, 0, 'name')]: task.name,
           [getPropertyFromIntegration(props.installedApp, 1, 'name')]: task.description,
           integrationId,
+          isGetEnabled: props.installedApp?.resources?.sampleConfig?.isGetEnabled || false,
         }),
         credentials: 'include',
       });
@@ -104,10 +114,6 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
   };
 
   const getBody = () => {
-    if (props.installedApp && !props.installedApp?.resources?.sampleConfig?.isGetEnabled) {
-      return null;
-    }
-
     if (hasLoaded) {
       return <TaskTable tasks={tasks} installedApp={props.installedApp} />;
     }
@@ -148,7 +154,12 @@ export default (props: { userData: UserData; installedApp: Feed }) => {
       </PageItem>
       <PageItem>
         {(!props.installedApp || props.installedApp?.resources?.sampleConfig?.isPostEnabled) && (
-          <TaskInput installedApp={props.installedApp} onTaskCreated={saveTask} isLoading={isSavingTask} />
+          <TaskInput
+            installedApp={props.installedApp}
+            onTaskCreated={saveTask}
+            isLoading={isSavingTask}
+            isInstalled={props.isInstalled}
+          />
         )}
       </PageItem>
       <PageItem>{getBody()}</PageItem>
