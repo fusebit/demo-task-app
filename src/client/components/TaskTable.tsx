@@ -14,14 +14,11 @@ import WarningIcon from '@mui/icons-material/Warning';
 import { Link as RouterLink } from 'react-router-dom';
 import { getItemName, getPropertyFromIntegration } from '../utils';
 
-const TaskTable = (props: { tasks: Task[]; appToTest: Feed }) => {
+const TaskTable = (props: { tasks: Task[]; appToTest: Feed; isInstalled: boolean }) => {
   const cellStyle = { color: !!props.appToTest ? '#3F51B5' : '#959595', fontWeight: 400 };
 
   return (
     <>
-      <Typography fontSize="22px" fontWeight={500} sx={{ marginBottom: '32px' }}>
-        Your {getItemName(props.appToTest, true)}
-      </Typography>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -46,7 +43,7 @@ const TaskTable = (props: { tasks: Task[]; appToTest: Feed }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {!props.appToTest && (
+      {!props.isInstalled && (
         <Box display="flex" alignItems="center" mt="80px">
           <WarningIcon color="error" sx={{ marginRight: '13px' }} />
           <Typography color="#333333">
