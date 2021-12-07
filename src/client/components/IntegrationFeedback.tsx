@@ -21,7 +21,7 @@ const IntegrationFeedback = (
 
     return () => {
       setOpen(false);
-    }
+    };
   }, [props.text]);
 
   const handleClose = (event: React.SyntheticEvent<Element, Event>) => {
@@ -31,7 +31,7 @@ const IntegrationFeedback = (
   return (
     <React.Fragment>
       <Stack spacing={2} sx={{ width: '100%' }}>
-        <Snackbar open={open} onClose={handleClose}>
+        <Snackbar open={open} onClose={handleClose} anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}>
           <Alert onClose={handleClose} severity={props.severity} sx={{ width: '100%' }}>
             {props.text}
           </Alert>
