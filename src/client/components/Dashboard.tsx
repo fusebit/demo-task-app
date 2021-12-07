@@ -115,7 +115,7 @@ export default (props: { userData: UserData; appToTest: Feed; isInstalled: boole
 
   const getBody = () => {
     if (hasLoaded) {
-      return <TaskTable tasks={tasks} appToTest={props.appToTest} />;
+      return <TaskTable tasks={tasks} appToTest={props.appToTest} isInstalled={props.isInstalled} />;
     }
 
     return (
@@ -157,6 +157,11 @@ export default (props: { userData: UserData; appToTest: Feed; isInstalled: boole
             </>
           </StatusPaper>
         </Box>
+      </PageItem>
+      <PageItem>
+        <Typography fontSize="22px" fontWeight={500} sx={{ marginBottom: '32px' }}>
+          Your {getItemName(props.appToTest, true)}
+        </Typography>
       </PageItem>
       <PageItem>
         {(!props.appToTest || props.appToTest?.resources?.sampleConfig?.isPostEnabled) && (
