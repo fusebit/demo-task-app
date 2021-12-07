@@ -132,6 +132,12 @@ export default (props: { userData: UserData; appToTest: Feed; isInstalled: boole
     );
   };
 
+  const handleCloseFeedback = () => {
+    setTimeout(() => {
+      setAlertProps(undefined);
+    }, 1000);
+  };
+
   return (
     <Page>
       <PageItem>
@@ -163,7 +169,7 @@ export default (props: { userData: UserData; appToTest: Feed; isInstalled: boole
         )}
       </PageItem>
       <PageItem>{getBody()}</PageItem>
-      <IntegrationFeedback {...alertProps} />
+      <IntegrationFeedback {...alertProps} onClose={handleCloseFeedback} />
     </Page>
   );
 };

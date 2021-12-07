@@ -7,26 +7,24 @@ const Alert = React.forwardRef((props: React.ComponentProps<typeof MuiAlert>, re
 });
 
 const IntegrationFeedback = (
-  props: React.PropsWithChildren<{ text: string; severity: 'error' | 'warning' | 'info' | 'success' }>
+  props: React.PropsWithChildren<{ text: string; severity: 'error' | 'warning' | 'info' | 'success'; onClose: () => void }>
 ) => {
   const [open, setOpen] = React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+    props.onClose()
+  };
+
   useEffect(() => {
     if (!!props.text) {
       setOpen(true);
 
       setTimeout(() => {
-        setOpen(false);
+        handleClose();
       }, 2500);
-    }
-
-    return () => {
-      setOpen(false);
     }
   }, [props.text]);
 
-  const handleClose = (event: React.SyntheticEvent<Element, Event>) => {
-    setOpen(false);
-  };
 
   return (
     <React.Fragment>
