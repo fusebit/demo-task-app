@@ -4,7 +4,7 @@ import { DataKeyMap } from '../../constants';
 const router = express.Router();
 
 router.post('/', async (req, res, next) => {
-  const { integrationId, ...task } = req.body;
+  const { integrationId, isGetEnabled, ...body } = req.body;
 
   if (!integrationId) {
     res.status(404).send('Integration id is required');
@@ -15,29 +15,19 @@ router.post('/', async (req, res, next) => {
   // Update this with your preferred data storage
   const configuration: Config = res.locals.data.getConfiguration();
   const currentUserId: string = res.locals.data.getCurrentUserId();
-  const tasks: TaskMap = res.locals.data.getTasks();
-  const userTasks: Task[] = tasks[currentUserId] || [];
   const users: Users = res.locals.data.getData(DataKeyMap.users);
   const currentUser: User = users[currentUserId];
 
-
-  // Save Task
-  userTasks.push(task);
-  tasks[currentUserId] = userTasks;
-  res.locals.data.setTasks(tasks);
-
   // Post to Integration
   try {
-    const response = await fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/postMessage/${currentUser.userId}`, {
+    const response = await fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/tenant/${currentUser.userId}/item`, {
       method: 'POST',
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',
         Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
       },
-      body: JSON.stringify({
-        message: `A task has been created within the Sample App. \n\n Task Name: ${task.name} \n Task Description: ${task.description}`,
-      }),
+      body: JSON.stringify(body),
     });
 
     if (!response.ok) {
@@ -46,20 +36,66 @@ router.post('/', async (req, res, next) => {
       throw new Error(text);
     }
 
-    res.send(userTasks);
+    if (!isGetEnabled) {
+      const tasks: TaskMap = res.locals.data.getTasks();
+      const userTasks: Task[] = tasks[currentUserId] || [];
 
+      userTasks.push(body);
+      tasks[currentUserId] = userTasks;
+      res.locals.data.setTasks(tasks);
+
+      res.status(204).send();
+      
+      return
+    }
+
+    res.status(204).send();
   } catch (e) {
-    console.log('Error posting message through integration', e);
+    console.log('Error posting item through integration', e);
     res.status(500).send(e)
   }
 });
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
   // Update this with your preferred data storage
+  const configuration: Config = res.locals.data.getConfiguration();
   const currentUserId: string = res.locals.data.getCurrentUserId();
-  const userTasks: Task[] = res.locals.data.getTasks()[currentUserId] || [];
+  const users: Users = res.locals.data.getData(DataKeyMap.users);
+  const currentUser: User = users[currentUserId];
+  const { integrationId, isGetEnabled } = req.query;
 
-  res.send(userTasks);
+
+  // Getting integration items
+  try {
+    if (!isGetEnabled) {
+      const userTasks: Task[] = res.locals.data.getTasks()[currentUserId] || [];
+
+      res.status(200).send(userTasks);
+
+      return;
+    }
+
+    const response = await fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/tenant/${currentUser.userId}/items`, {
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+      },
+    });
+
+    if (!response.ok) {
+      const text = await response.text()
+
+      throw new Error(text);
+    }
+
+    const data = await response.json();
+
+    res.status(200).send(data);
+  } catch (e) {
+    console.log('Error getting integration items', e);
+    res.status(500).send(e)
+  }
 });
 
 export default router;

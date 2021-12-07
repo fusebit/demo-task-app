@@ -77,7 +77,7 @@ router.get('/me', async (req, res, next) => {
           acc.available.push({
             ...curr,
             envPrefix,
-            integrationId: userIntegration.integrationId
+            integrationId: userIntegration.integrationId,
           });
         } else {
           acc.unavailable.push({

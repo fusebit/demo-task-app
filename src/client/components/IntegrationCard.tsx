@@ -40,7 +40,7 @@ const IntegrationCard = (props: {
       flexDirection="column"
       mr="10px"
       width="100%"
-      minHeight="140px"
+      height="160px"
       padding="24px"
       borderRadius="4px"
       justifyContent="space-between"
@@ -60,8 +60,14 @@ const IntegrationCard = (props: {
         <img
           src={`data:image/svg+xml;utf8,${encodeURIComponent(props.imgUrl)}`}
           onError={(e) => ((e.target as HTMLImageElement).src = '/static/fusebit-logo.svg')}
+          width="auto"
           height="52"
-          style={{ objectFit: 'contain', margin: '8px 0 15px', filter: !props.enabled && 'grayscale(100%)' }}
+          style={{
+            objectFit: 'contain',
+            margin: '8px 0 15px',
+            filter: !props.enabled && 'grayscale(100%)',
+            maxWidth: '100%',
+          }}
           alt={props.integrationName || 'Integration App'}
           title={props.integrationName || 'Integration App'}
         />
