@@ -1,35 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Page from './Page';
 import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, Grid } from '@mui/material';
 import IntegrationCard from './IntegrationCard';
-import { IntegrationTypeEnum } from '../../constants';
-import { getUserIntegrations } from '../utils/getUserIntegrations';
-
-// This represents the integrationsFeed json
-const MARKETPLACE_INTEGRATIONS = Object.keys(IntegrationTypeEnum) as IntegrationType[];
 
 const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
   const isInstalledList = Object.keys(props.userData.integrations);
+
   console.log('the following integrations are installed', isInstalledList);
-
-  const userIntegrations = getUserIntegrations();
-
-  const list = MARKETPLACE_INTEGRATIONS.reduce(
-    (acc, curr) => {
-      if (userIntegrations.find((i) => i.feedId === curr)) {
-        acc.available.push(curr);
-      } else {
-        acc.unavailable.push(curr);
-      }
-      return acc;
-    },
-    {
-      available: [] as IntegrationType[],
-      unavailable: [] as IntegrationType[],
-    }
-  );
 
   return (
     <Page>
@@ -67,20 +46,31 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
         </Typography>
       </PageItem>
       <PageItem>
-        {list.available.map((i) => (
-          <IntegrationCard
-            key={i}
-            onUninstall={props.onUninstall}
-            integration={IntegrationTypeEnum[i].value}
-            isInstalled={isInstalledList.includes(IntegrationTypeEnum[i].value)}
-            enabled
-          />
-        ))}
-        <Box display="flex" flexWrap="wrap">
-          {list.unavailable.map((i) => (
-            <IntegrationCard key={i} onUninstall={props.onUninstall} integration={IntegrationTypeEnum[i].value} />
+        <Grid container spacing={3} sx={{ marginBottom: 6 }}>
+          {props.userData.integrationList.available.map((i) => (
+            <Grid item xs={12} sm={6} md={4} key={i.id}>
+              <IntegrationCard
+                enabled
+                key={i.id}
+                onUninstall={props.onUninstall}
+                integration={i?.envPrefix}
+                isInstalled={isInstalledList.includes(i.id)}
+                name={i?.integrationId}
+                imgUrl={i.largeIcon}
+                integrationName={i?.name}
+                docsUrl={i?.resources?.configureAppDocUrl}
+              />
+            </Grid>
           ))}
-        </Box>
+        </Grid>
+
+        <Grid container spacing={3}>
+          {props.userData.integrationList.unavailable.map((i) => (
+            <Grid item xs={12} sm={6} md={4} key={i.id}>
+              <IntegrationCard imgUrl={i.largeIcon} integrationName={i?.name} />
+            </Grid>
+          ))}
+        </Grid>
       </PageItem>
     </Page>
   );

@@ -6,71 +6,119 @@ import TaskTable from './TaskTable';
 import PageItem from './PageItem';
 import Page from './Page';
 import IntegrationFeedback from './IntegrationFeedback';
-import { IntegrationTypeEnum } from '../../constants';
+import { getPropertyFromIntegration, getTextFromIntegration, getItemName } from '../utils';
 
-export default (props: { integrations: Partial<Record<IntegrationType, any>> }) => {
-  // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
-  const [currentIntegration] = Object.keys(props.integrations || {}) as IntegrationType[];
-  const integrationId = props.integrations[currentIntegration]?.tags['fusebit.parentEntityId'] || '';
-  const installedApp = IntegrationTypeEnum[currentIntegration];
+export default (props: { userData: UserData; appToTest: Feed; isInstalled: boolean }) => {
+  const integrationId = props.appToTest?.integrationId;
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);
   const [alertProps, setAlertProps] = useState<{ text: string; severity: 'error' | 'warning' | 'info' | 'success' }>();
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
+  const [isSavingTask, setSavingTask] = useState<boolean>(false);
+
   useEffect(() => {
-    if (!refreshFlag) {
+    if (!refreshFlag || !props.isInstalled) {
+      setHasLoaded(true);
       return;
     }
+
     let mounted = true;
-    fetch('/api/task', {
+    const query: Record<string, string> = {
+      integrationId,
+    };
+
+    if (props.appToTest?.resources?.sampleConfig?.isGetEnabled) {
+      query.isGetEnabled = 'true';
+    }
+
+    fetch(`/api/task?${new URLSearchParams(query)}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('configuration')}`,
         'Content-Type': 'application/json; charset=utf-8',
       },
       credentials: 'include',
     })
-      .then((response) => response.json())
+      .then(async (response) => {
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text);
+        }
+        return response.json();
+      })
       .then((tasks) => {
         if (mounted) {
           setTasks(tasks);
-          setRefreshFlag(false);
-          setHasLoaded(true);
         }
+      })
+      .catch((error) => {
+        console.log(error);
+        if (mounted) {
+          setAlertProps({
+            severity: 'error',
+            text: getTextFromIntegration(
+              props.appToTest,
+              'getFail',
+              'There was an error getting the integration items.'
+            ),
+          });
+        }
+      })
+      .finally(() => {
+        setRefreshFlag(false);
+        setHasLoaded(true);
       });
+
     return () => {
       mounted = false;
     };
-  }, [refreshFlag]);
+  }, [refreshFlag, props.appToTest]);
 
   const saveTask = async (task: Task) => {
-    const response = await fetch('/api/task', {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('configuration')}`,
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      method: 'POST',
-      body: JSON.stringify({ ...task, integrationId }),
-      credentials: 'include',
-    });
-    setTasks(await response.json());
-    alert();
+    try {
+      setSavingTask(true);
+      const response = await fetch('/api/task', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('configuration')}`,
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          [getPropertyFromIntegration(props.appToTest, 0, 'name')]: task.name,
+          [getPropertyFromIntegration(props.appToTest, 1, 'name')]: task.description,
+          integrationId,
+          isGetEnabled: props.appToTest?.resources?.sampleConfig?.isGetEnabled || false,
+        }),
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error(text);
+      }
+
+      setAlertProps({
+        severity: 'success',
+        text: getTextFromIntegration(props.appToTest, 'postSuccess', 'Integration triggered!'),
+      });
+      setRefreshFlag(true);
+    } catch (error) {
+      console.log(error);
+      setAlertProps({
+        severity: 'error',
+        text: getTextFromIntegration(props.appToTest, 'postFail', 'There was an error triggering the integration.'),
+      });
+    } finally {
+      setSavingTask(false);
+    }
   };
 
-  const alert = () => {
-    const severity = installedApp ? 'success' : 'warning';
+  const getBody = () => {
+    if (hasLoaded) {
+      return <TaskTable tasks={tasks} appToTest={props.appToTest} />;
+    }
 
-    const message = installedApp
-      ? installedApp.taskDoneText
-      : 'Head to the Integration Marketplace to pick one integration';
-
-    setAlertProps({ severity, text: message });
-  };
-
-  const Body = () =>
-    hasLoaded ? (
-      <TaskTable tasks={tasks} isInstalled={!!installedApp} />
-    ) : (
+    return (
       <Fade
         in
         style={{
@@ -82,6 +130,7 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
         <CircularProgress size="400" style={{ margin: 'auto', display: 'flex', padding: 20 }} />
       </Fade>
     );
+  };
 
   return (
     <Page>
@@ -94,19 +143,26 @@ export default (props: { integrations: Partial<Record<IntegrationType, any>> }) 
                 account. You can use this information to enable / disable different actions in the system.
               </Typography>
               <Typography>
-                In this example, the "Add New Task" Button, if installed, will use your integration code to immediately
-                update your user via Slack! Look at the code to see how it works, and learn more in the docs here.
+                {`In this example, the "Add New ${getItemName(
+                  props.appToTest
+                )}" Button, if installed, will use your integration code to immediately
+                update your user via Slack! Look at the code to see how it works, and learn more in the docs here.`}
               </Typography>
             </>
           </StatusPaper>
         </Box>
       </PageItem>
       <PageItem>
-        <TaskInput installedApp={installedApp} onTaskCreated={saveTask} />
+        {(!props.appToTest || props.appToTest?.resources?.sampleConfig?.isPostEnabled) && (
+          <TaskInput
+            appToTest={props.appToTest}
+            onTaskCreated={saveTask}
+            isLoading={isSavingTask}
+            isInstalled={props.isInstalled}
+          />
+        )}
       </PageItem>
-      <PageItem>
-        <Body />
-      </PageItem>
+      <PageItem>{getBody()}</PageItem>
       <IntegrationFeedback {...alertProps} />
     </Page>
   );

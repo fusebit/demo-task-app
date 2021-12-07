@@ -12,13 +12,13 @@ export default (props: { onLogin: Function; userData: UserData }) => {
   };
 
   const users: Users = props.userData?.users || {
-    'tentant-1': {
+    'Sample-App-Tenant-1': {
       userId: 'Sample-App-Tenant-1',
-      name: 'Tentant 1',
+      name: 'Tenant 1',
       color: '#BBDEFB',
       index: 0,
     },
-    'tentant-2': {
+    'Sample-App-Tenant-2': {
       userId: 'Sample-App-Tenant-2',
       name: 'Tenant 2',
       color: '#FFA600',

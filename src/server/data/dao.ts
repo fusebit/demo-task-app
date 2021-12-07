@@ -5,12 +5,12 @@ class DAO {
   constructor(req: Request, res: Response) {
     this.req = req;
     this.res = res;
-    if (this.req.headers.cookie) {
-      const data = this.req.headers.cookie
-        .split(';')
-        .find((item) => item.includes('sample-app'))
-        .split('=')[1]
-        .split('%3D')[0];
+    const cookieList = this.req.headers.cookie ? this.req.headers.cookie
+      .split(';') : [];
+    const sampleAppCookie = cookieList.find(cookie => cookie.includes('sample-app'));
+
+    if (sampleAppCookie) {
+      const data = sampleAppCookie.split('=')[1].split('%3D')[0];
       const dataString = Buffer.from(data, 'base64').toString();
       this.data = JSON.parse(dataString);
     } else {
@@ -41,6 +41,19 @@ class DAO {
       configuration: this.data.configuration,
       tasks: undefined,
     };
+    const encodedCookieString = Buffer.from(JSON.stringify(this.data)).toString('base64');
+    this.res.cookie('sample-app', encodedCookieString, { path: '/' });
+  };
+
+  clearTasks = (userId: string) => {
+    this.data = {
+      ...this.data,
+      tasks: {
+        ...this.data.tasks,
+        [userId]: []
+      },
+    };
+
     const encodedCookieString = Buffer.from(JSON.stringify(this.data)).toString('base64');
     this.res.cookie('sample-app', encodedCookieString, { path: '/' });
   };
@@ -92,7 +105,11 @@ class DAO {
 
   getIntegrationId = (integrationType: IntegrationType) => {
     const configuration = this.getConfiguration();
-    return configuration[`${integrationType}_INTEGRATION_ID`];
+    const id = configuration[`${integrationType}_INTEGRATION_ID`];
+    if (!id) {
+      throw `Integration ${integrationType} wasn't found`
+    }
+    return id
   };
 }
 

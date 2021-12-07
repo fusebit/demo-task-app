@@ -16,7 +16,7 @@ router.use(
     // Check for Environment Variables, Load if available.
     if (process.env.FUSEBIT_JWT) {
       dao.saveData(DataKeyMap.configuration, {
-        SLACK_INTEGRATION_ID: process.env.SLACK_INTEGRATION_ID,
+        SLACK_BOT_INTEGRATION_ID: process.env.SLACK_BOT_INTEGRATION_ID,
         HUBSPOT_INTEGRATION_ID: process.env.HUBSPOT_INTEGRATION_ID,
         FUSEBIT_JWT: process.env.FUSEBIT_JWT,
         FUSEBIT_INTEGRATION_URL: process.env.FUSEBIT_INTEGRATION_URL,

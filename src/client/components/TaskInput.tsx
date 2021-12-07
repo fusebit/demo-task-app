@@ -1,9 +1,10 @@
-import { Button, Grid, TextField, Tooltip, Box } from '@mui/material';
+import { Button, Grid, TextField, Tooltip, Box, CircularProgress } from '@mui/material';
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import { getPropertyFromIntegration, getItemName } from '../utils';
 
-const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
+const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))({
   [`& .${tooltipClasses.tooltip}`]: {
@@ -15,9 +16,12 @@ const CustomWidthTooltip = styled(({ className, ...props }: TooltipProps) => (
   },
 });
 
-const integrationName = 'Slack';
-
-const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: IntegrationInfo }) => {
+const TaskInput = (props: {
+  onTaskCreated: (task: Task) => void;
+  appToTest: Feed;
+  isLoading: boolean;
+  isInstalled: boolean;
+}) => {
   const [task, setTask] = useState<Task>({ name: '', description: '' });
   const handleAddTask = async () => {
     props.onTaskCreated(task);
@@ -33,7 +37,7 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: I
       <Grid item xs={4}>
         <TextField
           color="secondary"
-          label="Task Name"
+          label={getPropertyFromIntegration(props.appToTest, 0, 'label') || 'Item Name'}
           variant="outlined"
           fullWidth
           onChange={handleChange('name')}
@@ -43,34 +47,34 @@ const TaskInput = (props: { onTaskCreated: (task: Task) => void; installedApp: I
       <Grid item xs={4} ml="15px">
         <TextField
           color="secondary"
-          label="Task Detail"
+          label={getPropertyFromIntegration(props.appToTest, 1, 'label') || 'Item Description'}
           variant="outlined"
           fullWidth
           onChange={handleChange('description')}
           value={task.description}
         />
       </Grid>
-      <Grid item xs={2}>
-        <CustomWidthTooltip
+      <Grid item xs={3}>
+        <StyledTooltip
           sx={{ m: 1 }}
           arrow
           title={
-            !!props.installedApp
-              ? 'Your integration will be triggered when you click this button'
-              : `Please install the ${integrationName} Integration from the Integrations Marketplace first`
+            props.isInstalled
+              ? `${props.appToTest.name} will be triggered when you click this button`
+              : `Please install an Integration from the Integrations Marketplace first`
           }
         >
-          <Box>
+          <Box display="inline-block">
             <Button
-              disabled={!props.installedApp || task.name === '' || task.description === ''}
+              disabled={!props.isInstalled || props.isLoading || task.name === '' || task.description === ''}
               variant="contained"
               color="secondary"
               onClick={handleAddTask}
             >
-              Add New Task
+              {props.isLoading ? 'Adding new' : 'Add New'} {getItemName(props.appToTest)}
             </Button>
           </Box>
-        </CustomWidthTooltip>
+        </StyledTooltip>
       </Grid>
     </Grid>
   );
