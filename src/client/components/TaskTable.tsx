@@ -15,11 +15,11 @@ import { Link as RouterLink } from 'react-router-dom';
 import { getItemName, getPropertyFromIntegration } from '../utils';
 
 const TaskTable = (props: { tasks: Task[]; appToTest: Feed; isInstalled: boolean }) => {
-  const cellStyle = { color: !!props.appToTest ? '#3F51B5' : '#959595', fontWeight: 400 };
+  const cellStyle = { color: props.isInstalled ? '#3F51B5' : '#959595', fontWeight: 400 };
 
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ width: 908 }}>
         <Table>
           <TableHead>
             <TableRow>
