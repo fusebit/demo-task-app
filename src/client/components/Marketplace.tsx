@@ -47,27 +47,19 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
       </PageItem>
       <PageItem>
         <Grid container spacing={3} sx={{ marginBottom: 6 }}>
-          {props.userData.integrationList.available.map((i) => (
-            <Grid item xs={12} sm={6} md={4} key={i.id}>
+          {props.userData.integrationList.available.map((integration) => (
+            <Grid item xs={12} sm={6} md={4} key={integration.id}>
               <IntegrationCard
                 enabled
-                key={i.id}
+                key={integration.id}
                 onUninstall={props.onUninstall}
-                integration={i?.envPrefix}
-                isInstalled={isInstalledList.includes(i.id)}
-                name={i?.integrationId}
-                imgUrl={i.largeIcon}
-                integrationName={i?.name}
-                docsUrl={i?.resources?.configureAppDocUrl}
+                integration={integration?.envPrefix}
+                isInstalled={isInstalledList.includes(integration.id)}
+                name={integration?.integrationId}
+                imgUrl={integration.largeIcon}
+                integrationName={integration?.name}
+                docsUrl={integration?.resources?.configureAppDocUrl}
               />
-            </Grid>
-          ))}
-        </Grid>
-
-        <Grid container spacing={3}>
-          {props.userData.integrationList.unavailable.map((i) => (
-            <Grid item xs={12} sm={6} md={4} key={i.id}>
-              <IntegrationCard imgUrl={i.largeIcon} integrationName={i?.name} />
             </Grid>
           ))}
         </Grid>

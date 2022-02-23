@@ -22,14 +22,16 @@ router.get('/me', async (req, res, next) => {
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
   const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
 
-  const userIntegrations = Object.keys(configuration).filter(key => key.endsWith('_INTEGRATION_ID') && !!configuration[key as keyof Config]).map(i => {
-    const envPrefix = i.replace('_INTEGRATION_ID', '')
+  const userIntegrations = Object.keys(configuration)
+    .filter((key) => key.endsWith('_INTEGRATION_ID') && !!configuration[key as keyof Config])
+    .map((i) => {
+      const envPrefix = i.replace('_INTEGRATION_ID', '');
 
-    return {
-      feedId: (envPrefix || '').replace(/_/g, '-').toLowerCase(),
-      integrationId: configuration[i as keyof Config],
-    }
-  })
+      return {
+        feedId: (envPrefix || '').replace(/_/g, '-').toLowerCase(),
+        integrationId: configuration[i as keyof Config],
+      };
+    });
 
   if (!currentUserId) {
     return res.sendStatus(403);
@@ -63,15 +65,14 @@ router.get('/me', async (req, res, next) => {
       return acc;
     }, {});
 
-    const integrationsFeed = await fetch(process.env.INTEGRATIONS_FEED_URL).then((res) =>
-      res.json() as Promise<Feed[]>
+    const integrationsFeed = await fetch(process.env.INTEGRATIONS_FEED_URL).then(
+      (res) => res.json() as Promise<Feed[]>
     );
-
 
     const integrationList = (integrationsFeed || []).reduce(
       (acc, curr) => {
         const envPrefix = curr.id.replace(/-/g, '_').toUpperCase();
-        const userIntegration = userIntegrations.find(i => i.feedId === curr.id)
+        const userIntegration = userIntegrations.find((i) => i.feedId === curr.id);
 
         if (userIntegration) {
           acc.available.push({
