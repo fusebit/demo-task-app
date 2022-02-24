@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Page from './Page';
 import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
@@ -28,6 +28,16 @@ const Marketplace = (props: { userData: UserData }) => {
     });
     const data = await res.json();
     return data.targetUrl;
+  };
+
+  const onAuthentication = async (integrationName: string, sessionId: string) => {
+    await fetch(`/api/integration/${integrationName}/${sessionId}/callback`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('configuration')}`,
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    });
   };
 
   return (
@@ -66,13 +76,13 @@ const Marketplace = (props: { userData: UserData }) => {
         </Typography>
       </PageItem>
       <PageItem>
-        {/* <FusebitMarketplace
+        <FusebitMarketplace
           integrations={props.userData.integrationList}
           onUninstall={onUninstall}
           getInstallUrl={getInstallUrl}
-          onAuthentication={}
+          onAuthentication={onAuthentication}
           demo
-        /> */}
+        />
       </PageItem>
     </Page>
   );

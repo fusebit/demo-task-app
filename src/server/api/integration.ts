@@ -38,8 +38,9 @@ router.get('/:integrationName/install', async (req, res, next) => {
   }
 });
 
-router.get('/:integrationName/callback', async (req, res, next) => {
-  const integrationName = req.params.integrationName.toUpperCase();
+router.get('/:integrationName/:sessionId/callback', async (req, res, next) => {
+  const integrationName = req.params.integrationName;
+  const sessionId = req.params.sessionId;
 
   try {
     // Update this with your preferred data storage
@@ -47,8 +48,6 @@ router.get('/:integrationName/callback', async (req, res, next) => {
     const integrationId: string = res.locals.data.getIntegrationId(integrationName);
     const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
     const fusebitJwt: string = configuration.FUSEBIT_JWT;
-
-    const sessionId = req.query.session;
     const sessionPersistResponse = await fetch(
       `${fusebitIntegrationUrl}/${integrationId}/session/${sessionId}/commit`,
       {
