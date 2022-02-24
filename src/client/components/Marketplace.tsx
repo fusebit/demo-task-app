@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Page from './Page';
 import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
@@ -6,7 +6,7 @@ import { Typography, Box } from '@mui/material';
 import { Marketplace as FusebitMarketplace } from '@fusebit/react-marketplace';
 
 const Marketplace = (props: { userData: UserData }) => {
-  const handleUninstall = async (integrationName: string) => {
+  const onUninstall = async (integrationName: string) => {
     const res = await fetch(`/api/integration/${integrationName}/install`, {
       method: 'DELETE',
       headers: {
@@ -16,6 +16,18 @@ const Marketplace = (props: { userData: UserData }) => {
       credentials: 'include',
     });
     return await res.json();
+  };
+
+  const getInstallUrl = async (integrationName: string) => {
+    const res = await fetch(`/api/integration/${integrationName}/install`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('configuration')}`,
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    });
+    const data = await res.json();
+    return data.targetUrl;
   };
 
   return (
@@ -56,8 +68,8 @@ const Marketplace = (props: { userData: UserData }) => {
       <PageItem>
         {/* <FusebitMarketplace
           integrations={props.userData.integrationList}
-          onUninstall={handleUninstall}
-          getInstallUrl={}
+          onUninstall={onUninstall}
+          getInstallUrl={getInstallUrl}
           onAuthentication={}
           demo
         /> */}

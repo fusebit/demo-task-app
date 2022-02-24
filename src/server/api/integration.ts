@@ -10,12 +10,11 @@ router.get('/:integrationName/install', async (req, res, next) => {
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
   const appUrl: string = `${process.env.SSL_ENABLED ? 'https' : 'http'}://${req.headers.host}`;
   const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
-
+  const integrationId = req.params.integrationName;
 
   try {
-    const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
     const body = JSON.stringify({
-      redirectUrl: `${appUrl}/api/integration/${req.params.integrationName}/callback`,
+      redirectUrl: `${appUrl}/marketplace?integrationId=${integrationId}`,
       tags: {
         'fusebit.tenantId': currentUserId.toString(),
       },
@@ -25,20 +24,14 @@ router.get('/:integrationName/install', async (req, res, next) => {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${fusebitJwt}`,
     };
-    const createSessionResponse = await fetch(`${fusebitIntegrationUrl}/${integrationId}/session`, {
+    const response = await fetch(`${fusebitIntegrationUrl}/${integrationId}/session`, {
       body,
       headers,
       method: 'POST',
     });
-    const session = await createSessionResponse.json();
-
-    if (session.status > 299) {
-      res.status(session.status);
-      res.send({});
-      return;
-    }
-    const sessionId = session.id;
-    res.redirect(`${fusebitIntegrationUrl}/${integrationId}/session/${sessionId}/start`);
+    const data = await response.json();
+    console.log(data);
+    res.send({ targetUrl: data.targetUrl });
   } catch (e) {
     console.log('Error starting Fusebit session', e);
     res.sendStatus(500);
