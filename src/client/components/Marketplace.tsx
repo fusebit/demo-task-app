@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Page from './Page';
 import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
-import { Typography, Box, Grid } from '@mui/material';
-import IntegrationCard from './IntegrationCard';
+import { Typography, Box } from '@mui/material';
+import { Marketplace as FusebitMarketplace } from '@fusebit/react-marketplace';
 
-const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
-  const isInstalledList = Object.keys(props.userData.integrations);
-
-  console.log('the following integrations are installed', isInstalledList);
+const Marketplace = (props: { userData: UserData }) => {
+  const handleUninstall = async (integrationName: string) => {
+    const res = await fetch(`/api/integration/${integrationName}/install`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('configuration')}`,
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      credentials: 'include',
+    });
+    return await res.json();
+  };
 
   return (
     <Page>
@@ -46,23 +54,13 @@ const Marketplace = (props: { userData: UserData; onUninstall: Function }) => {
         </Typography>
       </PageItem>
       <PageItem>
-        <Grid container spacing={3} sx={{ marginBottom: 6 }}>
-          {props.userData.integrationList.available.map((integration) => (
-            <Grid item xs={12} sm={6} md={4} key={integration.id}>
-              <IntegrationCard
-                enabled
-                key={integration.id}
-                onUninstall={props.onUninstall}
-                integration={integration?.envPrefix}
-                isInstalled={isInstalledList.includes(integration.id)}
-                name={integration?.integrationId}
-                imgUrl={integration.largeIcon}
-                integrationName={integration?.name}
-                docsUrl={integration?.resources?.configureAppDocUrl}
-              />
-            </Grid>
-          ))}
-        </Grid>
+        {/* <FusebitMarketplace
+          integrations={props.userData.integrationList}
+          onUninstall={handleUninstall}
+          getInstallUrl={}
+          onAuthentication={}
+          demo
+        /> */}
       </PageItem>
     </Page>
   );

@@ -25,6 +25,13 @@ interface IntegrationData {
   };
 }
 
+interface Integration {
+  integrationId: string;
+  feedId: string;
+  isInstalled: boolean;
+  title?: string;
+}
+
 interface InstallResponse {
   items?: {
     [key: string]: any;
@@ -73,13 +80,9 @@ interface IntegrationIdMap extends IntegrationMap<string> {}
 interface UserData {
   currentUserId: string;
   users: Users;
-  integrations: Record<string, any>;
   integrationTypes: IntegrationType[];
   feed: Feed;
-  integrationList: {
-    available: Feed[];
-    unavailable: Feed[];
-  };
+  integrationList: Integration[];
 }
 
 interface Users {
