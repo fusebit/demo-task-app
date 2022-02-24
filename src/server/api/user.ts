@@ -65,11 +65,11 @@ router.get('/me', async (req, res, next) => {
       return acc;
     }, {});
 
-    const integrationsFeed = await fetch(process.env.INTEGRATIONS_FEED_URL).then(
-      (res) => res.json() as Promise<Feed[]>
-    );
+    const feedArr = await fetch(process.env.INTEGRATIONS_FEED_URL).then((res) => res.json() as Promise<Feed[]>);
 
-    const integrationList = (integrationsFeed || []).reduce(
+    const feed = feedArr.find((feed) => feed.id === userIntegrations[0].feedId);
+
+    const integrationList = (feedArr || []).reduce(
       (acc, curr) => {
         const envPrefix = curr.id.replace(/-/g, '_').toUpperCase();
         const userIntegration = userIntegrations.find((i) => i.feedId === curr.id);
@@ -93,7 +93,7 @@ router.get('/me', async (req, res, next) => {
       }
     );
 
-    res.send({ currentUserId, users, integrations, integrationTypes, integrationList });
+    res.send({ currentUserId, users, feed, integrations, integrationTypes, integrationList });
   } catch (e) {
     console.log('Error fetching integration installation status', e);
     res.sendStatus(500);

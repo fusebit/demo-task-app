@@ -77,7 +77,17 @@ const Routes = () => {
         unmountOnExit
         timeout={1000}
       >
-        <CircularProgress size="400" style={{ margin: 'auto', display: 'flex', padding: 20 }} />
+        <CircularProgress
+          size="50"
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            padding: 20,
+            color: '#F83420',
+          }}
+        />
       </Fade>
     );
   }
@@ -109,7 +119,7 @@ const Routes = () => {
   );
 
   const FrameWithProps = (props: RouteProps) => (
-    <Frame {...props} appToTest={appToTest} onLogout={handleLogout} userData={userData} />
+    <Frame {...props} appToTest={userData.feed} onLogout={handleLogout} userData={userData} />
   );
 
   const handleUninstall = async (integrationName: string) => {
