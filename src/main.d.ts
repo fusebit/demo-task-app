@@ -14,6 +14,23 @@ interface TaskMap {
 
 type IntegrationType = 'SLACK_BOT' | 'HUBSPOT';
 
+interface IntegrationDataResponse {
+  items: IntegrationData[];
+}
+
+interface IntegrationData {
+  id: string;
+  tags: {
+    'fusebit.feedId': string;
+  };
+}
+
+interface InstallResponse {
+  items?: {
+    [key: string]: any;
+  }[];
+}
+
 interface Feed {
   id: string;
   name: string;

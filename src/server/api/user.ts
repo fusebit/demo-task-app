@@ -38,6 +38,44 @@ router.get('/me', async (req, res, next) => {
   }
 
   try {
+    const integrationsDataResponse = await fetch(`${fusebitIntegrationUrl}`, {
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        Authorization: `Bearer ${fusebitJwt}`,
+      },
+    });
+
+    let integrationsData: IntegrationDataResponse = await integrationsDataResponse.json();
+
+    const selectedIntegration: IntegrationData = integrationsData.items.find(
+      (integration: IntegrationData) => integration.id === userIntegrations[0].integrationId
+    );
+
+    const selectedIntegrationInstallData = await fetch(
+      `${fusebitIntegrationUrl}/${selectedIntegration.id}/install?tag=fusebit.tenantId=${currentUserId}`,
+      {
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          Authorization: `Bearer ${fusebitJwt}`,
+        },
+      }
+    );
+
+    const selectedIntegrationInstall: InstallResponse = await selectedIntegrationInstallData.json();
+
+    const integration = {
+      integrationId: selectedIntegration.id,
+      feedId: selectedIntegration.tags['fusebit.feedId'],
+      title: selectedIntegration.id,
+      isInstalled: !!selectedIntegrationInstall.items?.[0],
+    };
+
+    console.log(integration);
+
     // Check which integrations are installed
     const integrations = (
       await Promise.all(
