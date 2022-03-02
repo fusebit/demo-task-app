@@ -137,7 +137,7 @@ const Routes = () => {
         <FrameWithProps>
           <Dashboard
             userData={userData}
-            appToTest={userData.feed}
+            integrationFeed={userData.feed}
             isInstalled={userData.integrationList[0].isInstalled}
           />
         </FrameWithProps>
