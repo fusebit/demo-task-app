@@ -30,7 +30,6 @@ router.get('/:integrationName/install', async (req, res, next) => {
       method: 'POST',
     });
     const data = await response.json();
-    console.log(data);
     res.send({ targetUrl: data.targetUrl });
   } catch (e) {
     console.log('Error starting Fusebit session', e);
@@ -39,13 +38,12 @@ router.get('/:integrationName/install', async (req, res, next) => {
 });
 
 router.get('/:integrationName/:sessionId/callback', async (req, res, next) => {
-  const integrationName = req.params.integrationName;
+  const integrationId = req.params.integrationName;
   const sessionId = req.params.sessionId;
 
   try {
     // Update this with your preferred data storage
     const configuration: Config = res.locals.data.getConfiguration();
-    const integrationId: string = res.locals.data.getIntegrationId(integrationName);
     const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
     const fusebitJwt: string = configuration.FUSEBIT_JWT;
     const sessionPersistResponse = await fetch(
@@ -72,13 +70,13 @@ router.get('/:integrationName/:sessionId/callback', async (req, res, next) => {
 
 router.delete('/:integrationName/install', async (req, res) => {
   // Update this with your preferred data storage
+  const integrationId = req.params.integrationName;
   const configuration: Config = res.locals.data.getConfiguration();
   const currentUserId: string = res.locals.data.getCurrentUserId();
   const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
 
   try {
-    const integrationId: string = res.locals.data.getIntegrationId(req.params.integrationName);
     // Get installation
     const lookupResponse = await fetch(
       `${fusebitIntegrationUrl}/${integrationId}/install?tag=fusebit.tenantId=${currentUserId}`,
@@ -103,8 +101,7 @@ router.delete('/:integrationName/install', async (req, res) => {
     });
 
     res.locals.data.clearTasks(currentUserId);
-
-    res.sendStatus(200);
+    res.send({ ok: true });
   } catch (e) {
     console.log('Error deleting Fusebit installation', e);
     res.sendStatus(500);

@@ -10,7 +10,6 @@ app.use(
     keys: ['Fusebit Example'],
   }),
   (req, res, next) => {
-    console.log(req.path);
     next();
   }
 );

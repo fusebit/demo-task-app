@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Switch, useLocation, RouteProps } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, useLocation, useHistory, RouteProps } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Login from './Login';
 import React, { useEffect, useState } from 'react';
@@ -23,6 +23,7 @@ const Routes = () => {
   const [userData, setUserData] = useState<UserData>();
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { hash } = useLocation();
+  const history = useHistory();
 
   useEffect(() => {
     let mounted = true;
@@ -95,7 +96,9 @@ const Routes = () => {
       },
       credentials: 'include',
     });
-    await getMe().then((userData) => setUserData(userData));
+    await getMe().then((userData) => {
+      setUserData(userData);
+    });
   };
 
   const handleLogout = async () => {
@@ -104,7 +107,15 @@ const Routes = () => {
       headers: { Authorization: `Bearer ${localStorage.getItem('configuration')}` },
       credentials: 'include',
     });
-    await getMe().finally(() => setUserData(undefined));
+    await getMe().finally(() => {
+      setUserData(undefined);
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.delete('integrationId');
+      queryParams.delete('session');
+      history.replace({
+        search: queryParams.toString(),
+      });
+    });
   };
 
   const AuthedRouteWithProps = (props: { path: string } & RouteProps) => (

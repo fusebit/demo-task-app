@@ -15,7 +15,8 @@ const Marketplace = (props: { userData: UserData }) => {
       },
       credentials: 'include',
     });
-    return await res.json();
+    const data = await res.json();
+    return data.ok;
   };
 
   const getInstallUrl = async (integrationName: string) => {
