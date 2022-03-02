@@ -9,7 +9,7 @@ import IntegrationFeedback from './IntegrationFeedback';
 import { getPropertyFromIntegration, getTextFromIntegration, getItemName } from '../utils';
 
 export default (props: { userData: UserData; appToTest: Feed; isInstalled: boolean }) => {
-  const integrationId = props.appToTest?.integrationId;
+  const integrationId = props.userData.integrationList[0].integrationId;
 
   const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshFlag, setRefreshFlag] = useState<boolean>(true);
@@ -127,7 +127,7 @@ export default (props: { userData: UserData; appToTest: Feed; isInstalled: boole
         unmountOnExit
         timeout={1000}
       >
-        <CircularProgress size="400" style={{ margin: 'auto', display: 'flex', padding: 20 }} />
+        <CircularProgress size="50" style={{ margin: 'auto', display: 'flex', padding: 20, color: '#F83420' }} />
       </Fade>
     );
   };

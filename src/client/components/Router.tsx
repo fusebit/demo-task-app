@@ -135,7 +135,11 @@ const Routes = () => {
       </AuthedRouteWithProps>
       <AuthedRouteWithProps path="/">
         <FrameWithProps>
-          {/* <Dashboard userData={userData} appToTest={userData.feed} isInstalled={appToTest.isInstalled} /> */}
+          <Dashboard
+            userData={userData}
+            appToTest={userData.feed}
+            isInstalled={userData.integrationList[0].isInstalled}
+          />
         </FrameWithProps>
       </AuthedRouteWithProps>
     </Switch>
