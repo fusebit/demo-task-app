@@ -23,13 +23,11 @@ const Routes = () => {
   const [userData, setUserData] = useState<UserData>();
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { hash } = useLocation();
+  const [isLoadingIntegrations, setIsLoadingIntegrations] = useState(false)
 
   // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
-  const installedAppsKeys = Object.keys(userData?.integrations || {});
-  const isInstalled = installedAppsKeys.length > 0;
-  const appToTest = isInstalled
-    ? userData?.integrationList.available.find((i) => i.id === installedAppsKeys[0])
-    : userData?.integrationList?.available[0] || null;
+  const appToTest = (userData?.list || [])[0];
+  const isInstalled = appToTest?.isInstalled || false;
 
   useEffect(() => {
     let mounted = true;
@@ -121,16 +119,46 @@ const Routes = () => {
       },
       credentials: 'include',
     });
-    await getMe()
+    setIsLoadingIntegrations(true)
+    getMe()
       .then((userData) => setUserData(userData))
-      .catch(() => ({}));
+      .catch(() => ({}))
+      .finally(() => setIsLoadingIntegrations(false))
+  };
+
+  const getInstallUrl = async (integrationId: string) => {
+    const res = await fetch(`/api/integration/${integrationId}/install`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('configuration')}`,
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    });
+    const data = await res.json();
+    return data.targetUrl;
+  };
+
+  const handleAuthentication = async (integrationId: string, sessionId: string) => {
+    await fetch(`/api/integration/${integrationId}/callback?session=${sessionId}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('configuration')}`,
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    });
   };
 
   return (
     <Switch>
       <AuthedRouteWithProps path="/marketplace">
         <FrameWithProps>
-          <Marketplace userData={userData} onUninstall={handleUninstall} />
+          <Marketplace
+            userData={userData}
+            onUninstall={handleUninstall}
+            getInstallUrl={getInstallUrl}
+            onAuthentication={handleAuthentication}
+            isLoadingIntegrations={isLoadingIntegrations}
+          />
         </FrameWithProps>
       </AuthedRouteWithProps>
       <AuthedRouteWithProps path="/">
