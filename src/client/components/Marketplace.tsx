@@ -52,7 +52,6 @@ const Marketplace = (props: {
           getInstallUrl={props.getInstallUrl}
           getIntegrations={() => props.userData?.list || []}
           isDemo
-          feedUrl='http://localhost:3000/feed/integrationsFeed.json'
         />
       </PageItem>
     </Page>
