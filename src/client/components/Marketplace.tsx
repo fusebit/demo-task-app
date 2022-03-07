@@ -8,11 +8,9 @@ import { Marketplace as FusebitMarketplace } from '@fusebit/react-marketplace';
 const Marketplace = (props: {
   userData: UserData;
   onUninstall: (integrationId: string) => Promise<void>;
-  onAuthentication: (integrationId: string, session: string) => Promise<void>;
   getInstallUrl: (integrationId: string) => Promise<string>;
   isLoadingIntegrations?: boolean;
 }) => {
-
   return (
     <Page>
       <PageItem>
@@ -50,12 +48,11 @@ const Marketplace = (props: {
       </PageItem>
       <PageItem>
         <FusebitMarketplace
-          integrations={props.userData?.list || []}
           onUninstall={props.onUninstall}
           getInstallUrl={props.getInstallUrl}
-          onAuthentication={props.onAuthentication}
-          isLoadingIntegrations={props.isLoadingIntegrations}
-          demo
+          getIntegrations={() => props.userData?.list || []}
+          isDemo
+          feedUrl='http://localhost:3000/feed/integrationsFeed.json'
         />
       </PageItem>
     </Page>

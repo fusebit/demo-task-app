@@ -23,7 +23,6 @@ const Routes = () => {
   const [userData, setUserData] = useState<UserData>();
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { hash } = useLocation();
-  const [isLoadingIntegrations, setIsLoadingIntegrations] = useState(false)
 
   // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
   const appToTest = (userData?.list || [])[0];
@@ -119,11 +118,9 @@ const Routes = () => {
       },
       credentials: 'include',
     });
-    setIsLoadingIntegrations(true)
     getMe()
       .then((userData) => setUserData(userData))
-      .catch(() => ({}))
-      .finally(() => setIsLoadingIntegrations(false))
+      .catch(() => ({}));
   };
 
   const getInstallUrl = async (integrationId: string) => {
@@ -138,27 +135,11 @@ const Routes = () => {
     return data.targetUrl;
   };
 
-  const handleAuthentication = async (integrationId: string, sessionId: string) => {
-    await fetch(`/api/integration/${integrationId}/callback?session=${sessionId}`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('configuration')}`,
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-    });
-  };
-
   return (
     <Switch>
       <AuthedRouteWithProps path="/marketplace">
         <FrameWithProps>
-          <Marketplace
-            userData={userData}
-            onUninstall={handleUninstall}
-            getInstallUrl={getInstallUrl}
-            onAuthentication={handleAuthentication}
-            isLoadingIntegrations={isLoadingIntegrations}
-          />
+          <Marketplace userData={userData} onUninstall={handleUninstall} getInstallUrl={getInstallUrl} />
         </FrameWithProps>
       </AuthedRouteWithProps>
       <AuthedRouteWithProps path="/">
