@@ -62,6 +62,14 @@ interface UserData {
     available: Feed[];
     unavailable: Feed[];
   }
+  list?: (Feed &
+  {
+    integrationId: string;
+    feedId: string;
+    isInstalled: boolean;
+    title: string;
+  }
+  )[]
 }
 
 interface Users {

@@ -25,11 +25,8 @@ const Routes = () => {
   const { hash } = useLocation();
 
   // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
-  const installedAppsKeys = Object.keys(userData?.integrations || {});
-  const isInstalled = installedAppsKeys.length > 0;
-  const appToTest = isInstalled
-    ? userData?.integrationList.available.find((i) => i.id === installedAppsKeys[0])
-    : userData?.integrationList?.available[0] || null;
+  const appToTest = (userData?.list || [])[0];
+  const isInstalled = appToTest?.isInstalled || false;
 
   useEffect(() => {
     let mounted = true;
@@ -121,16 +118,28 @@ const Routes = () => {
       },
       credentials: 'include',
     });
-    await getMe()
+    getMe()
       .then((userData) => setUserData(userData))
       .catch(() => ({}));
+  };
+
+  const getInstallUrl = async (integrationId: string) => {
+    const res = await fetch(`/api/integration/${integrationId}/install`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('configuration')}`,
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    });
+    const data = await res.json();
+    return data.targetUrl;
   };
 
   return (
     <Switch>
       <AuthedRouteWithProps path="/marketplace">
         <FrameWithProps>
-          <Marketplace userData={userData} onUninstall={handleUninstall} />
+          <Marketplace userData={userData} onUninstall={handleUninstall} getInstallUrl={getInstallUrl} />
         </FrameWithProps>
       </AuthedRouteWithProps>
       <AuthedRouteWithProps path="/">
