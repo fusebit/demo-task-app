@@ -26,24 +26,24 @@ router.get('/me', async (req, res, next) => {
     return res.sendStatus(403);
   }
 
-  const integrationsFeed = await fetch(process.env.INTEGRATIONS_FEED_URL).then((res) =>
-    res.json() as Promise<Feed[]>
-  );
+  try {
+    const integrationsFeed = await fetch(process.env.INTEGRATIONS_FEED_URL).then(
+      (res) => res.json() as Promise<Feed[]>
+    );
 
-  const userIntegrations = Object.keys(configuration).filter(key => key.endsWith('_INTEGRATION_ID') && !!configuration[key as keyof Config]).map(i => {
-    const envPrefix = i.replace('_INTEGRATION_ID', '')
+    const userIntegrations = Object.keys(configuration)
+      .filter((key) => key.endsWith('_INTEGRATION_ID') && !!configuration[key as keyof Config])
+      .map((i) => {
+        const envPrefix = i.replace('_INTEGRATION_ID', '');
 
-    return {
-      feedId: (envPrefix || '').replace(/_/g, '-').toLowerCase(),
-      integrationId: configuration[i as keyof Config],
-    }
-  })
+        return {
+          feedId: (envPrefix || '').replace(/_/g, '-').toLowerCase(),
+          integrationId: configuration[i as keyof Config],
+        };
+      });
 
-  const list = await Promise.all(integrationsFeed.filter(entity => userIntegrations.find(i => i.feedId === entity.id)).map(async (entity) => {
-    const integrationId = userIntegrations.find(i => i.feedId === entity.id).integrationId
-
-    const response = await fetch(
-      `${fusebitIntegrationUrl}/${integrationId}/install?tag=fusebit.tenantId=${currentUserId}`,
+    const installsResponse = await fetch(
+      `${fusebitIntegrationUrl.split('/integration')[0]}/install?tag=fusebit.tenantId=${currentUserId}`,
       {
         headers: {
           Accept: 'application/json, text/plain, */*',
@@ -53,23 +53,26 @@ router.get('/me', async (req, res, next) => {
       }
     );
 
-    const data = await response.json()
+    const installsData = await installsResponse.json();
 
-    return {
-      integrationId: integrationId,
-      feedId: entity.id,
-      isInstalled: (data.items || []).length > 0,
-      title: integrationId,
-      ...entity,
-    }
-  }))
+    const list = integrationsFeed
+      .filter((entity) => userIntegrations.find((i) => i.feedId === entity.id))
+      .map((entity) => {
+        const integrationId = userIntegrations.find((i) => i.feedId === entity.id).integrationId;
+        const isInstalled = installsData.items.find((install: Install) => install.parentId === integrationId);
 
-  try {
-    // Check which integrations are installed
+        return {
+          integrationId,
+          feedId: entity.id,
+          isInstalled: !!isInstalled,
+          title: integrationId,
+          ...entity,
+        };
+      });
 
     res.send({ currentUserId, users, integrationTypes, list });
   } catch (e) {
-    console.log('Error fetching integration installation status', e);
+    console.log('Error fetching the integration', e);
     res.sendStatus(500);
   }
 });
