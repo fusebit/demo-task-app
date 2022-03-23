@@ -20,7 +20,7 @@ router.get('/me', async (req, res, next) => {
   const configuration: Config = res.locals.data.getConfiguration();
   const integrationTypes: IntegrationType[] = res.locals.data.getEnabledIntegrationTypes();
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
-  const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
+  const fusebitBaseUrl: string = configuration.FUSEBIT_BASE_URL;
 
   if (!currentUserId) {
     return res.sendStatus(403);
@@ -42,16 +42,13 @@ router.get('/me', async (req, res, next) => {
         };
       });
 
-    const installsResponse = await fetch(
-      `${fusebitIntegrationUrl.split('/integration')[0]}/install?tag=fusebit.tenantId=${currentUserId}`,
-      {
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${fusebitJwt}`,
-        },
-      }
-    );
+    const installsResponse = await fetch(`${fusebitBaseUrl}/install?tag=fusebit.tenantId=${currentUserId}`, {
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${fusebitJwt}`,
+      },
+    });
 
     const installsData = await installsResponse.json();
 
