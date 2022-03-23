@@ -27,9 +27,8 @@ router.get('/me', async (req, res, next) => {
   }
 
   try {
-    const integrationsFeed = await fetch(process.env.INTEGRATIONS_FEED_URL).then(
-      (res) => res.json() as Promise<Feed[]>
-    );
+    const integrationsFeedResponse = await fetch(process.env.INTEGRATIONS_FEED_URL);
+    const integrationsFeed: Feed[] = await integrationsFeedResponse.json();
 
     const userIntegrations = Object.keys(configuration)
       .filter((key) => key.endsWith('_INTEGRATION_ID') && !!configuration[key as keyof Config])
