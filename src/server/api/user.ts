@@ -20,55 +20,56 @@ router.get('/me', async (req, res, next) => {
   const configuration: Config = res.locals.data.getConfiguration();
   const integrationTypes: IntegrationType[] = res.locals.data.getEnabledIntegrationTypes();
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
-  const fusebitBaseUrl: string = configuration.FUSEBIT_BASE_URL;
+  const fusebitIntegrationUrl: string = configuration.FUSEBIT_INTEGRATION_URL;
 
   if (!currentUserId) {
     return res.sendStatus(403);
   }
 
+  const integrationsFeed = await fetch(process.env.INTEGRATIONS_FEED_URL).then((res) =>
+    res.json() as Promise<Feed[]>
+  );
+
+  const userIntegrations = Object.keys(configuration).filter(key => key.endsWith('_INTEGRATION_ID') && !!configuration[key as keyof Config]).map(i => {
+    const envPrefix = i.replace('_INTEGRATION_ID', '')
+
+    return {
+      feedId: (envPrefix || '').replace(/_/g, '-').toLowerCase(),
+      integrationId: configuration[i as keyof Config],
+    }
+  })
+
+  const list = await Promise.all(integrationsFeed.filter(entity => userIntegrations.find(i => i.feedId === entity.id)).map(async (entity) => {
+    const integrationId = userIntegrations.find(i => i.feedId === entity.id).integrationId
+
+    const response = await fetch(
+      `${fusebitIntegrationUrl}/${integrationId}/install?tag=fusebit.tenantId=${currentUserId}`,
+      {
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${fusebitJwt}`,
+        },
+      }
+    );
+
+    const data = await response.json()
+
+    return {
+      integrationId: integrationId,
+      feedId: entity.id,
+      isInstalled: (data.items || []).length > 0,
+      title: integrationId,
+      ...entity,
+    }
+  }))
+
   try {
-    const integrationsFeedResponse = await fetch(process.env.INTEGRATIONS_FEED_URL);
-    const integrationsFeed: Feed[] = await integrationsFeedResponse.json();
-
-    const userIntegrations = Object.keys(configuration)
-      .filter((key) => key.endsWith('_INTEGRATION_ID') && !!configuration[key as keyof Config])
-      .map((i) => {
-        const envPrefix = i.replace('_INTEGRATION_ID', '');
-
-        return {
-          feedId: (envPrefix || '').replace(/_/g, '-').toLowerCase(),
-          integrationId: configuration[i as keyof Config],
-        };
-      });
-
-    const installsResponse = await fetch(`${fusebitBaseUrl}/install?tag=fusebit.tenantId=${currentUserId}`, {
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${fusebitJwt}`,
-      },
-    });
-
-    const installsData = await installsResponse.json();
-
-    const list = integrationsFeed
-      .filter((entity) => (userIntegrations || []).find((i) => i.feedId === entity.id))
-      .map((entity) => {
-        const integrationId = (userIntegrations || []).find((i) => i.feedId === entity.id).integrationId;
-        const isInstalled = (installsData?.items || []).find((install: Install) => install.parentId === integrationId);
-
-        return {
-          integrationId,
-          feedId: entity.id,
-          isInstalled: !!isInstalled,
-          title: integrationId,
-          ...entity,
-        };
-      });
+    // Check which integrations are installed
 
     res.send({ currentUserId, users, integrationTypes, list });
   } catch (e) {
-    console.log('Error fetching the integration', e);
+    console.log('Error fetching integration installation status', e);
     res.sendStatus(500);
   }
 });

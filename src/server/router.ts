@@ -19,7 +19,7 @@ router.use(
         SLACK_BOT_INTEGRATION_ID: process.env.SLACK_BOT_INTEGRATION_ID,
         HUBSPOT_INTEGRATION_ID: process.env.HUBSPOT_INTEGRATION_ID,
         FUSEBIT_JWT: process.env.FUSEBIT_JWT,
-        FUSEBIT_BASE_URL: process.env.FUSEBIT_BASE_URL,
+        FUSEBIT_INTEGRATION_URL: process.env.FUSEBIT_INTEGRATION_URL,
       });
       return next();
     }

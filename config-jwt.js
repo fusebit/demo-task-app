@@ -7,7 +7,7 @@ exec('fuse token -o raw', (error, stdout, stderr) => {
   const configToken = jwt.sign(
     {
       SLACK_BOT_INTEGRATION_ID: process.env.SLACK_BOT_INTEGRATION_ID,
-      FUSEBIT_BASE_URL: process.env.FUSEBIT_BASE_URL,
+      FUSEBIT_INTEGRATION_URL: process.env.FUSEBIT_INTEGRATION_URL,
       FUSEBIT_JWT: process.env.FUSEBIT_JWT,
     },
     process.env.SAMPLE_APP_TASK_JWT_SECRET,

@@ -9,7 +9,7 @@ router.post('/', async (req, res, next) => {
   if (!integrationId) {
     res.status(404).send('Integration id is required');
 
-    return;
+    return
   }
 
   // Update this with your preferred data storage
@@ -20,21 +20,18 @@ router.post('/', async (req, res, next) => {
 
   // Post to Integration
   try {
-    const response = await fetch(
-      `${configuration.FUSEBIT_BASE_URL}/integration/${integrationId}/api/tenant/${currentUser.userId}/item`,
-      {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
-        },
-        body: JSON.stringify(body),
-      }
-    );
+    const response = await fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/tenant/${currentUser.userId}/item`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+      },
+      body: JSON.stringify(body),
+    });
 
     if (!response.ok) {
-      const text = await response.text();
+      const text = await response.text()
 
       throw new Error(text);
     }
@@ -48,14 +45,14 @@ router.post('/', async (req, res, next) => {
       res.locals.data.setTasks(tasks);
 
       res.status(204).send();
-
-      return;
+      
+      return
     }
 
     res.status(204).send();
   } catch (e) {
     console.log('Error posting item through integration', e);
-    res.status(500).send(e);
+    res.status(500).send(e)
   }
 });
 
@@ -67,6 +64,7 @@ router.get('/', async (req, res, next) => {
   const currentUser: User = users[currentUserId];
   const { integrationId, isGetEnabled } = req.query;
 
+
   // Getting integration items
   try {
     if (!isGetEnabled) {
@@ -77,19 +75,16 @@ router.get('/', async (req, res, next) => {
       return;
     }
 
-    const response = await fetch(
-      `${configuration.FUSEBIT_BASE_URL}/integration/${integrationId}/api/tenant/${currentUser.userId}/items`,
-      {
-        headers: {
-          Accept: 'application/json, text/plain, */*',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
-        },
-      }
-    );
+    const response = await fetch(`${configuration.FUSEBIT_INTEGRATION_URL}/${integrationId}/api/tenant/${currentUser.userId}/items`, {
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${configuration.FUSEBIT_JWT}`,
+      },
+    });
 
     if (!response.ok) {
-      const text = await response.text();
+      const text = await response.text()
 
       throw new Error(text);
     }
@@ -99,7 +94,7 @@ router.get('/', async (req, res, next) => {
     res.status(200).send(data);
   } catch (e) {
     console.log('Error getting integration items', e);
-    res.status(500).send(e);
+    res.status(500).send(e)
   }
 });
 
