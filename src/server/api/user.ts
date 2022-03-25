@@ -52,10 +52,10 @@ router.get('/me', async (req, res, next) => {
     const installsData = await installsResponse.json();
 
     const list = integrationsFeed
-      .filter((entity) => userIntegrations.find((i) => i.feedId === entity.id))
+      .filter((entity) => (userIntegrations || []).find((i) => i.feedId === entity.id))
       .map((entity) => {
-        const integrationId = userIntegrations.find((i) => i.feedId === entity.id).integrationId;
-        const isInstalled = installsData.items.find((install: Install) => install.parentId === integrationId);
+        const integrationId = (userIntegrations || []).find((i) => i.feedId === entity.id).integrationId;
+        const isInstalled = (installsData?.items || []).find((install: Install) => install.parentId === integrationId);
 
         return {
           integrationId,
