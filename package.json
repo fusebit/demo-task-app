@@ -1,6 +1,6 @@
 {
   "name": "@fusebit-int/sample-app",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "main": "libc/server/server.js",
   "typings": "src/main.d.ts",
   "files": [
