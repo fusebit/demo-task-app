@@ -1,4 +1,4 @@
-type Config = Record<string, string>
+type Config = Record<string, string>;
 interface User {
   userId: string;
   color?: string;
@@ -6,13 +6,18 @@ interface User {
   index: number;
 }
 
-type Task = Record<string, string>
+type Task = Record<string, string>;
 
 interface TaskMap {
   [key: string]: Task[];
 }
 
 type IntegrationType = 'SLACK_BOT' | 'HUBSPOT';
+
+interface Install {
+  id: string;
+  parentId: string;
+}
 
 interface Feed {
   id: string;
@@ -46,12 +51,12 @@ interface Feed {
         }[];
       };
     };
-  },
+  };
 }
 
-interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> { }
+interface IntegrationMap<T> extends Partial<Record<IntegrationType, T>> {}
 
-interface IntegrationIdMap extends IntegrationMap<string> { }
+interface IntegrationIdMap extends IntegrationMap<string> {}
 
 interface UserData {
   currentUserId: string;
@@ -61,15 +66,13 @@ interface UserData {
   integrationList: {
     available: Feed[];
     unavailable: Feed[];
-  }
-  list?: (Feed &
-  {
+  };
+  list?: (Feed & {
     integrationId: string;
     feedId: string;
     isInstalled: boolean;
     title: string;
-  }
-  )[]
+  })[];
 }
 
 interface Users {
@@ -97,7 +100,7 @@ type IntegrationInfo<T = string> = {
   action: string;
   taskDoneText?: string;
   taskDescription?: string;
-}
+};
 
 type IntegrationTypeKeyMap = {
   [key in IntegrationType]: IntegrationInfo<key>;
