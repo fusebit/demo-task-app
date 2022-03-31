@@ -49,6 +49,8 @@ router.get('/me', async (req, res, next) => {
       },
     });
 
+    console.log('`${fusebitBaseUrl}/install?tag=fusebit.tenantId=${currentUserId}`', installsResponse)
+
     const installsData = await installsResponse.json();
 
     const list = integrationsFeed

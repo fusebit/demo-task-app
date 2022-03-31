@@ -48,7 +48,7 @@ const Marketplace = (props: {
       </PageItem>
       <PageItem>
         <FusebitMarketplace
-          onUninstall={props.onUninstall}
+          onUninstallClick={props.onUninstall}
           getInstallUrl={props.getInstallUrl}
           getIntegrations={() => props.userData?.list || []}
           isDemo
