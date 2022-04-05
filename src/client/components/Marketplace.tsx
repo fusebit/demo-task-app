@@ -15,19 +15,20 @@ const Marketplace = (props: {
     <Page>
       <PageItem>
         <Box mb="74px" mt="36px">
-          <StatusPaper title="Fusebit handles Authentification for you!" elevation={24}>
+          <StatusPaper title="Fusebit Marketplace Component" elevation={24}>
             <>
               <Typography>
-                Fusebit handles all the overhead of authenticating tenants and wiring up their configurations to a
-                specific install for you. Once you’ve installed the app,{' '}
+                Fusebit's {' '}
                 <a
                   rel="noreferrer"
                   target="_blank"
-                  href="https://manage.fusebit.io/"
+                  href="https://www.npmjs.com/package/@fusebit/react-marketplace"
                   style={{ color: '#333333', fontWeight: 700 }}
                 >
-                  head on over the fusebit management portal to see it.
-                </a>
+                  Marketplace Component
+                  </a>  
+                 handles all the overhead of authenticating tenants and wiring up their configurations to a
+                specific install for you.
               </Typography>
               <Box display="flex" alignItems="center" mt="24px">
                 <Typography fontWeight={700} sx={{ marginRight: '5px' }}>
