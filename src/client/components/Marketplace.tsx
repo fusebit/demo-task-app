@@ -18,7 +18,14 @@ const Marketplace = (props: {
           <StatusPaper title="Fusebit handles Authentification for you!" elevation={24}>
             <>
               <Typography>
-                Fusebit handles all the overhead of authenticating tenants and wiring up their configurations to a
+                Fusebit's Marketplace Component{' '}
+                <a
+                  rel="noreferrer"
+                  target="_blank"
+                  href="https://www.npmjs.com/package/@fusebit/react-marketplace"
+                  style={{ color: '#333333', fontWeight: 700 }}
+                ></a>  
+                handles all the overhead of authenticating tenants and wiring up their configurations to a
                 specific install for you. Once you’ve installed the app,{' '}
                 <a
                   rel="noreferrer"

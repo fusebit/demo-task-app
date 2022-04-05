@@ -151,8 +151,8 @@ export default (props: { userData: UserData; appToTest: Feed; isInstalled: boole
               <Typography>
                 {`In this example, the "Add New ${getItemName(
                   props.appToTest
-                )}" Button, if installed, will use your integration code to immediately
-                update your user via Slack! Look at the code to see how it works, and learn more in the docs here.`}
+                )}" Button, if installed, will execute your Fusebit Integration! 
+                Look at the code to see how it works by looking through the GitHub Repo`}
               </Typography>
             </>
           </StatusPaper>
