@@ -18,7 +18,7 @@ const Marketplace = (props: {
           <StatusPaper title="Fusebit Marketplace Component" elevation={24}>
             <>
               <Typography>
-                Fusebit's {' '}
+                Fusebit's{' '}
                 <a
                   rel="noreferrer"
                   target="_blank"
@@ -26,9 +26,9 @@ const Marketplace = (props: {
                   style={{ color: '#333333', fontWeight: 700 }}
                 >
                   Marketplace Component
-                  </a>  
-                 handles all the overhead of authenticating tenants and wiring up their configurations to a
-                specific install for you.
+                </a>{' '}
+                handles all the overhead of authenticating tenants and wiring up their configurations to a specific
+                install for you.
               </Typography>
               <Box display="flex" alignItems="center" mt="24px">
                 <Typography fontWeight={700} sx={{ marginRight: '5px' }}>
