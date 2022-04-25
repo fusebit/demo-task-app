@@ -9,6 +9,7 @@
     "outDir": "libc",
     "baseUrl": ".",
     "jsx": "react",
+    "skipLibCheck": true,
     "paths": {
       "*": ["node_modules/*"]
     }
