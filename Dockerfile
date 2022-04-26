@@ -2,7 +2,7 @@ FROM node:14
 
 WORKDIR /usr/src/app
 
-COPY package.json ./
+COPY package* ./
 RUN npm install
 
 COPY webpack.config.js ./
