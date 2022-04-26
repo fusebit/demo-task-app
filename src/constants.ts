@@ -9,6 +9,11 @@ export const IntegrationTypeEnum: IntegrationTypeKeyMap = {
     value: 'HUBSPOT',
     action: 'Sync your hubspot task list here.',
   },
+
+  ASANA: {
+    value: 'ASANA',
+    action: 'Sync your Asana TaskList',
+  },
 };
 
 export const DataKeyMap: DataKeyMap = {

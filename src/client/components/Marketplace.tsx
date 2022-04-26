@@ -52,6 +52,8 @@ const Marketplace = (props: {
           onUninstallClick={props.onUninstall}
           getInstallUrl={props.getInstallUrl}
           getIntegrations={() => props.userData?.list || []}
+          hideDescription={true}
+          classes={{card: "padding: 12;background: rgba(2, 49, 5, 0.1);"}}
           isDemo
         />
       </PageItem>
@@ -59,4 +61,19 @@ const Marketplace = (props: {
   );
 };
 
+
+/* classes?: {
+  link?: string;
+  card?: string;
+  topContent?: string;
+  bottomContent?: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  image?: string;
+  button?: string;
+  imagesWrapper?: string;
+  buttonsWrapper?: string;
+  spinner?: string;
+}; */
 export default Marketplace;

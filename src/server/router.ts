@@ -18,6 +18,7 @@ router.use(
       dao.saveData(DataKeyMap.configuration, {
         SLACK_BOT_INTEGRATION_ID: process.env.SLACK_BOT_INTEGRATION_ID,
         HUBSPOT_INTEGRATION_ID: process.env.HUBSPOT_INTEGRATION_ID,
+        ASANA_INTEGRATION_ID: process.env.ASANA_INTEGRATION_ID,
         FUSEBIT_JWT: process.env.FUSEBIT_JWT,
         FUSEBIT_BASE_URL: process.env.FUSEBIT_BASE_URL,
       });

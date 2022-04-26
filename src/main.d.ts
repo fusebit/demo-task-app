@@ -12,7 +12,7 @@ interface TaskMap {
   [key: string]: Task[];
 }
 
-type IntegrationType = 'SLACK_BOT' | 'HUBSPOT';
+type IntegrationType = 'SLACK_BOT' | 'HUBSPOT' | 'ASANA';
 
 interface Install {
   id: string;
