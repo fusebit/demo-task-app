@@ -9,9 +9,7 @@
     "outDir": "libc",
     "baseUrl": ".",
     "jsx": "react",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "skipLibCheck": true,
   },
   "presets": ["@babel/preset-react"],
   "include": ["src/**/*", "public/**/*"]

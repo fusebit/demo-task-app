@@ -2,13 +2,15 @@ FROM node:14
 
 WORKDIR /usr/src/app
 
-COPY package* ./
-RUN npm install
+COPY package-lock.json ./
+COPY package.json ./
 
 COPY webpack.config.js ./
 COPY tsconfig.json ./
 COPY public ./public
 COPY src ./src
+
+RUN npm install
 RUN npm run build
 
 ARG VH

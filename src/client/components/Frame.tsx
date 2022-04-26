@@ -19,7 +19,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import SubjectIcon from '@mui/icons-material/Subject';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, RouteProps } from 'react-router-dom';
 import { getItemName } from '../utils';
 
 const iconStyle = { color: 'white' };
@@ -42,7 +42,7 @@ const learnMoreLinks = [
   },
 ];
 
-const Frame = (props: React.PropsWithChildren<{ userData?: UserData; onLogout: () => void; appToTest: Feed }>) => {
+const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Feed; children?: any } & RouteProps> = (props) => {
   if (!props.userData.currentUserId) {
     return <React.Fragment />;
   }
