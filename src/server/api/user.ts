@@ -51,7 +51,7 @@ router.get('/me', async (req, res, next) => {
 
     const installsData = await installsResponse.json();
 
-/*     const list = integrationsFeed
+    const list = integrationsFeed
       .filter((entity) => (userIntegrations || []).find((i) => i.feedId === entity.id))
       .map((entity) => {
         const integrationId = (userIntegrations || []).find((i) => i.feedId === entity.id).integrationId;
@@ -66,10 +66,10 @@ router.get('/me', async (req, res, next) => {
         };
       });
 
-    console.log(list)  */
+    console.log(list)  
 
 
-   const list = [{ integrationId: 'Asana', feedId: 'asana', isInstalled: false, title: 'My Asana' }, { integrationId: 'Asana', feedId: 'githubapp', isInstalled: true, title: 'Anam Mazhar' }];
+   //const list = [{ integrationId: 'Asana', feedId: 'asana', isInstalled: false, title: 'My Asana' }, { integrationId: 'Asana', feedId: 'githubapp', isInstalled: true, title: 'Anam Mazhar' }];
 
 
     res.send({ currentUserId, users, integrationTypes, list });
