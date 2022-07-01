@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Avatar,
   Divider,
@@ -7,7 +7,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Paper,
   Box,
   Typography,
   Drawer,
@@ -21,6 +20,8 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { Link as RouterLink, RouteProps } from 'react-router-dom';
 import { getItemName } from '../utils';
+import { useDropzone } from 'react-dropzone';
+import styled from 'styled-components';
 
 const iconStyle = { color: 'white' };
 
@@ -42,7 +43,17 @@ const learnMoreLinks = [
   },
 ];
 
-const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Feed; children?: any } & RouteProps> = (props) => {
+const StyledLogo = styled.img`
+  height: 50px;
+  width: auto;
+  max-width: 300px;
+  object-fit: contain;
+`;
+
+const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Feed; children?: any } & RouteProps> = (
+  props
+) => {
+  const [logo, setLogo] = useState('');
   if (!props.userData.currentUserId) {
     return <React.Fragment />;
   }
@@ -52,6 +63,47 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
     { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: `Your ${getItemName(props.appToTest, true)}`, to: '/' },
     { id: 'marketplace', icon: <StarIcon sx={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
   ];
+
+  useEffect(() => {
+    const logo = localStorage.getItem('logo');
+    if (logo) {
+      setLogo(logo);
+    }
+  }, []);
+
+  const onDrop = useCallback((acceptedFiles) => {
+    acceptedFiles.forEach((image: Blob) => {
+      const reader = new FileReader();
+      reader.onabort = () => alert('file reading was aborted');
+      reader.onerror = () => alert('file reading has failed');
+      reader.onload = () => {
+        // Do whatever you want with the file contents
+        const binaryStr = reader.result;
+        localStorage.setItem('logo', String(binaryStr));
+        setLogo(String(binaryStr));
+      };
+      reader.readAsDataURL(image);
+    });
+  }, []);
+
+  const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
+    onDrop,
+    accept: {
+      'image/png': [],
+      'image/jpg': [],
+      'image/svg+xml': [],
+    },
+  });
+
+  const dropzoneText = useMemo(() => {
+    if (isDragReject) {
+      return 'Invalid Image Type';
+    } else if (isDragActive) {
+      return 'Drop Your Logo Here';
+    }
+
+    return 'Drag Your Logo Here';
+  }, [isDragActive, isDragReject]);
 
   return (
     <Box display="flex">
@@ -70,11 +122,27 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
         <Box style={{ backgroundColor: '#333333', height: '100%', padding: '12px 0', color: 'white' }}>
           <List disablePadding>
             <ListItem>
-              <Box className="drawer-logo-container">
-                <Typography fontSize="18px" lineHeight="21px" sx={{ width: 'fit-content' }}>
-                  Your Logo Here
-                </Typography>
-              </Box>
+              {logo ? (
+                <div {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  {isDragActive ? (
+                    <Box className="drawer-logo-container" sx={{ width: '260px !important' }}>
+                      <Typography fontSize="18px" lineHeight="21px" sx={{ width: 'fit-content' }}>
+                        {dropzoneText}
+                      </Typography>
+                    </Box>
+                  ) : (
+                    <StyledLogo src={logo} alt="logo" />
+                  )}
+                </div>
+              ) : (
+                <Box className="drawer-logo-container" {...getRootProps()}>
+                  <input {...getInputProps()} />
+                  <Typography fontSize="18px" lineHeight="21px" sx={{ width: 'fit-content' }}>
+                    {dropzoneText}
+                  </Typography>
+                </Box>
+              )}
             </ListItem>
             <ListItem sx={{ marginBottom: '12px' }}>
               <ListItemIcon>
