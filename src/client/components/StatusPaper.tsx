@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Paper, Box, Typography, PaperProps, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -9,12 +9,24 @@ interface Props extends PaperProps {
 
 const StatusPaper = ({ title, children, ...props }: Props) => {
   const [open, setOpen] = useState(true);
+  const [disableHelpBox, setDisableHelpBox] = useState<boolean>(false);
+  const localstorageKey = `disable-${title.toLowerCase().replaceAll(' ', '-')}-help-box`;
 
-  if (open) {
+  const handleClick = () => {
+    localStorage.setItem(localstorageKey, 'true');
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    const isHelpBoxDisabled = localStorage.getItem(localstorageKey) === 'true';
+    setDisableHelpBox(isHelpBoxDisabled);
+  }, []);
+
+  if (open && !disableHelpBox) {
     return (
       <Paper {...props} sx={{ position: 'relative' }}>
         <Box position="absolute" right="5px" top="5px">
-          <IconButton aria-label="close" onClick={() => setOpen(false)}>
+          <IconButton aria-label="close" onClick={handleClick}>
             <CloseIcon fontSize="small" sx={{ color: '#333333' }} />
           </IconButton>
         </Box>
