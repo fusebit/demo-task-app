@@ -4,13 +4,42 @@ import Login from './Login';
 import React, { useEffect, useState } from 'react';
 import Frame from './Frame';
 import Marketplace from './Marketplace';
-import { CircularProgress, Fade } from '@mui/material';
+import { CircularProgress, createTheme, Fade, ThemeProvider } from '@mui/material';
+import { useCustomColorsContext } from './useCustomColorsContext';
 
-const AppRouter = () => (
-  <Router>
-    <Routes />
-  </Router>
-);
+const AppRouter = () => {
+  const { colors } = useCustomColorsContext();
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: colors.primary,
+      },
+      secondary: {
+        main: colors.secondary,
+      },
+    },
+    components: {
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            ':hover': {
+              backgroundColor: 'rgba(255,255,255,0.2)',
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Routes />
+      </Router>
+    </ThemeProvider>
+  );
+};
 
 const AuthedRoute = (props: { onLogin: Function; userData: UserData } & RouteProps) => {
   if (props.userData?.currentUserId) {

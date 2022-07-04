@@ -22,6 +22,7 @@ import { Link as RouterLink, RouteProps } from 'react-router-dom';
 import { getItemName } from '../utils';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
+import { useCustomColorsContext } from './useCustomColorsContext';
 
 const iconStyle = { color: 'white' };
 
@@ -54,6 +55,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
   props
 ) => {
   const [logo, setLogo] = useState('');
+  const { colors } = useCustomColorsContext();
   if (!props.userData.currentUserId) {
     return <React.Fragment />;
   }
@@ -119,7 +121,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
         variant="permanent"
         anchor="left"
       >
-        <Box style={{ backgroundColor: '#333333', height: '100%', padding: '12px 0', color: 'white' }}>
+        <Box style={{ backgroundColor: colors.primary, height: '100%', padding: '12px 0', color: colors.sidebarText }}>
           <List disablePadding>
             <ListItem>
               {logo ? (
@@ -150,14 +152,18 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                   <PersonIcon sx={{ color: '#1F2937' }} />
                 </Avatar>
               </ListItemIcon>
-              <ListItemText sx={{ color: 'white' }}>{currentUser?.name}</ListItemText>
+              <ListItemText sx={{ color: colors.sidebarText }}>{currentUser?.name}</ListItemText>
             </ListItem>
             <ListItem sx={{ marginBottom: '12px' }}>
               <Typography fontWeight="700">Sample App</Typography>
             </ListItem>
             {sampleAppLinks.map((link) => {
               return (
-                <RouterLink key={link.id} to={link.to || ''} style={{ textDecoration: 'none', color: 'white' }}>
+                <RouterLink
+                  key={link.id}
+                  to={link.to || ''}
+                  style={{ textDecoration: 'none', color: colors.sidebarText }}
+                >
                   <ListItemButton
                     sx={{ backgroundColor: link.to && link.to === window.location.pathname && 'rgba(255,255,255,0.2)' }}
                   >
@@ -184,7 +190,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                   target={link.target}
                   key={link.id}
                   href={link.to}
-                  style={{ textDecoration: 'none', color: 'white' }}
+                  style={{ textDecoration: 'none', color: colors.sidebarText }}
                 >
                   <ListItemButton>
                     <ListItemIcon>{link.icon}</ListItemIcon>

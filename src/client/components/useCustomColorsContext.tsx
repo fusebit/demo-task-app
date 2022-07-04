@@ -9,7 +9,7 @@ interface Colors {
   backgroundText: string;
 }
 
-const defaultColors: Colors = {
+const DEFAULT_COLORS: Colors = {
   primary: '#333333',
   secondary: '#3F51B5',
   background: '#ffffff',
@@ -18,7 +18,7 @@ const defaultColors: Colors = {
 };
 
 const _useCustomColorsContext = () => {
-  const [colors, setColors] = useState<Colors>(defaultColors);
+  const [colors, setColors] = useState<Colors>(DEFAULT_COLORS);
   const query = new URLSearchParams(window.location.search);
 
   const setNewDefaultColor = (colorKey: keyof Colors, colorValue: string) => {
@@ -26,14 +26,15 @@ const _useCustomColorsContext = () => {
       const newColors = colors;
       newColors[colorKey] = colorValue;
       setColors(newColors);
+      localStorage.setItem('defaultColors', JSON.stringify(newColors));
     }
   };
 
   const searchAndStoreNewDefaultColors = (colorKeys: string[]) => {
-    const newColors = JSON.parse(localStorage.getItem('defaultColors')) || defaultColors;
+    const newColors = JSON.parse(localStorage.getItem('defaultColors')) || DEFAULT_COLORS;
     colorKeys.forEach((key: keyof Colors) => {
       const newColor = query.get(key);
-      if (key in defaultColors && newColor) {
+      if (key in DEFAULT_COLORS && newColor) {
         newColors[key] = `#${newColor}`;
       }
     });
@@ -42,11 +43,13 @@ const _useCustomColorsContext = () => {
 
   useEffect(() => {
     searchAndStoreNewDefaultColors(['primary', 'secondary', 'background', 'sidebarText', 'backgroundText']);
-    const colors = JSON.parse(localStorage.getItem('defaultColors')) || defaultColors;
+    const colors = JSON.parse(localStorage.getItem('defaultColors')) || DEFAULT_COLORS;
     setColors(colors);
   }, []);
 
-  return { colors };
+  return { colors, setNewDefaultColor };
 };
 
-export const [CustomColorsProvider, useCustomColorsContext] = constate(_useCustomColorsContext);
+const [CustomColorsProvider, useCustomColorsContext] = constate(_useCustomColorsContext);
+
+export { CustomColorsProvider, useCustomColorsContext };
