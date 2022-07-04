@@ -1,6 +1,7 @@
 import React from 'react';
 import AppRouter from './Router';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CustomColorsProvider, useCustomColorsContext } from './useCustomColorsContext';
 
 const theme = createTheme({
   palette: {
@@ -23,11 +24,16 @@ const theme = createTheme({
     },
   },
 });
+
 const Index = () => {
+  useCustomColorsContext();
+
   return (
-    <ThemeProvider theme={theme}>
-      <AppRouter />
-    </ThemeProvider>
+    <CustomColorsProvider>
+      <ThemeProvider theme={theme}>
+        <AppRouter />
+      </ThemeProvider>
+    </CustomColorsProvider>
   );
 };
 
