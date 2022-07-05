@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import constate from 'constate';
+import tinycolor from 'tinycolor2';
 
 interface Colors {
   primary: string;
@@ -17,33 +18,33 @@ const DEFAULT_COLORS: Colors = {
   sidebarText: '#ffffff',
 };
 
+const LOCALSTORAGE_COLORS_KEY = 'colors';
+
 const _useCustomColorsContext = () => {
   const [colors, setColors] = useState<Colors>(DEFAULT_COLORS);
   const query = new URLSearchParams(window.location.search);
 
   const setNewDefaultColor = (colorKey: keyof Colors, colorValue: string) => {
-    if (colorKey in colors) {
-      const newColors = colors;
-      newColors[colorKey] = colorValue;
-      setColors(newColors);
-      localStorage.setItem('defaultColors', JSON.stringify(newColors));
-    }
+    const newColors = colors;
+    newColors[colorKey] = colorValue;
+    setColors(newColors);
+    localStorage.setItem(LOCALSTORAGE_COLORS_KEY, JSON.stringify(newColors));
   };
 
   const searchAndStoreNewDefaultColors = (colorKeys: string[]) => {
-    const newColors = JSON.parse(localStorage.getItem('defaultColors')) || DEFAULT_COLORS;
-    colorKeys.forEach((key: keyof Colors) => {
-      const newColor = query.get(key);
-      if (key in DEFAULT_COLORS && newColor) {
-        newColors[key] = `#${newColor}`;
+    const newColors: Colors = JSON.parse(localStorage.getItem(LOCALSTORAGE_COLORS_KEY)) || DEFAULT_COLORS;
+    colorKeys.forEach((colorKey: keyof Colors) => {
+      const newColorValue = query.get(colorKey);
+      if (colorKey in newColors && newColorValue) {
+        newColors[colorKey] = newColorValue.includes('rgb') ? newColorValue : `#${newColorValue}`;
       }
     });
-    localStorage.setItem('defaultColors', JSON.stringify(newColors));
+    localStorage.setItem(LOCALSTORAGE_COLORS_KEY, JSON.stringify(newColors));
   };
 
   useEffect(() => {
     searchAndStoreNewDefaultColors(['primary', 'secondary', 'background', 'sidebarText', 'backgroundText']);
-    const colors = JSON.parse(localStorage.getItem('defaultColors')) || DEFAULT_COLORS;
+    const colors = JSON.parse(localStorage.getItem(LOCALSTORAGE_COLORS_KEY)) || DEFAULT_COLORS;
     setColors(colors);
   }, []);
 
