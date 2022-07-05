@@ -24,31 +24,25 @@ const _useCustomColorsContext = () => {
   const [colors, setColors] = useState<Colors>(DEFAULT_COLORS);
   const query = new URLSearchParams(window.location.search);
 
-  const setNewDefaultColor = (colorKey: keyof Colors, colorValue: string) => {
-    const newColors = colors;
-    newColors[colorKey] = colorValue;
-    setColors(newColors);
-    localStorage.setItem(LOCALSTORAGE_COLORS_KEY, JSON.stringify(newColors));
-  };
-
-  const searchAndStoreNewDefaultColors = (colorKeys: string[]) => {
-    const newColors: Colors = JSON.parse(localStorage.getItem(LOCALSTORAGE_COLORS_KEY)) || DEFAULT_COLORS;
-    colorKeys.forEach((colorKey: keyof Colors) => {
-      const newColorValue = query.get(colorKey);
-      if (colorKey in newColors && newColorValue) {
-        newColors[colorKey] = newColorValue.includes('rgb') ? newColorValue : `#${newColorValue}`;
-      }
-    });
-    localStorage.setItem(LOCALSTORAGE_COLORS_KEY, JSON.stringify(newColors));
-  };
-
   useEffect(() => {
-    searchAndStoreNewDefaultColors(['primary', 'secondary', 'background', 'sidebarText', 'backgroundText']);
-    const colors = JSON.parse(localStorage.getItem(LOCALSTORAGE_COLORS_KEY)) || DEFAULT_COLORS;
+    const colors: Colors = JSON.parse(localStorage.getItem(LOCALSTORAGE_COLORS_KEY)) || DEFAULT_COLORS;
+    const primaryColor = tinycolor(query.get('primary'));
+    const secondaryColor = tinycolor(query.get('secondary'));
+
+    if (primaryColor.isValid()) {
+      colors.primary = primaryColor.toString();
+      colors.sidebarText = primaryColor.isDark() ? '#ffffff' : '#333333';
+    }
+
+    if (secondaryColor.isValid()) {
+      colors.secondary = secondaryColor.toString();
+    }
+
+    localStorage.setItem(LOCALSTORAGE_COLORS_KEY, JSON.stringify(colors));
     setColors(colors);
   }, []);
 
-  return { colors, setNewDefaultColor };
+  return { colors };
 };
 
 const [CustomColorsProvider, useCustomColorsContext] = constate(_useCustomColorsContext);
