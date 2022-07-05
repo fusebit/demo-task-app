@@ -13,9 +13,11 @@ import {
 import WarningIcon from '@mui/icons-material/Warning';
 import { Link as RouterLink } from 'react-router-dom';
 import { getItemName, getPropertyFromIntegration } from '../utils';
+import { useCustomColorsContext } from './useCustomColorsContext';
 
 const TaskTable = (props: { tasks: Task[]; appToTest: Feed; isInstalled: boolean }) => {
-  const cellStyle = { color: props.isInstalled ? '#3F51B5' : '#959595', fontWeight: 400 };
+  const { colors } = useCustomColorsContext();
+  const cellStyle = { color: props.isInstalled ? colors.secondary : '#959595', fontWeight: 400 };
 
   return (
     <>
