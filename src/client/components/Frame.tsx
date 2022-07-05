@@ -23,26 +23,7 @@ import { getItemName } from '../utils';
 import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import { useCustomColorsContext } from './useCustomColorsContext';
-
-const iconStyle = { color: 'white' };
-
-const learnMoreLinks = [
-  {
-    id: 'docs',
-    icon: <InsertDriveFileIcon sx={iconStyle} />,
-    text: 'Docs',
-    to: 'https://developer.fusebit.io/docs/getting-started',
-    target: '_blank',
-  },
-  { id: 'blog', icon: <SubjectIcon sx={iconStyle} />, text: 'Blog', to: 'https://fusebit.io/blog/', target: '_blank' },
-  {
-    id: 'github',
-    icon: <GitHubIcon sx={iconStyle} />,
-    text: 'Github',
-    to: 'https://github.com/fusebit/demo-task-app',
-    target: '_blank',
-  },
-];
+import tinycolor from 'tinycolor2';
 
 const StyledLogo = styled.img`
   height: 50px;
@@ -60,6 +41,32 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
     return <React.Fragment />;
   }
   const currentUser = props.userData.users[props.userData.currentUserId];
+
+  const iconStyle = { color: colors.sidebarText };
+
+  const learnMoreLinks = [
+    {
+      id: 'docs',
+      icon: <InsertDriveFileIcon sx={iconStyle} />,
+      text: 'Docs',
+      to: 'https://developer.fusebit.io/docs/getting-started',
+      target: '_blank',
+    },
+    {
+      id: 'blog',
+      icon: <SubjectIcon sx={iconStyle} />,
+      text: 'Blog',
+      to: 'https://fusebit.io/blog/',
+      target: '_blank',
+    },
+    {
+      id: 'github',
+      icon: <GitHubIcon sx={iconStyle} />,
+      text: 'Github',
+      to: 'https://github.com/fusebit/demo-task-app',
+      target: '_blank',
+    },
+  ];
 
   const sampleAppLinks = [
     { id: 'tasks', icon: <InboxIcon sx={iconStyle} />, text: `Your ${getItemName(props.appToTest, true)}`, to: '/' },
@@ -128,7 +135,10 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
                   {isDragActive ? (
-                    <Box className="drawer-logo-container" sx={{ width: '260px !important' }}>
+                    <Box
+                      className="drawer-logo-container"
+                      sx={{ width: '260px !important', borderColor: colors.sidebarText }}
+                    >
                       <Typography fontSize="18px" lineHeight="21px" sx={{ width: 'fit-content' }}>
                         {dropzoneText}
                       </Typography>
@@ -138,7 +148,11 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                   )}
                 </div>
               ) : (
-                <Box className="drawer-logo-container" {...getRootProps()}>
+                <Box
+                  className="drawer-logo-container"
+                  {...getRootProps()}
+                  sx={{ border: `1px dotted ${colors.sidebarText} !important` }}
+                >
                   <input {...getInputProps()} />
                   <Typography fontSize="18px" lineHeight="21px" sx={{ width: 'fit-content' }}>
                     {dropzoneText}
@@ -165,7 +179,12 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                   style={{ textDecoration: 'none', color: colors.sidebarText }}
                 >
                   <ListItemButton
-                    sx={{ backgroundColor: link.to && link.to === window.location.pathname && 'rgba(255,255,255,0.2)' }}
+                    sx={{
+                      backgroundColor:
+                        link.to &&
+                        link.to === window.location.pathname &&
+                        tinycolor(colors.sidebarText).brighten(100).setAlpha(0.2).toRgbString(),
+                    }}
                   >
                     <ListItemIcon>{link.icon}</ListItemIcon>
                     <ListItemText>{link.text}</ListItemText>
@@ -179,7 +198,9 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
               </ListItemIcon>
               <ListItemText>Logout</ListItemText>
             </ListItemButton>
-            <Divider sx={{ borderColor: 'rgba(255,255,255,0.5)', margin: '20px 0' }} />
+            <Divider
+              sx={{ borderColor: tinycolor(colors.sidebarText).setAlpha(0.5).toRgbString(), margin: '20px 0' }}
+            />
             <ListItem sx={{ marginBottom: '12px' }}>
               <Typography fontWeight="700">Learn More</Typography>
             </ListItem>
