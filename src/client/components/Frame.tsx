@@ -24,6 +24,7 @@ import { useDropzone } from 'react-dropzone';
 import styled from 'styled-components';
 import { useCustomColorsContext } from './useCustomColorsContext';
 import tinycolor from 'tinycolor2';
+import DropzoneLogo from './DropzoneLogo';
 
 const StyledLogo = styled.img`
   height: 50px;
@@ -131,34 +132,9 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
         <Box style={{ backgroundColor: colors.primary, height: '100%', padding: '12px 0', color: colors.sidebarText }}>
           <List disablePadding>
             <ListItem>
-              {logo ? (
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  {isDragActive ? (
-                    <Box
-                      className="drawer-logo-container"
-                      sx={{ width: '260px !important', borderColor: colors.sidebarText }}
-                    >
-                      <Typography fontSize="18px" lineHeight="21px" sx={{ width: 'fit-content' }}>
-                        {dropzoneText}
-                      </Typography>
-                    </Box>
-                  ) : (
-                    <StyledLogo src={logo} alt="logo" />
-                  )}
-                </div>
-              ) : (
-                <Box
-                  className="drawer-logo-container"
-                  {...getRootProps()}
-                  sx={{ border: `1px dotted ${colors.sidebarText} !important` }}
-                >
-                  <input {...getInputProps()} />
-                  <Typography fontSize="18px" lineHeight="21px" sx={{ width: 'fit-content' }}>
-                    {dropzoneText}
-                  </Typography>
-                </Box>
-              )}
+              <Box mt="8px" mb="12px">
+                <DropzoneLogo />
+              </Box>
             </ListItem>
             <ListItem sx={{ marginBottom: '12px' }}>
               <ListItemIcon>

@@ -57,9 +57,29 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
   width: 100%;
   border: 1px dotted #ffffff;
   border-radius: 8px;
   padding: 32px 0;
   margin-bottom: 20px;
+  transition: all .25s ease-in-out;
+}
+
+.drawer-logo-container:hover {
+  cursor: pointer;
+  background: rgba(0,0,0,0.05);
+}
+
+.drawer-logo-container-dragging {
+  cursor: pointer;
+  background: rgba(0,0,0,0.05);
+}
+
+.logo {
+  height: 50px;
+  width: auto;
+  max-width: 300px;
+  object-fit: contain;
+  cursor: pointer;
 }
