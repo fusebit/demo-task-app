@@ -22,6 +22,7 @@ const LOCALSTORAGE_COLORS_KEY = 'colors';
 
 const _useCustomColorsContext = () => {
   const [colors, setColors] = useState<Colors>(DEFAULT_COLORS);
+  const [isUsingCustomColors, setIsUsingCustomColors] = useState(false);
   const query = new URLSearchParams(window.location.search);
 
   useEffect(() => {
@@ -38,11 +39,15 @@ const _useCustomColorsContext = () => {
       colors.secondary = secondaryColor.toString();
     }
 
+    if (JSON.stringify(colors) !== JSON.stringify(DEFAULT_COLORS)) {
+      setIsUsingCustomColors(true);
+    }
+
     localStorage.setItem(LOCALSTORAGE_COLORS_KEY, JSON.stringify(colors));
     setColors(colors);
   }, []);
 
-  return { colors };
+  return { colors, isUsingCustomColors };
 };
 
 const [CustomColorsProvider, useCustomColorsContext] = constate(_useCustomColorsContext);
