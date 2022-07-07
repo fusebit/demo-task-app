@@ -36,8 +36,14 @@ export default (props: { onLogin: Function }) => {
   };
 
   useEffect(() => {
-    const userData: Users = JSON.parse(localStorage.getItem('userData')) || DEFAULT_USER_DATA;
-    setUserData(userData);
+    const storedUserData = JSON.parse(localStorage.getItem('userData'));
+    if (storedUserData) {
+      storedUserData['Sample-App-Tenant-1'].color = colors.primary;
+      storedUserData['Sample-App-Tenant-2'].color = colors.secondary;
+      setUserData(storedUserData);
+    } else {
+      setUserData(DEFAULT_USER_DATA);
+    }
   }, []);
 
   return (
