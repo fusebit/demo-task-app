@@ -32,9 +32,7 @@ const DropzoneLogo = () => {
   const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
     onDrop,
     accept: {
-      'image/png': [],
-      'image/jpg': [],
-      'image/svg+xml': [],
+      'image/*': ['.jpg', '.png'],
     },
   });
 

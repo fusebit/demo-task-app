@@ -66,9 +66,10 @@ const TaskInput = (props: {
         >
           <Box display="inline-block">
             <Button
+              sx={{ height: '56px', width: '188px', boxShadow: 'none', textTransform: 'none' }}
               disabled={!props.isInstalled || props.isLoading || task.name === '' || task.description === ''}
               variant="contained"
-              color="secondary"
+              color="primary"
               onClick={handleAddTask}
             >
               {props.isLoading ? 'Adding new' : 'Add New'} {getItemName(props.appToTest)}

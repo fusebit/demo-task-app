@@ -36,7 +36,7 @@ const Marketplace = (props: {
           button.style.background = colors.primary;
           button.style.color = isDark ? lightTextColor : darkTextColor;
           link.style.borderColor = colors.primary;
-          link.style.color = colors.primary;
+          link.style.color = isDark ? colors.primary : darkTextColor;
 
           clearInterval(interval);
         }
