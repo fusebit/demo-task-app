@@ -32,7 +32,14 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
     return <React.Fragment />;
   }
   const currentUser = props.userData.users[props.userData.currentUserId];
-  console.log(props.userData);
+
+  const avatarColor = (() => {
+    if (currentUser.userId === 'Sample-App-Tenant-2') {
+      return colors.secondary;
+    }
+
+    return colors.primary;
+  })();
 
   const iconStyle = { color: colors.sidebarText };
 
@@ -88,8 +95,8 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
             </ListItem>
             <ListItem sx={{ marginBottom: '12px' }}>
               <ListItemIcon>
-                <Avatar sx={{ bgcolor: currentUser.color }}>
-                  <PersonIcon sx={{ color: tinycolor(currentUser.color).isDark() ? '#ffffff' : '#000000' }} />
+                <Avatar sx={{ bgcolor: avatarColor }}>
+                  <PersonIcon sx={{ color: tinycolor(avatarColor).isDark() ? '#ffffff' : '#000000' }} />
                 </Avatar>
               </ListItemIcon>
               <ListItemText sx={{ color: colors.sidebarText }}>{currentUser?.name}</ListItemText>
