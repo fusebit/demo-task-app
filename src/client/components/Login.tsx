@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
-import { Avatar, Grid, ListItemIcon, ListItemText, Paper, Box, Typography } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import { Avatar, Grid, ListItemIcon, ListItemText, Paper, Box, Typography, Input } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import { useCustomColorsContext } from './useCustomColorsContext';
 import DropzoneLogo from './DropzoneLogo';
 import tinycolor from 'tinycolor2';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import IconButton from '@mui/material/IconButton';
 
-export default (props: { onLogin: Function; userData: UserData }) => {
+export default (props: { onLogin: Function }) => {
   const { colors } = useCustomColorsContext();
+  const [userData, setUserData] = useState<Users>({});
+  const [editTenantId, setEditTenantId] = useState<string>('');
+  const [newTenantName, setNewTenantName] = useState<string>('');
 
-  const users: Users = props.userData?.users || {
+  const DEFAULT_USER_DATA: Users = {
     'Sample-App-Tenant-1': {
       userId: 'Sample-App-Tenant-1',
       name: 'Tenant 1',
@@ -24,6 +28,17 @@ export default (props: { onLogin: Function; userData: UserData }) => {
       index: 1,
     },
   };
+
+  const handleSubmitUserData = (user: User) => {
+    userData[user.userId].name = newTenantName;
+    localStorage.setItem('userData', JSON.stringify(userData));
+    setEditTenantId('');
+  };
+
+  useEffect(() => {
+    const userData: Users = JSON.parse(localStorage.getItem('userData')) || DEFAULT_USER_DATA;
+    setUserData(userData);
+  }, []);
 
   return (
     <Grid display="flex" minHeight={'100vh'} container>
@@ -56,17 +71,16 @@ export default (props: { onLogin: Function; userData: UserData }) => {
         position="relative"
       >
         <Typography fontWeight="700" mb="76px" fontSize="48px" lineHeight="56px" variant="h1" component="h1">
-          Welcome user!
+          Welcome!
         </Typography>
-        {Object.values(users).map((user, index) => (
+        {Object.values(userData).map((user, index) => (
           <Box
             onClick={() => {
               props.onLogin({
-                users,
+                users: userData,
                 currentUserId: user.userId,
               });
             }}
-            id={`${user.name}-wrapper`}
             key={index}
             display="flex"
             alignItems="center"
@@ -95,17 +109,51 @@ export default (props: { onLogin: Function; userData: UserData }) => {
                 <PersonIcon sx={{ color: tinycolor(user.color).isDark() ? '#ffffff' : '#000000' }} />
               </Avatar>
             </ListItemIcon>
-            <ListItemText>{user.name}</ListItemText>
-            <IconButton
-              aria-label="Edit"
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-            >
-              <ListItemIcon sx={{ minWidth: 'auto' }}>
-                <EditOutlinedIcon sx={{ color: '#000000' }} />
-              </ListItemIcon>
-            </IconButton>
+            {editTenantId === user.userId ? (
+              <>
+                <Input
+                  onKeyDown={(e) => {
+                    if (e.code === 'Enter') {
+                      handleSubmitUserData(user);
+                    }
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onChange={(e) => {
+                    setNewTenantName(e.target.value);
+                  }}
+                  defaultValue={user.name}
+                  fullWidth
+                />
+                <IconButton
+                  aria-label="Edit"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSubmitUserData(user);
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 'auto' }}>
+                    <DoneOutlinedIcon sx={{ color: '#000000' }} />
+                  </ListItemIcon>
+                </IconButton>
+              </>
+            ) : (
+              <>
+                <ListItemText>{user.name}</ListItemText>
+                <IconButton
+                  aria-label="Edit"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditTenantId(user.userId);
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 'auto' }}>
+                    <EditOutlinedIcon sx={{ color: '#000000' }} />
+                  </ListItemIcon>
+                </IconButton>
+              </>
+            )}
           </Box>
         ))}
       </Grid>

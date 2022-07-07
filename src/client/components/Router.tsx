@@ -45,7 +45,7 @@ const AuthedRoute = (props: { onLogin: Function; userData: UserData } & RoutePro
   if (props.userData?.currentUserId) {
     return <Route {...props} />;
   }
-  return <Login onLogin={props.onLogin} userData={props.userData} />;
+  return <Login onLogin={props.onLogin} />;
 };
 
 const Routes = () => {
@@ -118,7 +118,9 @@ const Routes = () => {
       },
       credentials: 'include',
     });
-    await getMe().then((userData) => setUserData(userData));
+    await getMe().then((userData) => {
+      setUserData(userData);
+    });
   };
 
   const handleLogout = async () => {

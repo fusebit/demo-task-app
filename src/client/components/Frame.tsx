@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import {
   Avatar,
   Divider,
@@ -20,28 +20,19 @@ import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { Link as RouterLink, RouteProps } from 'react-router-dom';
 import { getItemName } from '../utils';
-import { useDropzone } from 'react-dropzone';
-import styled from 'styled-components';
 import { useCustomColorsContext } from './useCustomColorsContext';
 import tinycolor from 'tinycolor2';
 import DropzoneLogo from './DropzoneLogo';
 
-const StyledLogo = styled.img`
-  height: 50px;
-  width: auto;
-  max-width: 300px;
-  object-fit: contain;
-`;
-
 const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Feed; children?: any } & RouteProps> = (
   props
 ) => {
-  const [logo, setLogo] = useState('');
   const { colors } = useCustomColorsContext();
   if (!props.userData.currentUserId) {
     return <React.Fragment />;
   }
   const currentUser = props.userData.users[props.userData.currentUserId];
+  console.log(props.userData);
 
   const iconStyle = { color: colors.sidebarText };
 
@@ -74,47 +65,6 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
     { id: 'marketplace', icon: <StarIcon sx={iconStyle} />, text: 'Integrations Marketplace', to: '/marketplace' },
   ];
 
-  useEffect(() => {
-    const logo = localStorage.getItem('logo');
-    if (logo) {
-      setLogo(logo);
-    }
-  }, []);
-
-  const onDrop = useCallback((acceptedFiles) => {
-    acceptedFiles.forEach((image: Blob) => {
-      const reader = new FileReader();
-      reader.onabort = () => alert('file reading was aborted');
-      reader.onerror = () => alert('file reading has failed');
-      reader.onload = () => {
-        // Do whatever you want with the file contents
-        const binaryStr = reader.result;
-        localStorage.setItem('logo', String(binaryStr));
-        setLogo(String(binaryStr));
-      };
-      reader.readAsDataURL(image);
-    });
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
-    onDrop,
-    accept: {
-      'image/png': [],
-      'image/jpg': [],
-      'image/svg+xml': [],
-    },
-  });
-
-  const dropzoneText = useMemo(() => {
-    if (isDragReject) {
-      return 'Invalid Image Type';
-    } else if (isDragActive) {
-      return 'Drop Your Logo Here';
-    }
-
-    return 'Drag Your Logo Here';
-  }, [isDragActive, isDragReject]);
-
   return (
     <Box display="flex">
       <Drawer
@@ -138,8 +88,8 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
             </ListItem>
             <ListItem sx={{ marginBottom: '12px' }}>
               <ListItemIcon>
-                <Avatar sx={{ bgcolor: '#BBDEFB' }}>
-                  <PersonIcon sx={{ color: '#1F2937' }} />
+                <Avatar sx={{ bgcolor: currentUser.color }}>
+                  <PersonIcon sx={{ color: tinycolor(currentUser.color).isDark() ? '#ffffff' : '#000000' }} />
                 </Avatar>
               </ListItemIcon>
               <ListItemText sx={{ color: colors.sidebarText }}>{currentUser?.name}</ListItemText>
