@@ -10,11 +10,11 @@ import IconButton from '@mui/material/IconButton';
 
 export default (props: { onLogin: Function }) => {
   const { colors } = useCustomColorsContext();
-  const [userData, setUserData] = useState<Users>({});
+  const [users, setUsers] = useState<Users>({});
   const [editTenantId, setEditTenantId] = useState<string>('');
   const [newTenantName, setNewTenantName] = useState<string>('');
 
-  const DEFAULT_USER_DATA: Users = {
+  const DEFAULT_USERS: Users = {
     'Sample-App-Tenant-1': {
       userId: 'Sample-App-Tenant-1',
       name: 'Tenant 1',
@@ -30,19 +30,23 @@ export default (props: { onLogin: Function }) => {
   };
 
   const handleSubmitUserData = (user: User) => {
-    userData[user.userId].name = newTenantName;
-    localStorage.setItem('userData', JSON.stringify(userData));
+    if (!newTenantName) {
+      return;
+    }
+
+    users[user.userId].name = newTenantName;
+    localStorage.setItem('users', JSON.stringify(users));
     setEditTenantId('');
   };
 
   useEffect(() => {
-    const storedUserData = JSON.parse(localStorage.getItem('userData'));
-    if (storedUserData) {
-      storedUserData['Sample-App-Tenant-1'].color = colors.primary;
-      storedUserData['Sample-App-Tenant-2'].color = colors.secondary;
-      setUserData(storedUserData);
+    const storedUsers = JSON.parse(localStorage.getItem('users'));
+    if (storedUsers) {
+      storedUsers['Sample-App-Tenant-1'].color = colors.primary;
+      storedUsers['Sample-App-Tenant-2'].color = colors.secondary;
+      setUsers(storedUsers);
     } else {
-      setUserData(DEFAULT_USER_DATA);
+      setUsers(DEFAULT_USERS);
     }
   }, []);
 
@@ -79,11 +83,15 @@ export default (props: { onLogin: Function }) => {
         <Typography fontWeight="700" mb="76px" fontSize="48px" lineHeight="56px" variant="h1" component="h1">
           Welcome!
         </Typography>
-        {Object.values(userData).map((user, index) => (
+        {Object.values(users).map((user, index) => (
           <Box
             onClick={() => {
+              if (editTenantId === user.userId) {
+                return;
+              }
+
               props.onLogin({
-                users: userData,
+                users,
                 currentUserId: user.userId,
               });
             }}
