@@ -82,7 +82,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
         <Box style={{ backgroundColor: colors.primary, height: '100%', padding: '12px 0', color: colors.sidebarText }}>
           <List disablePadding>
             <ListItem>
-              <Box mt="8px" mb="12px">
+              <Box mt="8px" mb="12px" width="100%">
                 <DropzoneLogo />
               </Box>
             </ListItem>
