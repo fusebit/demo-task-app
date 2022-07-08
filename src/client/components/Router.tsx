@@ -19,6 +19,13 @@ const AppRouter = () => {
         main: colors.secondary,
       },
     },
+    typography: {
+      fontFamily: `"Source Sans Pro", "Roboto", "Helvetica", "Arial", sans-serif`,
+      fontWeightLight: 300,
+      fontWeightRegular: 400,
+      fontWeightMedium: 600,
+      fontWeightBold: 700,
+    },
     components: {
       MuiListItemButton: {
         styleOverrides: {
