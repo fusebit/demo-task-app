@@ -1,20 +1,10 @@
-import { Button, Grid, TextField, Tooltip, Box, CircularProgress } from '@mui/material';
+import { Button, Grid, TextField, Tooltip, Box, CircularProgress, colors } from '@mui/material';
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { getPropertyFromIntegration, getItemName } from '../utils';
-
-const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))({
-  [`& .${tooltipClasses.tooltip}`]: {
-    width: 200,
-    padding: '4px 12px',
-    textAlign: 'center',
-    fontSize: 12,
-    lineHeight: '16px',
-  },
-});
+import { useCustomColorsContext } from './useCustomColorsContext';
+import tinycolor from 'tinycolor2';
 
 const TaskInput = (props: {
   onTaskCreated: (task: Task) => void;
@@ -23,6 +13,26 @@ const TaskInput = (props: {
   isInstalled: boolean;
 }) => {
   const [task, setTask] = useState<Task>({ name: '', description: '' });
+  const { colors } = useCustomColorsContext();
+
+  const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip {...props} classes={{ popper: className }} />
+  ))({
+    [`& .${tooltipClasses.tooltip}`]: {
+      width: 200,
+      background: tinycolor(colors.primary).setAlpha(0.6).toRgbString(),
+      color: tinycolor(colors.primary).isDark() ? '#ffffff' : '#333333',
+      padding: '12px',
+      textAlign: 'left',
+      fontWeight: 400,
+      fontSize: 12,
+      lineHeight: '16px',
+    },
+    [`& .${tooltipClasses.arrow}`]: {
+      color: tinycolor(colors.primary).setAlpha(0.6).toRgbString(),
+    },
+  });
+
   const handleAddTask = async () => {
     props.onTaskCreated(task);
     setTask({ name: '', description: '' });
@@ -33,7 +43,7 @@ const TaskInput = (props: {
   };
 
   return (
-    <Grid container spacing={2} display="flex" alignItems="center" mb="40px">
+    <Grid container spacing={2} display="flex" alignItems="center" mb="128px">
       <Grid item xs={4}>
         <TextField
           color="secondary"
@@ -44,7 +54,7 @@ const TaskInput = (props: {
           value={task.name}
         />
       </Grid>
-      <Grid item xs={4} ml="15px">
+      <Grid item xs={4}>
         <TextField
           color="secondary"
           label={getPropertyFromIntegration(props.appToTest, 1, 'label') || 'Item Description'}
@@ -54,9 +64,8 @@ const TaskInput = (props: {
           value={task.description}
         />
       </Grid>
-      <Grid item xs={3}>
+      <Grid item xs={4} display="flex">
         <StyledTooltip
-          sx={{ m: 1 }}
           arrow
           title={
             props.isInstalled

@@ -13,8 +13,8 @@ body {
 }
 
 .container-buffer {
-  padding: 20px;
-  row-gap: 20px;
+  padding: 0 48px;
+  row-gap: 32px;
 }
 
 .integration-media {
