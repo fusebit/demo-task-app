@@ -36,13 +36,6 @@ const AppRouter = () => {
           },
         },
       },
-      MuiGrid: {
-        styleOverrides: {
-          item: {
-            paddingLeft: '24px !important',
-          },
-        },
-      },
     },
   });
 

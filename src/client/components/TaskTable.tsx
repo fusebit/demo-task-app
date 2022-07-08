@@ -22,7 +22,7 @@ const TaskTable = (props: { tasks: Task[]; appToTest: Feed; isInstalled: boolean
 
   return (
     <>
-      <TableContainer component={Paper} sx={{ width: 792, boxShadow: 'none' }}>
+      <TableContainer component={Paper} sx={{ width: 805, boxShadow: 'none' }}>
         <Table>
           <TableHead>
             <TableRow>

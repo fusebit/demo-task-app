@@ -18,25 +18,34 @@ const Marketplace = (props: {
   useEffect(() => {
     if (!props.isLoadingIntegrations && isUsingCustomColors) {
       const interval = setInterval(() => {
+        const tile = document.querySelector('.tile') as HTMLElement;
         const topContent = document.querySelector('.tile-top-content') as HTMLElement;
         const title = document.querySelector('.tile-title') as HTMLElement;
         const subtitle = document.querySelector('.tile-subtitle') as HTMLElement;
         const button = document.querySelector('.tile-button') as HTMLElement;
         const link = document.querySelector('.tile-link') as HTMLElement;
-        if (topContent && button && link && title && subtitle) {
+        if (tile && topContent && tile && button && link && title && subtitle) {
           const isDark = tinycolor(colors.primary).isDark();
           const lightTextColor = '#ffffff';
           const darkTextColor = '#333333';
 
-          topContent.style.background = tinycolor(colors.primary).setAlpha(0.4).toRgbString();
-          title.style.color = isDark ? lightTextColor : darkTextColor;
+          tile.style.boxShadow = 'none';
+          tile.style.fontFamily = 'Source Sans Pro';
+          tile.style.border = `1px solid ${tinycolor(colors.primary).setAlpha(0.8).toRgbString()}`;
+          topContent.style.background = isDark
+            ? tinycolor(colors.primary).lighten(18).setAlpha(0.2).toRgbString()
+            : tinycolor(colors.primary).setAlpha(0.4).toRgbString();
+          title.style.color = isDark ? colors.primary : darkTextColor;
+          title.style.fontWeight = '600';
           subtitle.style.color = isDark
-            ? tinycolor(lightTextColor).darken().toString()
+            ? tinycolor(colors.primary).darken(15).setAlpha(0.4).toRgbString()
             : tinycolor(darkTextColor).lighten(25).toString();
           button.style.background = colors.primary;
           button.style.color = isDark ? lightTextColor : darkTextColor;
+          button.style.fontWeight = '600';
           link.style.borderColor = colors.primary;
           link.style.color = isDark ? colors.primary : darkTextColor;
+          link.style.fontWeight = '600';
 
           clearInterval(interval);
         }
@@ -76,7 +85,7 @@ const Marketplace = (props: {
         </Box>
       </PageItem>
       <PageItem>
-        <Typography fontSize="22px" fontWeight={500} sx={{ marginBottom: '24px' }}>
+        <Typography fontSize="24px" lineHeight="32px" fontWeight={600}>
           Available Integrations
         </Typography>
       </PageItem>
@@ -86,6 +95,7 @@ const Marketplace = (props: {
           getInstallUrl={props.getInstallUrl}
           getIntegrations={() => props.userData?.list || []}
           classes={{
+            card: 'tile',
             topContent: 'tile-top-content',
             title: 'tile-title',
             subtitle: 'tile-subtitle',

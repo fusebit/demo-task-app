@@ -6,6 +6,20 @@ import { getPropertyFromIntegration, getItemName } from '../utils';
 import { useCustomColorsContext } from './useCustomColorsContext';
 import tinycolor from 'tinycolor2';
 
+const inputStyles = {
+  '& label.Mui-focused': {
+    color: '#333333',
+  },
+  '& .MuiInput-underline:after': {
+    borderBottomColor: '#333333',
+  },
+  '& .MuiOutlinedInput-root': {
+    '&.Mui-focused fieldset': {
+      borderColor: '#333333',
+    },
+  },
+};
+
 const TaskInput = (props: {
   onTaskCreated: (task: Task) => void;
   appToTest: Feed;
@@ -46,7 +60,7 @@ const TaskInput = (props: {
     <Grid container spacing={2} display="flex" alignItems="center" mb="128px">
       <Grid item xs={4}>
         <TextField
-          color="secondary"
+          sx={inputStyles}
           label={getPropertyFromIntegration(props.appToTest, 0, 'label') || 'Item Name'}
           variant="outlined"
           fullWidth
@@ -56,7 +70,7 @@ const TaskInput = (props: {
       </Grid>
       <Grid item xs={4}>
         <TextField
-          color="secondary"
+          sx={inputStyles}
           label={getPropertyFromIntegration(props.appToTest, 1, 'label') || 'Item Description'}
           variant="outlined"
           fullWidth
@@ -66,6 +80,7 @@ const TaskInput = (props: {
       </Grid>
       <Grid item xs={4} display="flex">
         <StyledTooltip
+          placeholder="top-start"
           arrow
           title={
             props.isInstalled
@@ -73,7 +88,7 @@ const TaskInput = (props: {
               : `Please install an Integration from the Integrations Marketplace first`
           }
         >
-          <Box display="inline-block">
+          <span style={{ display: 'block' }}>
             <Button
               sx={{ height: '56px', width: '188px', boxShadow: 'none', textTransform: 'none' }}
               disabled={!props.isInstalled || props.isLoading || task.name === '' || task.description === ''}
@@ -83,7 +98,7 @@ const TaskInput = (props: {
             >
               {props.isLoading ? 'Adding new' : 'Add New'} {getItemName(props.appToTest)}
             </Button>
-          </Box>
+          </span>
         </StyledTooltip>
       </Grid>
     </Grid>
