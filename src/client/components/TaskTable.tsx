@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Link as RouterLink } from 'react-router-dom';
-import { getItemName, getPropertyFromIntegration } from '../utils';
+import { getPropertyFromIntegration } from '../utils';
 import { useCustomColorsContext } from './useCustomColorsContext';
 
 const TaskTable = (props: { tasks: Task[]; appToTest: Feed; isInstalled: boolean }) => {

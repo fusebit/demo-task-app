@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import constate from 'constate';
 import tinycolor from 'tinycolor2';
+import { DISABLE_HELPERS_LOCALSTORAGE_KEY } from './StatusPaper';
 
 interface Colors {
   primary: string;
@@ -41,6 +42,9 @@ const _useCustomColorsContext = () => {
 
     if (JSON.stringify(colors) !== JSON.stringify(DEFAULT_COLORS)) {
       setIsUsingCustomColors(true);
+      localStorage.setItem(DISABLE_HELPERS_LOCALSTORAGE_KEY, 'true');
+    } else {
+      localStorage.removeItem(DISABLE_HELPERS_LOCALSTORAGE_KEY);
     }
 
     localStorage.setItem(LOCALSTORAGE_COLORS_KEY, JSON.stringify(colors));

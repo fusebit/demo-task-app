@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Paper, Box, Typography, PaperProps, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
+export const DISABLE_HELPERS_LOCALSTORAGE_KEY = 'disableHelpers';
+
 interface Props extends PaperProps {
   title: string;
   children: React.ReactNode;
@@ -10,15 +12,14 @@ interface Props extends PaperProps {
 const StatusPaper = ({ title, children, ...props }: Props) => {
   const [open, setOpen] = useState(true);
   const [disableHelpBox, setDisableHelpBox] = useState<boolean>(false);
-  const localstorageKey = `disable-${title.toLowerCase().replaceAll(' ', '-')}-help-box`;
 
   const handleClick = () => {
-    localStorage.setItem(localstorageKey, 'true');
+    localStorage.setItem(DISABLE_HELPERS_LOCALSTORAGE_KEY, 'true');
     setOpen(false);
   };
 
   useEffect(() => {
-    const isHelpBoxDisabled = localStorage.getItem(localstorageKey) === 'true';
+    const isHelpBoxDisabled = localStorage.getItem(DISABLE_HELPERS_LOCALSTORAGE_KEY) === 'true';
     setDisableHelpBox(isHelpBoxDisabled);
   }, []);
 
