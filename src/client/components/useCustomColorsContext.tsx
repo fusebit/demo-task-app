@@ -6,16 +6,12 @@ import { DISABLE_HELPERS_LOCALSTORAGE_KEY } from './StatusPaper';
 interface Colors {
   primary: string;
   secondary: string;
-  background: string;
   sidebarText: string;
-  backgroundText: string;
 }
 
 const DEFAULT_COLORS: Colors = {
   primary: '#333333',
   secondary: '#3F51B5',
-  background: '#ffffff',
-  backgroundText: '#333333',
   sidebarText: '#ffffff',
 };
 
