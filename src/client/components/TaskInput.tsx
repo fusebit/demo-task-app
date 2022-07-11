@@ -27,15 +27,17 @@ const TaskInput = (props: {
   isInstalled: boolean;
 }) => {
   const [task, setTask] = useState<Task>({ name: '', description: '' });
-  const { colors } = useCustomColorsContext();
+  const { colors, isPrimaryColorWhite } = useCustomColorsContext();
 
   const StyledTooltip = styled(({ className, ...props }: TooltipProps) => (
     <Tooltip {...props} classes={{ popper: className }} />
   ))({
     [`& .${tooltipClasses.tooltip}`]: {
       width: 200,
-      background: tinycolor(colors.primary).setAlpha(0.6).toRgbString(),
-      color: tinycolor(colors.primary).isDark() ? '#ffffff' : '#333333',
+      background: tinycolor(!isPrimaryColorWhite ? colors.primary : colors.secondary)
+        .setAlpha(0.6)
+        .toRgbString(),
+      color: tinycolor(!isPrimaryColorWhite ? colors.primary : colors.secondary).isDark() ? '#ffffff' : '#333333',
       padding: '12px',
       textAlign: 'left',
       fontWeight: 400,
@@ -43,7 +45,9 @@ const TaskInput = (props: {
       lineHeight: '16px',
     },
     [`& .${tooltipClasses.arrow}`]: {
-      color: tinycolor(colors.primary).setAlpha(0.6).toRgbString(),
+      color: tinycolor(!isPrimaryColorWhite ? colors.primary : colors.secondary)
+        .setAlpha(0.6)
+        .toRgbString(),
     },
   });
 
@@ -93,7 +97,7 @@ const TaskInput = (props: {
               sx={{ height: '56px', width: '188px', boxShadow: 'none', textTransform: 'none' }}
               disabled={!props.isInstalled || props.isLoading || task.name === '' || task.description === ''}
               variant="contained"
-              color="primary"
+              color={!isPrimaryColorWhite ? 'primary' : 'secondary'}
               onClick={handleAddTask}
             >
               {props.isLoading ? 'Adding new' : 'Add New'} {getItemName(props.appToTest)}

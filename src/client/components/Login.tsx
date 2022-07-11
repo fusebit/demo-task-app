@@ -9,7 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import tinycolor from 'tinycolor2';
 
 export default (props: { onLogin: Function }) => {
-  const { colors } = useCustomColorsContext();
+  const { colors, isPrimaryColorWhite } = useCustomColorsContext();
   const [users, setUsers] = useState<Users>({});
   const [editTenantId, setEditTenantId] = useState<string>('');
   const [newTenantName, setNewTenantName] = useState<string>('');
@@ -57,7 +57,11 @@ export default (props: { onLogin: Function }) => {
         alignItems={'center'}
         justifyContent={'center'}
         width={'50vw'}
-        sx={{ background: colors.primary }}
+        sx={{
+          background: !isPrimaryColorWhite
+            ? colors.primary
+            : `linear-gradient(${colors.primary} 40%, ${tinycolor(colors.secondary).setAlpha(0.5).toRgbString()} 100%)`,
+        }}
       >
         <Box width={'290px'} height={'20px'}>
           <DropzoneLogo />

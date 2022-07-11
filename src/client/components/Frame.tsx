@@ -31,7 +31,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
 ) => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [newTenantName, setNewTenantName] = useState('');
-  const { colors, isDark } = useCustomColorsContext();
+  const { colors, isDark, isPrimaryColorWhite } = useCustomColorsContext();
 
   if (!props.userData.currentUserId) {
     return <React.Fragment />;
@@ -44,6 +44,16 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
     }
 
     return colors.primary;
+  })();
+
+  const itemHoverColor = (() => {
+    if (!isPrimaryColorWhite) {
+      return tinycolor('#ffffff')
+        .setAlpha(isDark ? 0.1 : 0.3)
+        .toRgbString();
+    }
+
+    return tinycolor(colors.primary).darken(7).toString();
   })();
 
   const iconStyle = { color: colors.sidebarText, height: '20px', width: '20px' };
@@ -103,7 +113,9 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
           '& .MuiDrawer-paper': {
             width: 310,
             boxSizing: 'border-box',
-            borderRight: 'none',
+            borderRight: !isPrimaryColorWhite
+              ? 'none'
+              : `1px solid ${tinycolor(colors.sidebarText).setAlpha(0.1).toRgbString()}`,
           },
         }}
         variant="permanent"
@@ -202,16 +214,10 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                 >
                   <ListItemButton
                     sx={{
-                      backgroundColor:
-                        isLinkActive &&
-                        tinycolor('#ffffff')
-                          .setAlpha(isDark ? 0.1 : 0.3)
-                          .toRgbString(),
+                      backgroundColor: isLinkActive && itemHoverColor,
                       transition: 'all .2s ease-in-out',
                       ':hover': {
-                        backgroundColor: tinycolor('#ffffff')
-                          .setAlpha(isDark ? 0.1 : 0.3)
-                          .toRgbString(),
+                        backgroundColor: itemHoverColor,
                       },
                     }}
                   >
@@ -248,9 +254,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                       height: 'max-content',
                       transition: 'all .2s ease-in-out',
                       ':hover': {
-                        backgroundColor: tinycolor('#ffffff')
-                          .setAlpha(isDark ? 0.1 : 0.3)
-                          .toRgbString(),
+                        backgroundColor: itemHoverColor,
                         cursor: 'pointer',
                       },
                     }}

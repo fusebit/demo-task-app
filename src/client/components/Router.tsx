@@ -64,6 +64,7 @@ const Routes = () => {
   const [userData, setUserData] = useState<UserData>();
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { hash } = useLocation();
+  const { colors, isPrimaryColorWhite } = useCustomColorsContext();
 
   // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
   const appToTest = (userData?.list || [])[0];
@@ -115,7 +116,11 @@ const Routes = () => {
         unmountOnExit
         timeout={1000}
       >
-        <CircularProgress size="400" style={{ margin: 'auto', display: 'flex', padding: 20 }} />
+        <CircularProgress
+          color={!isPrimaryColorWhite ? 'primary' : 'secondary'}
+          size="50"
+          style={{ position: 'absolute', top: '45%', left: '50%', transform: 'translate(-50%, -50%)' }}
+        />
       </Fade>
     );
   }

@@ -25,26 +25,27 @@ const Marketplace = (props: {
         const button = document.querySelector('.tile-button') as HTMLElement;
         const link = document.querySelector('.tile-link') as HTMLElement;
         if (tile && topContent && tile && button && link && title && subtitle) {
-          const isDark = tinycolor(colors.primary).isDark();
+          const mainColor = colors.primary !== '#ffffff' ? colors.primary : colors.secondary;
+          const isDark = tinycolor(mainColor).isDark();
           const lightTextColor = '#ffffff';
           const darkTextColor = '#333333';
 
           tile.style.boxShadow = 'none';
           tile.style.fontFamily = 'Source Sans Pro';
-          tile.style.border = `1px solid ${tinycolor(colors.primary).setAlpha(0.8).toRgbString()}`;
+          tile.style.border = `1px solid ${tinycolor(mainColor).setAlpha(0.8).toRgbString()}`;
           topContent.style.background = isDark
-            ? tinycolor(colors.primary).lighten(18).setAlpha(0.2).toRgbString()
-            : tinycolor(colors.primary).setAlpha(0.4).toRgbString();
-          title.style.color = isDark ? colors.primary : darkTextColor;
+            ? tinycolor(mainColor).lighten(18).setAlpha(0.2).toRgbString()
+            : tinycolor(mainColor).setAlpha(0.4).toRgbString();
+          title.style.color = isDark ? mainColor : darkTextColor;
           title.style.fontWeight = '600';
           subtitle.style.color = isDark
-            ? tinycolor(colors.primary).darken(15).setAlpha(0.4).toRgbString()
+            ? tinycolor(mainColor).darken(15).setAlpha(0.4).toRgbString()
             : tinycolor(darkTextColor).lighten(25).toString();
-          button.style.background = colors.primary;
+          button.style.background = mainColor;
           button.style.color = isDark ? lightTextColor : darkTextColor;
           button.style.fontWeight = '600';
-          link.style.borderColor = colors.primary;
-          link.style.color = isDark ? colors.primary : darkTextColor;
+          link.style.borderColor = mainColor;
+          link.style.color = isDark ? mainColor : darkTextColor;
           link.style.fontWeight = '600';
 
           clearInterval(interval);

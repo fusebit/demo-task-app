@@ -51,7 +51,12 @@ const _useCustomColorsContext = () => {
     setColors(colors);
   }, []);
 
-  return { colors, isUsingCustomColors, isDark: tinycolor(colors.primary).isDark() };
+  return {
+    colors,
+    isUsingCustomColors,
+    isDark: tinycolor(colors.primary).isDark(),
+    isPrimaryColorWhite: colors.primary === '#ffffff',
+  };
 };
 
 const [CustomColorsProvider, useCustomColorsContext] = constate(_useCustomColorsContext);
