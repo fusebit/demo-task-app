@@ -30,9 +30,14 @@ const AppRouter = () => {
       MuiListItemButton: {
         styleOverrides: {
           root: {
-            ':hover': {
-              backgroundColor: 'rgba(255,255,255,0.2)',
-            },
+            padding: '16px 24px',
+          },
+        },
+      },
+      MuiListItem: {
+        styleOverrides: {
+          root: {
+            padding: '16px 24px',
           },
         },
       },

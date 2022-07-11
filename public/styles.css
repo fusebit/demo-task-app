@@ -77,9 +77,9 @@ body {
 }
 
 .logo {
-  height: 50px;
+  height: 32px;
   width: auto;
-  max-width: 300px;
+  max-width: 236px;
   object-fit: contain;
   cursor: pointer;
 }

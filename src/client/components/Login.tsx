@@ -1,9 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Avatar, Grid, ListItemIcon, ListItemText, Paper, Box, Typography, Input } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Avatar, Grid, ListItemIcon, ListItemText, Box, Typography, Input } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import { useCustomColorsContext } from './useCustomColorsContext';
 import DropzoneLogo from './DropzoneLogo';
-import tinycolor from 'tinycolor2';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import IconButton from '@mui/material/IconButton';
@@ -120,7 +119,7 @@ export default (props: { onLogin: Function }) => {
           >
             <ListItemIcon>
               <Avatar sx={{ bgcolor: user.color }}>
-                <PersonIcon sx={{ color: tinycolor(user.color).isDark() ? '#ffffff' : '#000000' }} />
+                <PersonIcon sx={{ color: '#ffffff' }} />
               </Avatar>
             </ListItemIcon>
             {editTenantId === user.userId ? (
