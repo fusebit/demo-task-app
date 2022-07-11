@@ -6,6 +6,7 @@ import DropzoneLogo from './DropzoneLogo';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import IconButton from '@mui/material/IconButton';
+import tinycolor from 'tinycolor2';
 
 export default (props: { onLogin: Function }) => {
   const { colors } = useCustomColorsContext();
@@ -51,15 +52,6 @@ export default (props: { onLogin: Function }) => {
 
   return (
     <Grid display="flex" minHeight={'100vh'} container>
-      {/* <Grid item xs={6} position="relative" mt="113px">
-        <StatusPaper title="Welcome to the Fusebit Sample App!" elevation={24}>
-          <Typography fontSize="16px" lineHeight="24px">
-            Fusebit provides multi-tenancy out of box, we’ve mocked out two users for you in this sample app so you can
-            see it in action. Log in to get started and don’t forget to follow along in the code in your favorite
-            editor!
-          </Typography>
-        </StatusPaper>
-      </Grid> */}
       <Grid
         display={'flex'}
         alignItems={'center'}
@@ -119,12 +111,15 @@ export default (props: { onLogin: Function }) => {
           >
             <ListItemIcon>
               <Avatar sx={{ bgcolor: user.color }}>
-                <PersonIcon sx={{ color: '#ffffff' }} />
+                <PersonIcon sx={{ color: tinycolor(user.color).isDark() ? '#ffffff' : '#000000' }} />
               </Avatar>
             </ListItemIcon>
             {editTenantId === user.userId ? (
               <>
                 <Input
+                  onBlur={() => {
+                    handleSubmitUserData(user);
+                  }}
                   onKeyDown={(e) => {
                     if (e.code === 'Enter') {
                       handleSubmitUserData(user);

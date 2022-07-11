@@ -134,7 +134,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
             >
               <ListItemIcon>
                 <Avatar sx={{ bgcolor: avatarColor }}>
-                  <PersonIcon sx={{ color: '#ffffff' }} />
+                  <PersonIcon sx={{ color: tinycolor(avatarColor).isDark() ? '#ffffff' : '#000000' }} />
                 </Avatar>
               </ListItemIcon>
               {isEditingName ? (
