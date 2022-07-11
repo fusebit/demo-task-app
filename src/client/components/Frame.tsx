@@ -31,7 +31,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
 ) => {
   const [isEditingName, setIsEditingName] = useState(false);
   const [newTenantName, setNewTenantName] = useState('');
-  const { colors } = useCustomColorsContext();
+  const { colors, isDark } = useCustomColorsContext();
 
   if (!props.userData.currentUserId) {
     return <React.Fragment />;
@@ -124,8 +124,12 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
               sx={{
                 marginBottom: '64px',
                 padding: '12px 24px',
-                background: tinycolor(colors.primary).darken(7).toString(),
-                borderTop: `1px solid ${tinycolor(colors.primary).darken(9).toString()}`,
+                background: tinycolor(colors.primary)
+                  .darken(isDark ? 4 : 7)
+                  .toString(),
+                borderTop: `1px solid ${tinycolor(colors.sidebarText)
+                  .setAlpha(isDark ? 0.2 : 0.1)
+                  .toRgbString()}`,
               }}
             >
               <ListItemIcon>
@@ -136,6 +140,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
               {isEditingName ? (
                 <>
                   <Input
+                    sx={{ color: colors.sidebarText }}
                     autoFocus
                     onBlur={() => {
                       handleSubmitUserData();
@@ -152,8 +157,9 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                     fullWidth
                   />
                   <IconButton
-                    aria-label="Edit"
-                    onClick={(e) => {
+                    color="secondary"
+                    aria-label="Accept-edit"
+                    onClick={() => {
                       handleSubmitUserData();
                     }}
                   >
@@ -168,8 +174,9 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                     {currentUser?.name}
                   </ListItemText>
                   <IconButton
+                    color="secondary"
                     aria-label="Edit"
-                    onClick={(e) => {
+                    onClick={() => {
                       setIsEditingName(true);
                     }}
                   >
@@ -181,7 +188,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
               )}
             </ListItem>
             <ListItem sx={{ marginBottom: '16px', paddingTop: 0, paddingBottom: 0 }}>
-              <Typography fontSize="14px" fontWeight="600" color="#685544">
+              <Typography fontSize="14px" fontWeight="600" color={colors.sidebarText}>
                 SAMPLE APP
               </Typography>
             </ListItem>
@@ -195,10 +202,16 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                 >
                   <ListItemButton
                     sx={{
-                      backgroundColor: isLinkActive && tinycolor('#ffffff').setAlpha(0.3).toRgbString(),
+                      backgroundColor:
+                        isLinkActive &&
+                        tinycolor('#ffffff')
+                          .setAlpha(isDark ? 0.1 : 0.3)
+                          .toRgbString(),
                       transition: 'all .2s ease-in-out',
                       ':hover': {
-                        backgroundColor: tinycolor('#ffffff').setAlpha(0.3).toRgbString(),
+                        backgroundColor: tinycolor('#ffffff')
+                          .setAlpha(isDark ? 0.1 : 0.3)
+                          .toRgbString(),
                       },
                     }}
                   >
@@ -226,7 +239,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                   <Box
                     width="100%"
                     height="1px"
-                    sx={{ background: tinycolor('#000000').setAlpha(0.1).toRgbString(), margin: '16px 0' }}
+                    sx={{ background: tinycolor(colors.sidebarText).setAlpha(0.1).toRgbString(), margin: '16px 0' }}
                   />
                   <ListItemButton
                     onClick={link.onClick}
@@ -235,7 +248,9 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                       height: 'max-content',
                       transition: 'all .2s ease-in-out',
                       ':hover': {
-                        backgroundColor: tinycolor('#ffffff').setAlpha(0.3).toRgbString(),
+                        backgroundColor: tinycolor('#ffffff')
+                          .setAlpha(isDark ? 0.1 : 0.3)
+                          .toRgbString(),
                         cursor: 'pointer',
                       },
                     }}
