@@ -95,8 +95,10 @@ const Marketplace = (props: {
       <PageItem>
         <FusebitMarketplace
           onUninstallClick={(integrationId) => {
-            const button = document.querySelector('.tile-button') as HTMLElement;
-            button.style.background = mainColor;
+            if (isUsingCustomColors) {
+              const button = document.querySelector('.tile-button') as HTMLElement;
+              button.style.background = mainColor;
+            }
             return props.onUninstall(integrationId);
           }}
           getInstallUrl={props.getInstallUrl}
