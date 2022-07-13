@@ -61,7 +61,7 @@ const TaskInput = (props: {
   };
 
   return (
-    <Grid container spacing={2} display="flex" alignItems="center" mb="128px">
+    <Grid container spacing={2} display="flex" alignItems="center" mb="32px">
       <Grid item xs={4}>
         <TextField
           sx={inputStyles}

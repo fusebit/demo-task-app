@@ -16,7 +16,6 @@ import { getPropertyFromIntegration } from '../utils';
 import { useCustomColorsContext } from './useCustomColorsContext';
 
 const TaskTable = (props: { tasks: Task[]; appToTest: Feed; isInstalled: boolean }) => {
-  const { colors } = useCustomColorsContext();
   const cellTitleStyle = { color: '#959595', fontWeight: 600, fontSize: '16px', lineHeight: '24px' };
   const cellRowStyle = { color: '#241C15', fontSize: '16px', lineHeight: '24px' };
 
