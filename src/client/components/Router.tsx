@@ -187,7 +187,12 @@ const Routes = () => {
     <Switch>
       <AuthedRouteWithProps path="/marketplace">
         <FrameWithProps>
-          <Marketplace userData={userData} onUninstall={handleUninstall} getInstallUrl={getInstallUrl} />
+          <Marketplace
+            userData={userData}
+            isInstalled={isInstalled}
+            onUninstall={handleUninstall}
+            getInstallUrl={getInstallUrl}
+          />
         </FrameWithProps>
       </AuthedRouteWithProps>
       <AuthedRouteWithProps path="/">

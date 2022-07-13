@@ -12,8 +12,10 @@ const Marketplace = (props: {
   onUninstall: (integrationId: string) => Promise<void>;
   getInstallUrl: (integrationId: string) => Promise<string>;
   isLoadingIntegrations?: boolean;
+  isInstalled?: boolean;
 }) => {
   const { colors, isUsingCustomColors } = useCustomColorsContext();
+  const mainColor = colors.primary !== '#ffffff' ? colors.primary : colors.secondary;
 
   useEffect(() => {
     if (!props.isLoadingIntegrations && isUsingCustomColors) {
@@ -25,7 +27,6 @@ const Marketplace = (props: {
         const button = document.querySelector('.tile-button') as HTMLElement;
         const link = document.querySelector('.tile-link') as HTMLElement;
         if (tile && topContent && tile && button && link && title && subtitle) {
-          const mainColor = colors.primary !== '#ffffff' ? colors.primary : colors.secondary;
           const isDark = tinycolor(mainColor).isDark();
           const lightTextColor = '#ffffff';
           const darkTextColor = '#333333';
@@ -41,7 +42,8 @@ const Marketplace = (props: {
           subtitle.style.color = isDark
             ? tinycolor(mainColor).darken(15).setAlpha(0.4).toRgbString()
             : tinycolor(darkTextColor).lighten(25).toString();
-          button.style.background = mainColor;
+          console.log(button);
+          button.style.background = !props.isInstalled && mainColor;
           button.style.color = isDark ? lightTextColor : darkTextColor;
           button.style.fontWeight = '600';
           link.style.borderColor = mainColor;
@@ -92,7 +94,11 @@ const Marketplace = (props: {
       </PageItem>
       <PageItem>
         <FusebitMarketplace
-          onUninstallClick={props.onUninstall}
+          onUninstallClick={(integrationId) => {
+            const button = document.querySelector('.tile-button') as HTMLElement;
+            button.style.background = mainColor;
+            return props.onUninstall(integrationId);
+          }}
           getInstallUrl={props.getInstallUrl}
           getIntegrations={() => props.userData?.list || []}
           classes={{
