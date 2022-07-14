@@ -13,7 +13,6 @@ import {
 import WarningIcon from '@mui/icons-material/Warning';
 import { Link as RouterLink } from 'react-router-dom';
 import { getPropertyFromIntegration } from '../utils';
-import { useCustomColorsContext } from './useCustomColorsContext';
 
 const TaskTable = (props: { tasks: Task[]; appToTest: Feed; isInstalled: boolean }) => {
   const cellTitleStyle = { color: '#959595', fontWeight: 600, fontSize: '16px', lineHeight: '24px' };
@@ -21,11 +20,13 @@ const TaskTable = (props: { tasks: Task[]; appToTest: Feed; isInstalled: boolean
 
   return (
     <>
-      <TableContainer component={Paper} sx={{ width: 805, boxShadow: 'none' }}>
+      <TableContainer component={Paper} sx={{ width: 808, boxShadow: 'none' }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={cellTitleStyle}>{getPropertyFromIntegration(props.appToTest, 0, 'label')}</TableCell>
+              <TableCell sx={{ ...cellTitleStyle, width: '281px' }}>
+                {getPropertyFromIntegration(props.appToTest, 0, 'label')}
+              </TableCell>
               <TableCell sx={cellTitleStyle} align="left">
                 {getPropertyFromIntegration(props.appToTest, 1, 'label')}
               </TableCell>

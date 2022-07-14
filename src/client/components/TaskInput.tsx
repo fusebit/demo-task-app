@@ -7,6 +7,7 @@ import { useCustomColorsContext } from './useCustomColorsContext';
 import tinycolor from 'tinycolor2';
 
 const inputStyles = {
+  width: '294px',
   '& label.Mui-focused': {
     color: '#333333',
   },
@@ -62,7 +63,7 @@ const TaskInput = (props: {
 
   return (
     <Grid container spacing={2} display="flex" alignItems="center" mb="32px">
-      <Grid item xs={4}>
+      <Grid item>
         <TextField
           sx={inputStyles}
           label={getPropertyFromIntegration(props.appToTest, 0, 'label') || 'Item Name'}
@@ -72,7 +73,7 @@ const TaskInput = (props: {
           value={task.name}
         />
       </Grid>
-      <Grid item xs={4}>
+      <Grid item>
         <TextField
           sx={inputStyles}
           label={getPropertyFromIntegration(props.appToTest, 1, 'label') || 'Item Description'}
@@ -82,7 +83,7 @@ const TaskInput = (props: {
           value={task.description}
         />
       </Grid>
-      <Grid item xs={4} display="flex">
+      <Grid item display="flex">
         <StyledTooltip
           placeholder="top-start"
           arrow
