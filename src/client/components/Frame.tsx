@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   Avatar,
-  Divider,
   List,
   ListItem,
   ListItemButton,
