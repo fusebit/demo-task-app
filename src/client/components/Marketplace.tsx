@@ -7,6 +7,9 @@ import { Marketplace as FusebitMarketplace } from '@fusebit/react-marketplace';
 import { useCustomColorsContext } from './useCustomColorsContext';
 import tinycolor from 'tinycolor2';
 
+const LIGHT_TEXT_COLOR = '#ffffff';
+const DARK_TEXT_COLOR = '#333333';
+
 const Marketplace = (props: {
   userData: UserData;
   onUninstall: (integrationId: string) => Promise<void>;
@@ -16,6 +19,7 @@ const Marketplace = (props: {
 }) => {
   const { colors, isUsingCustomColors } = useCustomColorsContext();
   const mainColor = colors.primary !== '#ffffff' ? colors.primary : colors.secondary;
+  const isDark = tinycolor(mainColor).isDark();
 
   useEffect(() => {
     if (!props.isLoadingIntegrations && isUsingCustomColors) {
@@ -27,28 +31,25 @@ const Marketplace = (props: {
         const button = document.querySelector('.tile-button') as HTMLElement;
         const link = document.querySelector('.tile-link') as HTMLElement;
         if (tile && topContent && tile && button && link && title && subtitle) {
-          const isDark = tinycolor(mainColor).isDark();
-          const lightTextColor = '#ffffff';
-          const darkTextColor = '#333333';
-
           tile.style.boxShadow = 'none';
           tile.style.fontFamily = 'Source Sans Pro';
           tile.style.border = `1px solid ${tinycolor(mainColor).setAlpha(0.8).toRgbString()}`;
           topContent.style.background = isDark
             ? tinycolor(mainColor).lighten(18).setAlpha(0.2).toRgbString()
             : tinycolor(mainColor).setAlpha(0.4).toRgbString();
-          title.style.color = isDark ? mainColor : darkTextColor;
+          title.style.color = isDark ? mainColor : DARK_TEXT_COLOR;
           title.style.fontWeight = '600';
           subtitle.style.color = isDark
             ? tinycolor(mainColor).darken(15).setAlpha(0.4).toRgbString()
-            : tinycolor(darkTextColor).lighten(25).toString();
-          console.log(button);
-          button.style.background = !props.isInstalled && mainColor;
-          button.style.color = isDark ? lightTextColor : darkTextColor;
+            : tinycolor(DARK_TEXT_COLOR).lighten(25).toString();
           button.style.fontWeight = '600';
           link.style.borderColor = mainColor;
-          link.style.color = isDark ? mainColor : darkTextColor;
+          link.style.color = isDark ? mainColor : DARK_TEXT_COLOR;
           link.style.fontWeight = '600';
+          if (!props.isInstalled) {
+            button.style.background = mainColor;
+            button.style.color = isDark ? LIGHT_TEXT_COLOR : DARK_TEXT_COLOR;
+          }
 
           clearInterval(interval);
         }
@@ -98,6 +99,7 @@ const Marketplace = (props: {
             if (isUsingCustomColors) {
               const button = document.querySelector('.tile-button') as HTMLElement;
               button.style.background = mainColor;
+              button.style.color = isDark ? LIGHT_TEXT_COLOR : DARK_TEXT_COLOR;
             }
             return props.onUninstall(integrationId);
           }}
