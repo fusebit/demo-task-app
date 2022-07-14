@@ -83,3 +83,20 @@ body {
   object-fit: contain;
   cursor: pointer;
 }
+
+.tile {
+  box-shadow: none;
+  font-family: 'Source Sans Pro';
+}
+
+.tile-title {
+  font-weight: 600;
+}
+
+.tile-button {
+  font-weight: 600;
+}
+
+.tile-link {
+  font-weight: 600;
+}

@@ -225,7 +225,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
           <Box display="flex" flexDirection="column" marginTop="auto">
             {sidebarLinks.map((link) => {
               return (
-                <>
+                <div key={link.id}>
                   <Box
                     width="100%"
                     height="1px"
@@ -233,7 +233,6 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                   />
                   <ListItemButton
                     onClick={link.onClick}
-                    key={link.id}
                     sx={{
                       height: 'max-content',
                       transition: 'all .2s ease-in-out',
@@ -256,7 +255,7 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                       {link.text}
                     </ListItemText>
                   </ListItemButton>
-                </>
+                </div>
               );
             })}
           </Box>

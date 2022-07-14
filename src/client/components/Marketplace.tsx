@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Page from './Page';
 import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
 import { Typography, Box } from '@mui/material';
 import { Marketplace as FusebitMarketplace } from '@fusebit/react-marketplace';
 import { useCustomColorsContext } from './useCustomColorsContext';
-import tinycolor from 'tinycolor2';
-
-const LIGHT_TEXT_COLOR = '#ffffff';
-const DARK_TEXT_COLOR = '#333333';
+import { DARK_TEXT_COLOR, LIGHT_TEXT_COLOR, TILE_CLASSES } from '../utils';
+import useTileContrastColor from './useTileContrastColor';
 
 const Marketplace = (props: {
   userData: UserData;
@@ -17,45 +15,11 @@ const Marketplace = (props: {
   isLoadingIntegrations?: boolean;
   isInstalled?: boolean;
 }) => {
-  const { colors, isUsingCustomColors } = useCustomColorsContext();
-  const mainColor = colors.primary !== '#ffffff' ? colors.primary : colors.secondary;
-  const isDark = tinycolor(mainColor).isDark();
-
-  useEffect(() => {
-    if (!props.isLoadingIntegrations && isUsingCustomColors) {
-      const interval = setInterval(() => {
-        const tile = document.querySelector('.tile') as HTMLElement;
-        const topContent = document.querySelector('.tile-top-content') as HTMLElement;
-        const title = document.querySelector('.tile-title') as HTMLElement;
-        const subtitle = document.querySelector('.tile-subtitle') as HTMLElement;
-        const button = document.querySelector('.tile-button') as HTMLElement;
-        const link = document.querySelector('.tile-link') as HTMLElement;
-        if (tile && topContent && tile && button && link && title && subtitle) {
-          tile.style.boxShadow = 'none';
-          tile.style.fontFamily = 'Source Sans Pro';
-          tile.style.border = `1px solid ${tinycolor(mainColor).setAlpha(0.8).toRgbString()}`;
-          topContent.style.background = isDark
-            ? tinycolor(mainColor).lighten(18).setAlpha(0.2).toRgbString()
-            : tinycolor(mainColor).setAlpha(0.4).toRgbString();
-          title.style.color = isDark ? mainColor : DARK_TEXT_COLOR;
-          title.style.fontWeight = '600';
-          subtitle.style.color = isDark
-            ? tinycolor(mainColor).darken(15).setAlpha(0.4).toRgbString()
-            : tinycolor(DARK_TEXT_COLOR).lighten(25).toString();
-          button.style.fontWeight = '600';
-          link.style.borderColor = mainColor;
-          link.style.color = isDark ? mainColor : DARK_TEXT_COLOR;
-          link.style.fontWeight = '600';
-          if (!props.isInstalled) {
-            button.style.background = mainColor;
-            button.style.color = isDark ? LIGHT_TEXT_COLOR : DARK_TEXT_COLOR;
-          }
-
-          clearInterval(interval);
-        }
-      }, 50);
-    }
-  }, [colors, isUsingCustomColors, props.isLoadingIntegrations]);
+  const { isUsingCustomColors } = useCustomColorsContext();
+  const { isDark, mainColor } = useTileContrastColor({
+    isInstalled: props.isInstalled,
+    isLoadingIntegrations: props.isLoadingIntegrations,
+  });
 
   return (
     <Page>
@@ -97,7 +61,7 @@ const Marketplace = (props: {
         <FusebitMarketplace
           onUninstallClick={(integrationId) => {
             if (isUsingCustomColors) {
-              const button = document.querySelector('.tile-button') as HTMLElement;
+              const button = document.querySelector(`.${TILE_CLASSES.button}`) as HTMLElement;
               button.style.background = mainColor;
               button.style.color = isDark ? LIGHT_TEXT_COLOR : DARK_TEXT_COLOR;
             }
@@ -105,14 +69,7 @@ const Marketplace = (props: {
           }}
           getInstallUrl={props.getInstallUrl}
           getIntegrations={() => props.userData?.list || []}
-          classes={{
-            card: 'tile',
-            topContent: 'tile-top-content',
-            title: 'tile-title',
-            subtitle: 'tile-subtitle',
-            button: 'tile-button',
-            link: 'tile-link',
-          }}
+          classes={TILE_CLASSES}
           isDemo
         />
       </PageItem>
