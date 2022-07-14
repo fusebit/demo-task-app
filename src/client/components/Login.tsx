@@ -121,6 +121,7 @@ export default (props: { onLogin: Function }) => {
             {editTenantId === user.userId ? (
               <>
                 <Input
+                  autoFocus
                   onBlur={() => {
                     handleSubmitUserData(user);
                   }}
@@ -158,6 +159,7 @@ export default (props: { onLogin: Function }) => {
                   onClick={(e) => {
                     e.stopPropagation();
                     setEditTenantId(user.userId);
+                    setNewTenantName(user.name);
                   }}
                 >
                   <ListItemIcon sx={{ minWidth: 'auto' }}>
