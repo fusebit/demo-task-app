@@ -25,36 +25,20 @@ import { getItemName } from '../utils';
 import { useCustomColorsContext } from './useCustomColorsContext';
 import tinycolor from 'tinycolor2';
 import DropzoneLogo from './DropzoneLogo';
+import useFrameColors from './useFrameColors';
 
 const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Feed; children?: any } & RouteProps> = (
   props
 ) => {
+  const currentUser = props.userData.users[props.userData.currentUserId];
   const [isEditingName, setIsEditingName] = useState(false);
   const [newTenantName, setNewTenantName] = useState('');
   const { colors, isDark, isPrimaryColorWhite } = useCustomColorsContext();
+  const { avatarColor, itemHoverColor } = useFrameColors({ userId: currentUser.userId });
 
   if (!props.userData.currentUserId) {
     return <React.Fragment />;
   }
-  const currentUser = props.userData.users[props.userData.currentUserId];
-
-  const avatarColor = (() => {
-    if (currentUser.userId === 'Sample-App-Tenant-2') {
-      return colors.secondary;
-    }
-
-    return colors.primary;
-  })();
-
-  const itemHoverColor = (() => {
-    if (!isPrimaryColorWhite) {
-      return tinycolor('#ffffff')
-        .setAlpha(isDark ? 0.1 : 0.3)
-        .toRgbString();
-    }
-
-    return tinycolor(colors.primary).darken(7).toString();
-  })();
 
   const iconStyle = { color: colors.sidebarText, height: '20px', width: '20px' };
 
