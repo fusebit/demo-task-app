@@ -37,6 +37,10 @@ To change the logo, drag and drop your logo on the box that says `Drag your logo
 
 If you want to change the logo again after you have set it, either drag and drop your new logo on the old logo and you'll see that the logo will dissapear and the drop box that says `Drag your logo here` will render again, or click on the logo and a prompt to select a new logo will show up.
 
+We recommend using [this extension](https://chrome.google.com/webstore/detail/svg-export/naeaaedieihlkmdajjefioajbbdbdjgp/related) to download the SVG's icon's from the websites you wish to make the sample app look like
+
+To use this extension, simply download it, and click on the extension icon when you are in the webiste you want to get the SVG from. A new window will pop showing you all of the SVG's of the website, and you'll be able to download the ones you want to use.
+
 All of the customization preferences will be saved in localstorage.
 
 To open localstorage in Chrome, press F12 or right click on the website, click inspect, and go to the Application tab. Then, on the left you will see a section titled Storage, below that title it will say Local Storage. Press the arrow on the left of Local Storage to expand it, and then right click on the website url to see all of the keys.

@@ -76,7 +76,7 @@ export default (props: { onLogin: Function }) => {
         position="relative"
       >
         <Typography fontWeight="700" mb="76px" fontSize="48px" lineHeight="56px" variant="h1" component="h1">
-          Welcome!
+          Choose an Account to Get Started
         </Typography>
         {Object.values(users).map((user, index) => (
           <Box
