@@ -13,8 +13,8 @@ body {
 }
 
 .container-buffer {
-  padding: 20px;
-  row-gap: 20px;
+  padding: 0 20px;
+  row-gap: 32px;
 }
 
 .integration-media {
@@ -57,9 +57,46 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
   width: 100%;
   border: 1px dotted #ffffff;
   border-radius: 8px;
   padding: 32px 0;
   margin-bottom: 20px;
+  transition: all .25s ease-in-out;
+}
+
+.drawer-logo-container:hover {
+  cursor: pointer;
+  background: rgba(0,0,0,0.05);
+}
+
+.drawer-logo-container-dragging {
+  cursor: pointer;
+  background: rgba(0,0,0,0.05);
+}
+
+.logo {
+  height: 32px;
+  width: auto;
+  max-width: 236px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.tile {
+  box-shadow: none;
+  font-family: 'Source Sans Pro';
+}
+
+.tile-title {
+  font-weight: 600;
+}
+
+.tile-button {
+  font-weight: 600;
+}
+
+.tile-link {
+  font-weight: 600;
 }

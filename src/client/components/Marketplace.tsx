@@ -4,13 +4,23 @@ import PageItem from './PageItem';
 import StatusPaper from './StatusPaper';
 import { Typography, Box } from '@mui/material';
 import { Marketplace as FusebitMarketplace } from '@fusebit/react-marketplace';
+import { useCustomColorsContext } from './useCustomColorsContext';
+import { DARK_TEXT_COLOR, LIGHT_TEXT_COLOR, TILE_CLASSES } from '../utils';
+import useTileContrastColor from './useTileContrastColor';
 
 const Marketplace = (props: {
   userData: UserData;
   onUninstall: (integrationId: string) => Promise<void>;
   getInstallUrl: (integrationId: string) => Promise<string>;
   isLoadingIntegrations?: boolean;
+  isInstalled?: boolean;
 }) => {
+  const { isUsingCustomColors } = useCustomColorsContext();
+  const { isDark, mainColor } = useTileContrastColor({
+    isInstalled: props.isInstalled,
+    isLoadingIntegrations: props.isLoadingIntegrations,
+  });
+
   return (
     <Page>
       <PageItem>
@@ -43,15 +53,23 @@ const Marketplace = (props: {
         </Box>
       </PageItem>
       <PageItem>
-        <Typography fontSize="22px" fontWeight={500} sx={{ marginBottom: '24px' }}>
+        <Typography fontSize="24px" lineHeight="32px" fontWeight={600}>
           Available Integrations
         </Typography>
       </PageItem>
       <PageItem>
         <FusebitMarketplace
-          onUninstallClick={props.onUninstall}
+          onUninstallClick={(integrationId) => {
+            if (isUsingCustomColors) {
+              const button = document.querySelector(`.${TILE_CLASSES.button}`) as HTMLElement;
+              button.style.background = mainColor;
+              button.style.color = isDark ? LIGHT_TEXT_COLOR : DARK_TEXT_COLOR;
+            }
+            return props.onUninstall(integrationId);
+          }}
           getInstallUrl={props.getInstallUrl}
           getIntegrations={() => props.userData?.list || []}
+          classes={TILE_CLASSES}
           isDemo
         />
       </PageItem>

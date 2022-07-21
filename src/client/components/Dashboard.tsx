@@ -160,7 +160,7 @@ export default (props: { userData: UserData; appToTest: Feed; isInstalled: boole
         </Box>
       </PageItem>
       <PageItem>
-        <Typography fontSize="22px" fontWeight={500} sx={{ marginBottom: '32px' }}>
+        <Typography fontSize="24px" fontWeight={600}>
           Your {getItemName(props.appToTest, true)}
         </Typography>
       </PageItem>

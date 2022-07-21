@@ -4,25 +4,67 @@ import Login from './Login';
 import React, { useEffect, useState } from 'react';
 import Frame from './Frame';
 import Marketplace from './Marketplace';
-import { CircularProgress, Fade } from '@mui/material';
+import { CircularProgress, createTheme, Fade, ThemeProvider } from '@mui/material';
+import { useCustomColorsContext } from './useCustomColorsContext';
 
-const AppRouter = () => (
-  <Router>
-    <Routes />
-  </Router>
-);
+const AppRouter = () => {
+  const { colors } = useCustomColorsContext();
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: colors.primary,
+      },
+      secondary: {
+        main: colors.secondary,
+      },
+    },
+    typography: {
+      fontFamily: `"Source Sans Pro", "Roboto", "Helvetica", "Arial", sans-serif`,
+      fontWeightLight: 300,
+      fontWeightRegular: 400,
+      fontWeightMedium: 600,
+      fontWeightBold: 700,
+    },
+    components: {
+      MuiListItemButton: {
+        styleOverrides: {
+          root: {
+            padding: '16px 24px',
+          },
+        },
+      },
+      MuiListItem: {
+        styleOverrides: {
+          root: {
+            padding: '16px 24px',
+          },
+        },
+      },
+    },
+  });
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Routes />
+      </Router>
+    </ThemeProvider>
+  );
+};
 
 const AuthedRoute = (props: { onLogin: Function; userData: UserData } & RouteProps) => {
   if (props.userData?.currentUserId) {
     return <Route {...props} />;
   }
-  return <Login onLogin={props.onLogin} userData={props.userData} />;
+  return <Login onLogin={props.onLogin} />;
 };
 
 const Routes = () => {
   const [userData, setUserData] = useState<UserData>();
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const { hash } = useLocation();
+  const { colors, isPrimaryColorWhite } = useCustomColorsContext();
 
   // TODO: For now, this sample app only supports one integration at a time.  This will be updated in the future to support multiple integrations.
   const appToTest = (userData?.list || [])[0];
@@ -74,7 +116,11 @@ const Routes = () => {
         unmountOnExit
         timeout={1000}
       >
-        <CircularProgress size="400" style={{ margin: 'auto', display: 'flex', padding: 20 }} />
+        <CircularProgress
+          color={!isPrimaryColorWhite ? 'primary' : 'secondary'}
+          size="50"
+          style={{ position: 'absolute', top: '45%', left: '50%', transform: 'translate(-50%, -50%)' }}
+        />
       </Fade>
     );
   }
@@ -89,7 +135,9 @@ const Routes = () => {
       },
       credentials: 'include',
     });
-    await getMe().then((userData) => setUserData(userData));
+    await getMe().then((userData) => {
+      setUserData(userData);
+    });
   };
 
   const handleLogout = async () => {
@@ -139,7 +187,12 @@ const Routes = () => {
     <Switch>
       <AuthedRouteWithProps path="/marketplace">
         <FrameWithProps>
-          <Marketplace userData={userData} onUninstall={handleUninstall} getInstallUrl={getInstallUrl} />
+          <Marketplace
+            userData={userData}
+            isInstalled={isInstalled}
+            onUninstall={handleUninstall}
+            getInstallUrl={getInstallUrl}
+          />
         </FrameWithProps>
       </AuthedRouteWithProps>
       <AuthedRouteWithProps path="/">

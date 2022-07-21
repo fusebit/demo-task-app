@@ -1,73 +1,175 @@
-import React from 'react';
-import StatusPaper from './StatusPaper';
-import { Avatar, Grid, List, ListItem, ListItemIcon, ListItemText, Paper, Box, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Avatar, Grid, ListItemIcon, ListItemText, Box, Typography, Input } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
+import { useCustomColorsContext } from './useCustomColorsContext';
+import DropzoneLogo from './DropzoneLogo';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
+import IconButton from '@mui/material/IconButton';
+import tinycolor from 'tinycolor2';
 
-export default (props: { onLogin: Function; userData: UserData }) => {
-  const handleLogin = (user: User) => async () => {
-    props.onLogin({
-      users,
-      currentUserId: user.userId,
-    });
-  };
+export default (props: { onLogin: Function }) => {
+  const { colors, isPrimaryColorWhite } = useCustomColorsContext();
+  const [users, setUsers] = useState<Users>({});
+  const [editTenantId, setEditTenantId] = useState<string>('');
+  const [newTenantName, setNewTenantName] = useState<string>('');
 
-  const users: Users = props.userData?.users || {
+  const DEFAULT_USERS: Users = {
     'Sample-App-Tenant-1': {
       userId: 'Sample-App-Tenant-1',
       name: 'Tenant 1',
-      color: '#BBDEFB',
+      color: colors.primary,
       index: 0,
     },
     'Sample-App-Tenant-2': {
       userId: 'Sample-App-Tenant-2',
       name: 'Tenant 2',
-      color: '#FFA600',
+      color: colors.secondary,
       index: 1,
     },
   };
 
+  const handleSubmitUserData = (user: User) => {
+    if (!newTenantName) {
+      return;
+    }
+
+    users[user.userId].name = newTenantName;
+    localStorage.setItem('users', JSON.stringify(users));
+    setEditTenantId('');
+  };
+
+  useEffect(() => {
+    const storedUsers = JSON.parse(localStorage.getItem('users'));
+    if (storedUsers) {
+      storedUsers['Sample-App-Tenant-1'].color = colors.primary;
+      storedUsers['Sample-App-Tenant-2'].color = colors.secondary;
+      setUsers(storedUsers);
+    } else {
+      setUsers(DEFAULT_USERS);
+    }
+  }, []);
+
   return (
-    <Grid display="flex" flexDirection="column" container alignItems="center" justifyContent="center">
-      <Box position="absolute" left="0" top="0" width="100vw" height="204px" style={{ backgroundColor: '#333333' }} />
-      <Grid item xs={6} position="relative" mt="113px">
-        <StatusPaper title="Welcome to the Fusebit Sample App!" elevation={24}>
-          <Typography fontSize="16px" lineHeight="24px">
-            Fusebit provides multi-tenancy out of box, we’ve mocked out two users for you in this sample app so you can
-            see it in action. Log in to get started and don’t forget to follow along in the code in your favorite
-            editor!
-          </Typography>
-        </StatusPaper>
+    <Grid display="flex" minHeight={'100vh'} container>
+      <Grid
+        display={'flex'}
+        alignItems={'center'}
+        justifyContent={'center'}
+        width={'50vw'}
+        sx={{
+          background: !isPrimaryColorWhite
+            ? colors.primary
+            : `linear-gradient(${colors.primary} 40%, ${tinycolor(colors.secondary).setAlpha(0.5).toRgbString()} 100%)`,
+        }}
+      >
+        <Box width={'290px'} height={'20px'}>
+          <DropzoneLogo />
+        </Box>
       </Grid>
-      <Grid minWidth="268px" position="relative" mt="104px">
-        <Paper elevation={24}>
-          <Box padding="21px 0px 13px">
-            <Typography
-              fontWeight="500"
-              mb="20px"
-              ml="15px"
-              fontSize="20px"
-              lineHeight="24px"
-              variant="h3"
-              component="h3"
-            >
-              Welcome user!
-            </Typography>
-            <List>
-              {Object.values(users).map((user, index) => (
-                <ListItem disablePadding button onClick={handleLogin(user)} key={index}>
-                  <Box display="flex" alignItems="center" padding="8px 0px" ml="15px">
-                    <ListItemIcon>
-                      <Avatar sx={{ bgcolor: user.color }}>
-                        <PersonIcon sx={{ color: '#1F2937' }} />
-                      </Avatar>
-                    </ListItemIcon>
-                    <ListItemText>{user.name}</ListItemText>
-                  </Box>
-                </ListItem>
-              ))}
-            </List>
+      <Grid
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        width="50vw"
+        position="relative"
+      >
+        <Typography fontWeight="700" mb="76px" fontSize="32px" lineHeight="56px" variant="h1" component="h1">
+          Choose an Account
+        </Typography>
+        {Object.values(users).map((user, index) => (
+          <Box
+            onClick={() => {
+              if (editTenantId === user.userId) {
+                return;
+              }
+
+              props.onLogin({
+                users,
+                currentUserId: user.userId,
+              });
+            }}
+            key={index}
+            display="flex"
+            alignItems="center"
+            padding="24px"
+            width="394px"
+            boxShadow="0px 20px 48px rgba(52, 72, 123, 0.1)"
+            mb="32px"
+            borderRadius="8px"
+            sx={{
+              position: 'relative',
+              zIndex: 1000000,
+              transition: 'all .2s ease-in-out',
+              ':hover': {
+                cursor: 'pointer',
+                boxShadow: '0px 20px 48px rgba(52, 72, 123, 0.3)',
+                transform: 'translateY(-5px)',
+              },
+              ':active': {
+                transform: 'translateY(-2px)',
+                boxShadow: '0px 20px 48px rgba(52, 72, 123, 0.1)',
+              },
+            }}
+          >
+            <ListItemIcon>
+              <Avatar sx={{ bgcolor: user.color }}>
+                <PersonIcon sx={{ color: tinycolor(user.color).isDark() ? '#ffffff' : '#000000' }} />
+              </Avatar>
+            </ListItemIcon>
+            {editTenantId === user.userId ? (
+              <>
+                <Input
+                  autoFocus
+                  onBlur={() => {
+                    handleSubmitUserData(user);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.code === 'Enter') {
+                      handleSubmitUserData(user);
+                    }
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  onChange={(e) => {
+                    setNewTenantName(e.target.value);
+                  }}
+                  defaultValue={user.name}
+                  fullWidth
+                />
+                <IconButton
+                  aria-label="Edit"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSubmitUserData(user);
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 'auto' }}>
+                    <DoneOutlinedIcon sx={{ color: '#000000' }} />
+                  </ListItemIcon>
+                </IconButton>
+              </>
+            ) : (
+              <>
+                <ListItemText>{user.name}</ListItemText>
+                <IconButton
+                  aria-label="Edit"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setEditTenantId(user.userId);
+                    setNewTenantName(user.name);
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 'auto' }}>
+                    <EditOutlinedIcon sx={{ color: '#000000' }} />
+                  </ListItemIcon>
+                </IconButton>
+              </>
+            )}
           </Box>
-        </Paper>
+        ))}
       </Grid>
     </Grid>
   );

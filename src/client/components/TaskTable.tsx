@@ -12,19 +12,22 @@ import {
 } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { Link as RouterLink } from 'react-router-dom';
-import { getItemName, getPropertyFromIntegration } from '../utils';
+import { getPropertyFromIntegration } from '../utils';
 
 const TaskTable = (props: { tasks: Task[]; appToTest: Feed; isInstalled: boolean }) => {
-  const cellStyle = { color: props.isInstalled ? '#3F51B5' : '#959595', fontWeight: 400 };
+  const cellTitleStyle = { color: '#959595', fontWeight: 600, fontSize: '16px', lineHeight: '24px' };
+  const cellRowStyle = { color: '#241C15', fontSize: '16px', lineHeight: '24px' };
 
   return (
     <>
-      <TableContainer component={Paper} sx={{ width: 908 }}>
+      <TableContainer component={Paper} sx={{ width: 808, boxShadow: 'none' }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={cellStyle}>{getPropertyFromIntegration(props.appToTest, 0, 'label')}</TableCell>
-              <TableCell sx={cellStyle} align="left">
+              <TableCell sx={{ ...cellTitleStyle, width: '281px' }}>
+                {getPropertyFromIntegration(props.appToTest, 0, 'label')}
+              </TableCell>
+              <TableCell sx={cellTitleStyle} align="left">
                 {getPropertyFromIntegration(props.appToTest, 1, 'label')}
               </TableCell>
             </TableRow>
@@ -32,10 +35,10 @@ const TaskTable = (props: { tasks: Task[]; appToTest: Feed; isInstalled: boolean
           <TableBody>
             {props.tasks.map((task) => (
               <TableRow key={task.index}>
-                <TableCell component="th" scope="row">
+                <TableCell sx={cellRowStyle} component="th" scope="row">
                   {task[getPropertyFromIntegration(props.appToTest, 0, 'name') as keyof typeof task]}
                 </TableCell>
-                <TableCell align="left">
+                <TableCell sx={cellRowStyle} align="left">
                   {task[getPropertyFromIntegration(props.appToTest, 1, 'name') as keyof typeof task]}
                 </TableCell>
               </TableRow>
