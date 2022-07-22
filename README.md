@@ -19,19 +19,21 @@ Please explore this codebase to understand how the different pieces work under t
 
 ## 🎨 Customization
 
-To change the primary color of the sample app, use the `primary` query param followed by a hex color without the #, for example: https://task-sample-app.on.fusebit.io/?primary=333333
+If you wanted to use this sample app to do a quick demo, then we offer limited customization capabilities to help with this. You are able to change the color theme and upload your own custom logo as well. 
 
-To change the secondary color of the sample app, use the `secondary` query param followed by a hex color without the #, for example: https://task-sample-app.on.fusebit.io/?secondary=3F51B5
+### Color Theme
 
-If you want to change both of them at the same time, you can do it like so: https://task-sample-app.on.fusebit.io/?primary=333333&secondary=3F51B5
+The default primary color is #333333, and the default secondary color is #3F51B5. The primary color will be reflected almost everywhere on the sample app, unless that color is set to #ffffff.
 
-The default primary color is #333333, and the default secondary color is #3F51B5.
+* To change the primary color of the sample app, use the `primary` query param followed by a hex color without the #, for example: https://task-sample-app.on.fusebit.io/?primary=333333
 
-The primary color will be reflected almost everywhere on the sample app, unless that color is set to #ffffff.
+* To change the secondary color of the sample app, use the `secondary` query param followed by a hex color without the #, for example: https://task-sample-app.on.fusebit.io/?secondary=3F51B5
 
-In case the primary color is #ffffff (white), we will use the secondary color on the buttons, the marketplace tiles and on the login page instead of the primary color to prevent the primary color to intervene with the sample app background color.
+* If you want to change both of them at the same time, you can do it like so: https://task-sample-app.on.fusebit.io/?primary=333333&secondary=3F51B5
 
-If the primary color is different to white, the secondary color will only be used to change the secondary user avatar color and as a detail color on some hover or focus states.
+In case the primary color is #ffffff (white), we will use the secondary color on the buttons, the marketplace tiles and on the login page instead of the primary color to prevent the primary color to intervene with the sample app background color. If the primary color is different to white, the secondary color will only be used to change the secondary user avatar color and as a detail color on some hover or focus states.
+
+### Logo
 
 To change the logo, drag and drop your logo on the box that says `Drag your logo here` or click on the box and select the logo you desire to set.
 
@@ -41,13 +43,13 @@ We recommend using [this extension](https://chrome.google.com/webstore/detail/sv
 
 To use this extension, simply download it, and click on the extension icon when you are in the webiste you want to get the SVG from. A new window will pop showing you all of the SVG's of the website, and you'll be able to download the ones you want to use.
 
+### Resetting Customization
+
 All of the customization preferences will be saved in localstorage.
 
-To open localstorage in Chrome, press F12 or right click on the website, click inspect, and go to the Application tab. Then, on the left you will see a section titled Storage, below that title it will say Local Storage. Press the arrow on the left of Local Storage to expand it, and then right click on the website url to see all of the keys.
+* The colors will be saved under the `colors` key. If you want to set the colors back to the default value, right click on the `colors` key and then click on `delete`.
 
-The colors will be saved under the `colors` key. If you want to set the colors back to the default value, right click on the `colors` key and then click on `delete`.
-
-The logo will be saved under the `logo` key. If you want to remove the logo, right click on the `logo` key and then click on `delete`.
+* The logo will be saved under the `logo` key. If you want to remove the logo, right click on the `logo` key and then click on `delete`.
 
 The helpers will be disabled by default if the colors are customized. You will see them under the `disableHelpers` key if they are disabled. You don't need to remove this key, if you remove the colors preference, the `disableHelpers` key will be automatically removed and the helpers will be visible again.
 
