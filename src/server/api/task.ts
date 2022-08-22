@@ -21,7 +21,7 @@ router.post('/', async (req, res, next) => {
   // Post to Integration
   try {
     const response = await fetch(
-      `${configuration.FUSEBIT_BASE_URL}/integration/${integrationId}/api/tenant/${currentUser.userId}/item`,
+      `${configuration.FUSEBIT_BASE_URL}/integration/${integrationId}/api/tenant/${currentUser.name}/item`,
       {
         method: 'POST',
         headers: {
@@ -78,7 +78,7 @@ router.get('/', async (req, res, next) => {
     }
 
     const response = await fetch(
-      `${configuration.FUSEBIT_BASE_URL}/integration/${integrationId}/api/tenant/${currentUser.userId}/items`,
+      `${configuration.FUSEBIT_BASE_URL}/integration/${integrationId}/api/tenant/${currentUser.name}/items`,
       {
         headers: {
           Accept: 'application/json, text/plain, */*',

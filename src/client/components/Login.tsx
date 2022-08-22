@@ -88,6 +88,7 @@ export default (props: { onLogin: Function }) => {
               props.onLogin({
                 users,
                 currentUserId: user.userId,
+                currentTenantId: user.name,
               });
             }}
             key={index}

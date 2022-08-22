@@ -3,7 +3,8 @@ export const IntegrationTypeEnum: IntegrationTypeKeyMap = {
     value: 'SLACK_BOT',
     action: 'Get slack notifications when a new task is created.',
     taskDoneText: 'A message is being sent to your slack account.',
-    taskDescription: 'In this example, the "Add New Task" Button, if installed, will use your integration code to immediately update your user via Slack! Look at the code to see how it works, and learn more in the docs here.'
+    taskDescription:
+      'In this example, the "Add New Task" Button, if installed, will use your integration code to immediately update your user via Slack! Look at the code to see how it works, and learn more in the docs here.',
   },
   HUBSPOT: {
     value: 'HUBSPOT',
@@ -14,6 +15,7 @@ export const IntegrationTypeEnum: IntegrationTypeKeyMap = {
 export const DataKeyMap: DataKeyMap = {
   configuration: 'configuration',
   currentUserId: 'currentUserId',
+  currentTenantId: 'currentTenantId',
   users: 'users',
   tasks: 'tasks',
 };
