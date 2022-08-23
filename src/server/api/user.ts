@@ -1,16 +1,12 @@
 import express from 'express';
 import fetch from 'node-fetch';
+import { toKebabCase } from '../../constants';
 const router = express.Router();
 
 router.post('/login', async (req, res, next) => {
   res.locals.data.setUsers(req.body.users);
   res.locals.data.setCurrentUserId(req.body.currentUserId);
-  res.locals.data.setCurrentTenantId(
-    req.body.currentTenantId
-      .replace(/([a-z])([A-Z])/g, '$1-$2')
-      .replace(/[\s_]+/g, '-')
-      .toLowerCase()
-  );
+  res.locals.data.setCurrentTenantId(toKebabCase(req.body.currentTenantId));
   res.sendStatus(200);
 });
 

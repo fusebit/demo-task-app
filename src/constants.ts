@@ -37,3 +37,12 @@ export const AssertIntegrationName: (integrationName: string) => asserts integra
 
 export const urlOrSvgToImage = (img = '') =>
   img.match('^<svg') ? `data:image/svg+xml;utf8,${encodeURIComponent(img)}` : img;
+
+export const toKebabCase = (text: string) => {
+  const kebabCaseText = text
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/[\s_]+/g, '-')
+    .toLowerCase();
+
+  return kebabCaseText;
+};
