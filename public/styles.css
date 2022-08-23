@@ -13,7 +13,6 @@ body {
 }
 
 .container-buffer {
-  padding: 0 20px;
   row-gap: 32px;
 }
 
@@ -74,6 +73,10 @@ body {
 .drawer-logo-container-dragging {
   cursor: pointer;
   background: rgba(0,0,0,0.05);
+}
+
+.marketplace-wrapper {
+  grid-template-columns: repeat(auto-fill, 295px);
 }
 
 .logo {

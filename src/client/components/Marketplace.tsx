@@ -59,6 +59,7 @@ const Marketplace = (props: {
       </PageItem>
       <PageItem>
         <FusebitMarketplace
+          className="marketplace-wrapper"
           onUninstallClick={(integrationId) => {
             if (isUsingCustomColors) {
               const button = document.querySelector(`.${TILE_CLASSES.button}`) as HTMLElement;
