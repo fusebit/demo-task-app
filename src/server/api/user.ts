@@ -1,10 +1,12 @@
 import express from 'express';
 import fetch from 'node-fetch';
+import { toKebabCase } from '../../constants';
 const router = express.Router();
 
 router.post('/login', async (req, res, next) => {
   res.locals.data.setUsers(req.body.users);
   res.locals.data.setCurrentUserId(req.body.currentUserId);
+  res.locals.data.setCurrentTenantId(toKebabCase(req.body.currentTenantId));
   res.sendStatus(200);
 });
 
@@ -16,6 +18,7 @@ router.delete('/logout', (req, res, next) => {
 router.get('/me', async (req, res, next) => {
   // Update this with your preferred data storage=
   const currentUserId: string = res.locals.data.getCurrentUserId();
+  const currentTenantId: string = res.locals.data.getCurrentTenantId();
   const users: Users = res.locals.data.getUsers();
   const configuration: Config = res.locals.data.getConfiguration();
   const integrationTypes: IntegrationType[] = res.locals.data.getEnabledIntegrationTypes();
@@ -41,7 +44,7 @@ router.get('/me', async (req, res, next) => {
         };
       });
 
-    const installsResponse = await fetch(`${fusebitBaseUrl}/install?tag=fusebit.tenantId=${currentUserId}`, {
+    const installsResponse = await fetch(`${fusebitBaseUrl}/install?tag=fusebit.tenantId=${currentTenantId}`, {
       headers: {
         Accept: 'application/json, text/plain, */*',
         'Content-Type': 'application/json',

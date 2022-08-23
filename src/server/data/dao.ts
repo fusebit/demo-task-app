@@ -5,9 +5,8 @@ class DAO {
   constructor(req: Request, res: Response) {
     this.req = req;
     this.res = res;
-    const cookieList = this.req.headers.cookie ? this.req.headers.cookie
-      .split(';') : [];
-    const sampleAppCookie = cookieList.find(cookie => cookie.includes('sample-app'));
+    const cookieList = this.req.headers.cookie ? this.req.headers.cookie.split(';') : [];
+    const sampleAppCookie = cookieList.find((cookie) => cookie.includes('sample-app'));
 
     if (sampleAppCookie) {
       const data = sampleAppCookie.split('=')[1].split('%3D')[0];
@@ -17,6 +16,7 @@ class DAO {
       this.data = {
         users: undefined,
         currentUserId: undefined,
+        currentTenantId: undefined,
         tasks: undefined,
         configuration: undefined,
       };
@@ -37,6 +37,7 @@ class DAO {
   clearData = () => {
     this.data = {
       currentUserId: undefined,
+      currentTenantId: undefined,
       users: undefined,
       configuration: this.data.configuration,
       tasks: undefined,
@@ -50,7 +51,7 @@ class DAO {
       ...this.data,
       tasks: {
         ...this.data.tasks,
-        [userId]: []
+        [userId]: [],
       },
     };
 
@@ -72,6 +73,14 @@ class DAO {
 
   setCurrentUserId = (currentUserId: string) => {
     this.saveData(DataKeyMap.currentUserId, currentUserId);
+  };
+
+  getCurrentTenantId = () => {
+    return this.getData(DataKeyMap.currentTenantId);
+  };
+
+  setCurrentTenantId = (currentTenantId: string) => {
+    this.saveData(DataKeyMap.currentTenantId, currentTenantId);
   };
 
   getConfiguration = () => {
@@ -107,9 +116,9 @@ class DAO {
     const configuration = this.getConfiguration();
     const id = configuration[`${integrationType}_INTEGRATION_ID`];
     if (!id) {
-      throw `Integration ${integrationType} wasn't found`
+      throw `Integration ${integrationType} wasn't found`;
     }
-    return id
+    return id;
   };
 }
 

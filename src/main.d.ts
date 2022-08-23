@@ -87,6 +87,7 @@ interface Data {
   tasks: Tasks;
   currentUserId: string;
   configuration: Config;
+  currentTenantId: string;
 }
 
 type DataKey = keyof Data;

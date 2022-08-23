@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get('/:integrationId/install', async (req, res, next) => {
   // Update this with your preferred data storage
-  const currentUserId: string = res.locals.data.getCurrentUserId();
+  const currentTenantId: string = res.locals.data.getCurrentTenantId();
   const configuration: Config = res.locals.data.getConfiguration();
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
   const appUrl: string = `${process.env.SSL_ENABLED ? 'https' : 'http'}://${req.headers.host}`;
@@ -17,7 +17,7 @@ router.get('/:integrationId/install', async (req, res, next) => {
     const body = JSON.stringify({
       redirectUrl: `${appUrl}/api/integration/${integrationId}/callback`,
       tags: {
-        'fusebit.tenantId': currentUserId.toString(),
+        'fusebit.tenantId': currentTenantId.toString(),
       },
     });
     const headers = {
@@ -82,6 +82,7 @@ router.delete('/:integrationId/install', async (req, res) => {
   // Update this with your preferred data storage
   const configuration: Config = res.locals.data.getConfiguration();
   const currentUserId: string = res.locals.data.getCurrentUserId();
+  const currentTenantId: string = res.locals.data.getCurrentTenantId();
   const fusebitBaseUrl: string = configuration.FUSEBIT_BASE_URL;
   const fusebitJwt: string = configuration.FUSEBIT_JWT;
 
@@ -89,7 +90,7 @@ router.delete('/:integrationId/install', async (req, res) => {
     const integrationId: string = req.params.integrationId;
     // Get installation
     const lookupResponse = await fetch(
-      `${fusebitBaseUrl}/integration/${integrationId}/install?tag=fusebit.tenantId=${currentUserId}`,
+      `${fusebitBaseUrl}/integration/${integrationId}/install?tag=fusebit.tenantId=${currentTenantId}`,
       {
         headers: {
           Accept: 'application/json, text/plain, */*',
