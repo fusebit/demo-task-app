@@ -31,7 +31,6 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
 ) => {
   const currentUser = props.userData.users[props.userData.currentUserId];
   const [isEditingName, setIsEditingName] = useState(false);
-  const [newTenantName, setNewTenantName] = useState('');
   const { colors, isDark, isPrimaryColorWhite } = useCustomColorsContext();
   const { avatarColor, itemHoverColor } = useFrameColors({ userId: currentUser.userId });
 
@@ -74,18 +73,6 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
       },
     },
   ];
-
-  const handleSubmitUserData = () => {
-    if (!newTenantName) {
-      setIsEditingName(false);
-      return;
-    }
-
-    props.userData.users[props.userData.currentUserId].name = newTenantName;
-    localStorage.setItem('users', JSON.stringify(props.userData.users));
-    setNewTenantName('');
-    setIsEditingName(false);
-  };
 
   return (
     <Box display="flex">
@@ -132,55 +119,9 @@ const Frame: React.FC<{ userData?: UserData; onLogout: () => void; appToTest: Fe
                   <PersonIcon sx={{ color: tinycolor(avatarColor).isDark() ? '#ffffff' : '#000000' }} />
                 </Avatar>
               </ListItemIcon>
-              {isEditingName ? (
-                <>
-                  <Input
-                    sx={{ color: colors.sidebarText }}
-                    autoFocus
-                    onBlur={() => {
-                      handleSubmitUserData();
-                    }}
-                    onKeyDown={(e) => {
-                      if (e.code === 'Enter') {
-                        handleSubmitUserData();
-                      }
-                    }}
-                    onChange={(e) => {
-                      setNewTenantName(e.target.value);
-                    }}
-                    defaultValue={currentUser?.name}
-                    fullWidth
-                  />
-                  <IconButton
-                    color="secondary"
-                    aria-label="Accept-edit"
-                    onClick={() => {
-                      handleSubmitUserData();
-                    }}
-                  >
-                    <ListItemIcon sx={{ minWidth: 'auto' }}>
-                      <DoneOutlinedIcon sx={{ color: colors.sidebarText }} />
-                    </ListItemIcon>
-                  </IconButton>
-                </>
-              ) : (
-                <>
-                  <ListItemText sx={{ color: colors.sidebarText, '& .MuiTypography-root': { fontWeight: '600' } }}>
-                    {currentUser?.name}
-                  </ListItemText>
-                  <IconButton
-                    color="secondary"
-                    aria-label="Edit"
-                    onClick={() => {
-                      setIsEditingName(true);
-                    }}
-                  >
-                    <ListItemIcon sx={{ minWidth: 'auto' }}>
-                      <EditOutlinedIcon sx={{ color: colors.sidebarText }} />
-                    </ListItemIcon>
-                  </IconButton>
-                </>
-              )}
+              <ListItemText sx={{ color: colors.sidebarText, '& .MuiTypography-root': { fontWeight: '600' } }}>
+                {currentUser?.name}
+              </ListItemText>
             </ListItem>
             <ListItem sx={{ marginBottom: '16px', paddingTop: 0, paddingBottom: 0 }}>
               <Typography fontSize="14px" fontWeight="600" color={colors.sidebarText}>
