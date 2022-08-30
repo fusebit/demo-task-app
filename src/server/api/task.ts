@@ -15,13 +15,13 @@ router.post('/', async (req, res, next) => {
   // Update this with your preferred data storage
   const configuration: Config = res.locals.data.getConfiguration();
   const currentUserId: string = res.locals.data.getCurrentUserId();
+  const currentTenantId: string = res.locals.data.getCurrentTenantId();
   const users: Users = res.locals.data.getData(DataKeyMap.users);
-  const currentUser: User = users[currentUserId];
 
   // Post to Integration
   try {
     const response = await fetch(
-      `${configuration.FUSEBIT_BASE_URL}/integration/${integrationId}/api/tenant/${currentUser.name}/item`,
+      `${configuration.FUSEBIT_BASE_URL}/integration/${integrationId}/api/tenant/${currentTenantId}/item`,
       {
         method: 'POST',
         headers: {
@@ -63,8 +63,8 @@ router.get('/', async (req, res, next) => {
   // Update this with your preferred data storage
   const configuration: Config = res.locals.data.getConfiguration();
   const currentUserId: string = res.locals.data.getCurrentUserId();
+  const currentTenantId: string = res.locals.data.getCurrentTenantId();
   const users: Users = res.locals.data.getData(DataKeyMap.users);
-  const currentUser: User = users[currentUserId];
   const { integrationId, isGetEnabled } = req.query;
 
   // Getting integration items
@@ -78,7 +78,7 @@ router.get('/', async (req, res, next) => {
     }
 
     const response = await fetch(
-      `${configuration.FUSEBIT_BASE_URL}/integration/${integrationId}/api/tenant/${currentUser.name}/items`,
+      `${configuration.FUSEBIT_BASE_URL}/integration/${integrationId}/api/tenant/${currentTenantId}/items`,
       {
         headers: {
           Accept: 'application/json, text/plain, */*',
