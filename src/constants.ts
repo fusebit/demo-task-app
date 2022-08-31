@@ -42,6 +42,7 @@ export const toKebabCase = (text: string) => {
   const kebabCaseText = text
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     .replace(/[\s_]+/g, '-')
+    .replace('@', '-')
     .toLowerCase();
 
   return kebabCaseText;
